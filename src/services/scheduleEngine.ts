@@ -44,7 +44,7 @@ export function isTargetDate(
 
     case 'yearly':
       return (
-        getMonth(d) === schedule.month && getDate(d) === schedule.dayOfMonth
+        getMonth(d) + 1 === schedule.month && getDate(d) === schedule.dayOfMonth
       )
 
     case 'custom': {

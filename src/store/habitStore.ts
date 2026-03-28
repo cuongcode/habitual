@@ -51,6 +51,7 @@ interface HabitStore {
   entries: Record<string, HabitEntry[]>
   notes: Record<string, HabitDayNote>
   activeCategoryId: string | null
+  setActiveCategoryId(id: string | null): void
 
   init(): Promise<void>
 
@@ -80,6 +81,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   entries: {},
   notes: {},
   activeCategoryId: null,
+  setActiveCategoryId: (id) => set({ activeCategoryId: id }),
 
   // ── Init ────────────────────────────────────────────────────────
 

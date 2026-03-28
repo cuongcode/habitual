@@ -1,4 +1,4 @@
-import { StrictMode, useState, useEffect } from 'react'
+import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './styles/global.css'
@@ -28,34 +28,26 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  const [ready, setReady] = useState(false)
-
   useEffect(() => {
+    console.log('🚀 App mounting, initializing store...')
     useHabitStore
       .getState()
       .init()
-      .then(() => {
-        setReady(true)
-      })
+      .then(() => console.log('✅ Store ready'))
+      .catch((err) => console.error('❌ Store init failed:', err))
   }, [])
-
-  if (!ready) {
-    return (
-      <div
-        style={{
-          width: '100vw',
-          height: '100dvh',
-          backgroundColor: '#FAF6F1',
-        }}
-      />
-    )
-  }
 
   return (
     <StrictMode>
       <RouterProvider router={router} />
     </StrictMode>
   )
+}
+
+// Global error handler
+window.onerror = (msg, url, lineNo, columnNo, error) => {
+  console.error('🔥 Global error:', { msg, url, lineNo, columnNo, error })
+  return false
 }
 
 createRoot(document.getElementById('root')!).render(<App />)

@@ -94,65 +94,71 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   // ── Init ────────────────────────────────────────────────────────
 
   async init() {
-    let categories = await db.getAllCategories()
-    let habits = await db.getAllHabits()
+    try {
+      let categories = await db.getAllCategories()
+      let habits = await db.getAllHabits()
 
-    // ── Stale Seed Cleanup ──────────────────────────────────────────
-    // If we have habits with old seed names but old IDs, remove them
-    const seedNames = ['Morning walk', 'Drink water', 'Deep work session']
-    const stableIds = ['h1', 'h2', 'f1']
-    
-    let needsRefetch = false
-    for (const h of habits) {
-      if (seedNames.includes(h.name) && !stableIds.includes(h.id)) {
-        await db.deleteHabit(h.id)
-        needsRefetch = true
-      }
-    }
-    
-    if (needsRefetch) {
-      habits = await db.getAllHabits()
-    }
-
-    // ── Seeding ─────────────────────────────────────────────────────
-    let finalCategories = [...categories]
-    let finalHabits = [...habits]
-
-    if (categories.length === 0) {
-      finalCategories = SEED_CATEGORIES
-      for (const cat of finalCategories) {
-        await db.saveCategory(cat)
-      }
-    }
-
-    if (!habits.some((h) => h.id === 'h1')) {
-      const seedHabits = makeSeedHabits()
-      for (const habit of seedHabits) {
-        if (!habits.some((prev) => prev.id === habit.id)) {
-          await db.saveHabit(habit)
-          finalHabits.push(habit)
+      // ── Stale Seed Cleanup ──────────────────────────────────────────
+      const seedNames = ['Morning walk', 'Drink water', 'Deep work session']
+      const stableIds = ['h1', 'h2', 'f1']
+      
+      let needsRefetch = false
+      for (const h of habits) {
+        if (seedNames.includes(h.name) && !stableIds.includes(h.id)) {
+          await db.deleteHabit(h.id)
+          needsRefetch = true
         }
       }
-    }
+      
+      if (needsRefetch) {
+        habits = await db.getAllHabits()
+      }
 
-    // ── Load Related Data ───────────────────────────────────────────
-    const entries: Record<string, HabitEntry[]> = {}
-    for (const habit of finalHabits) {
-      entries[habit.id] = await db.getEntriesForHabit(habit.id)
-    }
+      // ── Seeding ─────────────────────────────────────────────────────
+      let finalCategories = [...categories]
+      let finalHabits = [...habits]
 
-    const allNotesRaw = await db.getAllNotes()
-    const notes: Record<string, HabitDayNote> = {}
-    for (const note of allNotesRaw) {
-      notes[noteKey(note.habitId, note.date)] = note
-    }
+      if (categories.length === 0) {
+        finalCategories = SEED_CATEGORIES
+        for (const cat of finalCategories) {
+          await db.saveCategory(cat)
+        }
+      }
 
-    set({
-      categories: finalCategories,
-      habits: finalHabits,
-      entries,
-      notes,
-    })
+      if (!habits.some((h) => h.id === 'h1')) {
+        const seedHabits = makeSeedHabits()
+        for (const habit of seedHabits) {
+          if (!habits.some((prev) => prev.id === habit.id)) {
+            await db.saveHabit(habit)
+            finalHabits.push(habit)
+          }
+        }
+      }
+
+      // ── Load Related Data ───────────────────────────────────────────
+      const entries: Record<string, HabitEntry[]> = {}
+      for (const habit of finalHabits) {
+        entries[habit.id] = await db.getEntriesForHabit(habit.id)
+      }
+
+      const allNotesRaw = await db.getAllNotes()
+      const notes: Record<string, HabitDayNote> = {}
+      for (const note of allNotesRaw) {
+        notes[noteKey(note.habitId, note.date)] = note
+      }
+
+      set({
+        categories: finalCategories,
+        habits: finalHabits,
+        entries,
+        notes,
+      })
+      console.log('✅ Habit store initialized')
+    } catch (err) {
+      console.error('❌ Failed to initialize habit store:', err)
+      // Set some state so the app can at least render
+      set({ categories: [], habits: [] })
+    }
   },
 
   // ── Categories ──────────────────────────────────────────────────

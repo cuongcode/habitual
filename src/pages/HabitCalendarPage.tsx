@@ -1,7 +1,97 @@
+import { useState, useEffect, useRef } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import { ArrowLeft, ArrowUp } from 'lucide-react'
+import { useHabitStore } from '../store/habitStore'
+import HabitCalendarHeader from '../components/HabitCalendarHeader'
+import WeekdayHeaders from '../components/WeekdayHeaders'
+import CalendarGrid from '../components/CalendarGrid'
+import HabitCalendarNav from '../components/HabitCalendarNav'
+
 export default function HabitCalendarPage() {
+  const { habitId } = useParams<{ habitId: string }>()
+  const habit = useHabitStore((state) => 
+    state.habits.find((h) => h.id === habitId)
+  )
+  const entries = useHabitStore((state) => 
+    state.entries[habitId ?? ''] ?? []
+  )
+  const categories = useHabitStore((state) => state.categories)
+  const notes = useHabitStore((state) => state.notes)
+  
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [showBackToTop, setShowBackToTop] = useState(false)
+
+  const category = categories.find((c) => c.id === habit?.categoryId)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    const handleScroll = () => {
+      setShowBackToTop(el.scrollTop > 600)
+    }
+
+    el.addEventListener('scroll', handleScroll)
+    return () => el.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  if (!habit) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-10 bg-cream">
+        <h1 className="text-2xl text-ink font-display" style={{ fontFamily: 'var(--font-display)' }}>
+          Habit not found
+        </h1>
+        <Link 
+          to="/" 
+          className="mt-6 flex items-center gap-2 text-rust font-mono uppercase text-sm"
+          style={{ fontFamily: 'var(--font-mono)' }}
+        >
+          <ArrowLeft size={16} />
+          Go Back
+        </Link>
+      </div>
+    )
+  }
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <h1 style={{ fontFamily: "var(--font-display)", fontSize: '2rem' }}>HabitCalendarPage</h1>
+    <div className="flex flex-col h-screen bg-cream overflow-hidden">
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-10 bg-cream border-b border-muted/10">
+        <HabitCalendarHeader habit={habit} category={category} />
+        <WeekdayHeaders />
+      </div>
+
+      {/* Scrollable Grid */}
+      <div 
+        ref={scrollRef} 
+        className="flex-1 overflow-y-auto scroll-smooth"
+      >
+        <CalendarGrid 
+          habit={habit} 
+          entries={entries} 
+          notes={notes} 
+        />
+      </div>
+
+      {/* Back to Top */}
+      <button
+        onClick={scrollToTop}
+        className={`
+          fixed bottom-[84px] right-4 w-10 h-10 bg-rust text-cream rounded-full 
+          flex items-center justify-center shadow-lg transition-all duration-300 z-30
+          active:scale-90
+          ${showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}
+        `}
+      >
+        <ArrowUp size={20} />
+      </button>
+
+      {/* Sticky Nav */}
+      <HabitCalendarNav habitId={habit.id} />
     </div>
   )
 }

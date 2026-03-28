@@ -36,28 +36,36 @@ let dbPromise: Promise<IDBPDatabase<HabitualDB>> | null = null
 
 function getDB(): Promise<IDBPDatabase<HabitualDB>> {
   if (!dbPromise) {
-    dbPromise = openDB<HabitualDB>('habitual-db', 1, {
+    dbPromise = openDB<HabitualDB>('habitual-db', 2, {
       upgrade(db) {
         // Categories
-        db.createObjectStore('categories', { keyPath: 'id' })
+        if (!db.objectStoreNames.contains('categories')) {
+          db.createObjectStore('categories', { keyPath: 'id' })
+        }
 
         // Habits
-        const habitStore = db.createObjectStore('habits', { keyPath: 'id' })
-        habitStore.createIndex('categoryId', 'categoryId')
+        if (!db.objectStoreNames.contains('habits')) {
+          const habitStore = db.createObjectStore('habits', { keyPath: 'id' })
+          habitStore.createIndex('categoryId', 'categoryId')
+        }
 
         // Entries
-        const entryStore = db.createObjectStore('entries', { keyPath: 'id' })
-        entryStore.createIndex('habitId', 'habitId')
-        entryStore.createIndex('date', 'date')
-        entryStore.createIndex('habitId_date', ['habitId', 'date'], {
-          unique: true,
-        })
+        if (!db.objectStoreNames.contains('entries')) {
+          const entryStore = db.createObjectStore('entries', { keyPath: 'id' })
+          entryStore.createIndex('habitId', 'habitId')
+          entryStore.createIndex('date', 'date')
+          entryStore.createIndex('habitId_date', ['habitId', 'date'], {
+            unique: true,
+          })
+        }
 
         // Notes
-        const noteStore = db.createObjectStore('notes', { keyPath: 'id' })
-        noteStore.createIndex('habitId_date', ['habitId', 'date'], {
-          unique: true,
-        })
+        if (!db.objectStoreNames.contains('notes')) {
+          const noteStore = db.createObjectStore('notes', { keyPath: 'id' })
+          noteStore.createIndex('habitId_date', ['habitId', 'date'], {
+            unique: true,
+          })
+        }
       },
     })
   }

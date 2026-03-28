@@ -25,7 +25,7 @@ function makeSeedHabits(): Habit[] {
   const now = new Date().toISOString()
   return [
     {
-      id: crypto.randomUUID(),
+      id: 'h1',
       name: 'Morning walk',
       categoryId: 'cat-1',
       schedule: { frequency: 'daily' },
@@ -33,7 +33,15 @@ function makeSeedHabits(): Habit[] {
       createdAt: now,
     },
     {
-      id: crypto.randomUUID(),
+      id: 'h2',
+      name: 'Drink water',
+      categoryId: 'cat-1',
+      schedule: { frequency: 'daily' },
+      order: 1,
+      createdAt: now,
+    },
+    {
+      id: 'f1',
       name: 'Deep work session',
       categoryId: 'cat-2',
       schedule: { frequency: 'weekly', weekday: 4 },
@@ -86,51 +94,65 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   // ── Init ────────────────────────────────────────────────────────
 
   async init() {
-    const [categories, habits] = await Promise.all([
-      db.getAllCategories(),
-      db.getAllHabits(),
-    ])
+    let categories = await db.getAllCategories()
+    let habits = await db.getAllHabits()
 
-    // Load all entries keyed by habitId
+    // ── Stale Seed Cleanup ──────────────────────────────────────────
+    // If we have habits with old seed names but old IDs, remove them
+    const seedNames = ['Morning walk', 'Drink water', 'Deep work session']
+    const stableIds = ['h1', 'h2', 'f1']
+    
+    let needsRefetch = false
+    for (const h of habits) {
+      if (seedNames.includes(h.name) && !stableIds.includes(h.id)) {
+        await db.deleteHabit(h.id)
+        needsRefetch = true
+      }
+    }
+    
+    if (needsRefetch) {
+      habits = await db.getAllHabits()
+    }
+
+    // ── Seeding ─────────────────────────────────────────────────────
+    let finalCategories = [...categories]
+    let finalHabits = [...habits]
+
+    if (categories.length === 0) {
+      finalCategories = SEED_CATEGORIES
+      for (const cat of finalCategories) {
+        await db.saveCategory(cat)
+      }
+    }
+
+    if (!habits.some((h) => h.id === 'h1')) {
+      const seedHabits = makeSeedHabits()
+      for (const habit of seedHabits) {
+        if (!habits.some((prev) => prev.id === habit.id)) {
+          await db.saveHabit(habit)
+          finalHabits.push(habit)
+        }
+      }
+    }
+
+    // ── Load Related Data ───────────────────────────────────────────
     const entries: Record<string, HabitEntry[]> = {}
-    for (const habit of habits) {
+    for (const habit of finalHabits) {
       entries[habit.id] = await db.getEntriesForHabit(habit.id)
     }
 
-    // Load all notes — we iterate habits and a date range isn't practical,
-    // so we fetch from IDB directly via getAll and key them
-    const allNotesRaw = await (async () => {
-      const { openDB } = await import('idb')
-      const idb = await openDB('habitual-db', 1)
-      return idb.getAll('notes') as Promise<HabitDayNote[]>
-    })()
+    const allNotesRaw = await db.getAllNotes()
     const notes: Record<string, HabitDayNote> = {}
     for (const note of allNotesRaw) {
       notes[noteKey(note.habitId, note.date)] = note
     }
 
-    // Seed if empty
-    if (habits.length === 0) {
-      const seedCategories = SEED_CATEGORIES
-      const seedHabits = makeSeedHabits()
-
-      for (const cat of seedCategories) {
-        await db.saveCategory(cat)
-      }
-      for (const habit of seedHabits) {
-        await db.saveHabit(habit)
-      }
-
-      set({
-        categories: seedCategories,
-        habits: seedHabits,
-        entries: {},
-        notes: {},
-      })
-      return
-    }
-
-    set({ categories, habits, entries, notes })
+    set({
+      categories: finalCategories,
+      habits: finalHabits,
+      entries,
+      notes,
+    })
   },
 
   // ── Categories ──────────────────────────────────────────────────
@@ -212,22 +234,25 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
     }
   },
 
-  async reorderHabits(categoryId, orderedIds) {
+  async reorderHabits(_categoryId, newOrderedIds) {
     const prevHabits = get().habits
-    const newHabits = prevHabits.map((h) => {
-      if (h.categoryId !== categoryId) return h
-      const order = orderedIds.indexOf(h.id)
-      return order !== -1 ? { ...h, order } : h
+
+    const updatedHabits = prevHabits.map((habit) => {
+      const newOrder = newOrderedIds.indexOf(habit.id)
+      if (newOrder === -1) return habit
+      return { ...habit, order: newOrder }
     })
 
-    set({ habits: newHabits })
+    set({ habits: updatedHabits })
 
     try {
-      const updated = newHabits.filter((h) => h.categoryId === categoryId)
-      await Promise.all(updated.map((h) => db.saveHabit(h)))
+      const changedIds = new Set(newOrderedIds)
+      const changedHabits = updatedHabits.filter((h) => changedIds.has(h.id))
+      await Promise.all(changedHabits.map((h) => db.saveHabit(h)))
     } catch (err) {
       console.error('Failed to reorder habits in IDB:', err)
       set({ habits: prevHabits })
+      console.log('--- STORE REVERTED DUE TO ERROR ---')
     }
   },
 

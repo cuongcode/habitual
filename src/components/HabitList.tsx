@@ -1,11 +1,14 @@
+import { useState, useMemo } from 'react'
 import {
   DndContext,
   closestCenter,
+  DragOverlay,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import type { DragEndEvent } from '@dnd-kit/core'
+import type { DragStartEvent, DragEndEvent } from '@dnd-kit/core'
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -14,6 +17,7 @@ import {
 import { useHabitStore } from '../store/habitStore'
 import HabitRow from './HabitRow'
 import type { Habit } from '../types/index'
+import { subDays, format } from 'date-fns'
 
 export default function HabitList() {
   const habits = useHabitStore((s) => s.habits)
@@ -21,54 +25,71 @@ export default function HabitList() {
   const activeCategoryId = useHabitStore((s) => s.activeCategoryId)
   const reorderHabits = useHabitStore((s) => s.reorderHabits)
 
+  const [activeId, setActiveId] = useState<string | null>(null)
+
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 200, tolerance: 8 },
+    }),
   )
 
-  // Sort habits: filter by category, then sort by category order → habit order
-  let sortedHabits: Habit[]
+  // Group habits by category
+  const groups = useMemo(() => {
+    if (activeCategoryId) {
+      const filtered = habits
+        .filter((h) => h.categoryId === activeCategoryId)
+        .sort((a, b) => a.order - b.order)
+      const cat = categories.find((c) => c.id === activeCategoryId)
+      return cat ? [{ category: cat, habits: filtered }] : []
+    }
 
-  if (activeCategoryId) {
-    sortedHabits = habits
-      .filter((h) => h.categoryId === activeCategoryId)
-      .sort((a, b) => a.order - b.order)
-  } else {
-    // All habits: sort by category order, then habit order
-    const catOrderMap = new Map(categories.map((c, i) => [c.id, i]))
-    sortedHabits = [...habits].sort((a, b) => {
-      const catDiff =
-        (catOrderMap.get(a.categoryId) ?? 999) -
-        (catOrderMap.get(b.categoryId) ?? 999)
-      if (catDiff !== 0) return catDiff
-      return a.order - b.order
-    })
+    // All view: group by category order
+    return categories
+      .map((cat) => ({
+        category: cat,
+        habits: habits
+          .filter((h) => h.categoryId === cat.id)
+          .sort((a, b) => a.order - b.order),
+      }))
+      .filter((g) => g.habits.length > 0)
+  }, [habits, categories, activeCategoryId])
+
+  const activeHabit = activeId ? habits.find((h) => h.id === activeId) : null
+
+  function handleDragStart(event: DragStartEvent) {
+    setActiveId(String(event.active.id))
   }
 
   function handleDragEnd(event: DragEndEvent) {
+    setActiveId(null)
+
     const { active, over } = event
     if (!over || active.id === over.id) return
 
-    const activeHabit = habits.find((h) => h.id === active.id)
-    if (!activeHabit) return
+    // Find which category group this drag happened in
+    const habit = habits.find((h) => h.id === active.id)
+    if (!habit) return
 
-    const categoryId = activeHabit.categoryId
-    const categoryHabits = sortedHabits.filter(
-      (h) => h.categoryId === categoryId,
-    )
-    const oldIndex = categoryHabits.findIndex((h) => h.id === active.id)
-    const newIndex = categoryHabits.findIndex((h) => h.id === over.id)
+    const group = groups.find((g) => g.category.id === habit.categoryId)
+    if (!group) return
 
+    const oldIndex = group.habits.findIndex((h) => h.id === active.id)
+    const newIndex = group.habits.findIndex((h) => h.id === over.id)
+
+    // If 'over' is in a different category, it won't be found in this group
     if (oldIndex === -1 || newIndex === -1) return
 
-    const reordered = arrayMove(categoryHabits, oldIndex, newIndex)
-    reorderHabits(
-      categoryId,
-      reordered.map((h) => h.id),
-    )
+    const reordered = arrayMove(group.habits, oldIndex, newIndex)
+    const newOrderedIds = reordered.map((h) => h.id)
+
+    reorderHabits(habit.categoryId, newOrderedIds)
   }
 
   // Empty state
-  if (sortedHabits.length === 0) {
+  if (groups.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center gap-4 px-8">
         <svg
@@ -82,12 +103,9 @@ export default function HabitList() {
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          {/* Page */}
           <rect x="16" y="8" width="32" height="48" rx="3" />
-          {/* Lines on page */}
           <line x1="24" y1="20" x2="40" y2="20" />
           <line x1="24" y1="28" x2="36" y2="28" />
-          {/* Pen */}
           <line x1="44" y1="40" x2="52" y2="56" />
         </svg>
         <p
@@ -107,18 +125,91 @@ export default function HabitList() {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext
-        items={sortedHabits.map((h) => h.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        <div className="flex-1 overflow-y-auto">
-          {sortedHabits.map((habit) => (
-            <HabitRow key={habit.id} habit={habit} />
-          ))}
-        </div>
-      </SortableContext>
+      <div className="flex-1 overflow-y-auto">
+        {groups.map((group) => (
+          <div key={group.category.id} className="mb-4 last:mb-0">
+            {/* Category Header (only show in 'All' view) */}
+            {!activeCategoryId && (
+              <div className="px-4 py-2 bg-cream-dark/30 border-b border-muted-light/30">
+                <span
+                  className="text-muted-dark uppercase tracking-wider font-semibold"
+                  style={{ fontSize: '11px' }}
+                >
+                  {group.category.label}
+                </span>
+              </div>
+            )}
+
+            <SortableContext
+              items={group.habits.map((h) => h.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {group.habits.map((habit) => (
+                <HabitRow key={habit.id} habit={habit} />
+              ))}
+            </SortableContext>
+          </div>
+        ))}
+      </div>
+
+      <DragOverlay>
+        {activeHabit ? (
+          <DragOverlayRow habit={activeHabit} />
+        ) : null}
+      </DragOverlay>
     </DndContext>
+  )
+}
+
+// ── Drag overlay (simplified row) ──────────────────────────────────
+
+function DragOverlayRow({ habit }: { habit: Habit }) {
+  const today = new Date()
+  const days: Date[] = []
+  for (let i = 6; i >= 0; i--) {
+    days.push(subDays(today, i))
+  }
+  const todayStr = format(today, 'yyyy-MM-dd')
+
+  return (
+    <div
+      className="flex items-center gap-2 px-4 py-3 bg-cream border-2 border-rust rounded-md shadow-lg"
+      style={{ opacity: 0.85 }}
+    >
+      <span
+        className="flex-1 truncate text-ink"
+        style={{ fontFamily: "var(--font-body)", fontSize: '15px' }}
+      >
+        {habit.name}
+      </span>
+      <div className="flex gap-1 shrink-0">
+        {days.map((day) => {
+          const dateStr = format(day, 'yyyy-MM-dd')
+          const dayNum = format(day, 'd')
+          const isToday = dateStr === todayStr
+          return (
+            <div
+              key={dateStr}
+              className={`w-7 h-7 rounded-md flex items-center justify-center bg-cream-dark
+                ${isToday ? 'border-2 border-rust' : 'border border-muted-light'}`}
+            >
+              <span
+                className="text-muted"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: '10px',
+                  lineHeight: 1,
+                }}
+              >
+                {dayNum}
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }

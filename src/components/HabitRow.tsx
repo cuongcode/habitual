@@ -2,6 +2,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useNavigate } from 'react-router-dom'
 import { subDays, format } from 'date-fns'
+import { GripVertical } from 'lucide-react'
 import type { Habit } from '../types/index'
 
 interface HabitRowProps {
@@ -41,15 +42,15 @@ export default function HabitRow({ habit }: HabitRowProps) {
       className="flex items-center gap-2 px-4 py-3 border-b border-muted-light bg-cream"
     >
       {/* Drag handle */}
-      <button
+      <div
         {...attributes}
         {...listeners}
-        className="w-5 shrink-0 text-muted cursor-grab active:cursor-grabbing select-none"
-        style={{ fontSize: '16px', lineHeight: 1 }}
+        className="shrink-0 text-muted cursor-grab active:cursor-grabbing p-1"
+        style={{ touchAction: 'none' }}
         aria-label="Drag to reorder"
       >
-        ≡
-      </button>
+        <GripVertical size={16} />
+      </div>
 
       {/* Habit name */}
       <button

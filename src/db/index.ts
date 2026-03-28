@@ -125,6 +125,11 @@ export async function deleteEntry(id: string): Promise<void> {
   await db.delete('entries', id)
 }
 
+export async function getAllNotes(): Promise<HabitDayNote[]> {
+  const db = await getDB()
+  return db.getAll('notes')
+}
+
 // ── Notes ───────────────────────────────────────────────────────────
 
 export async function getNoteForHabitDate(

@@ -28,6 +28,8 @@ const router = createBrowserRouter([
   },
 ])
 
+import { ToastContainer } from './components/Toast'
+
 function App() {
   useEffect(() => {
     console.log('🚀 App mounting, initializing store...')
@@ -44,6 +46,7 @@ function App() {
 
   return (
     <StrictMode>
+      <ToastContainer />
       <RouterProvider router={router} />
     </StrictMode>
   )

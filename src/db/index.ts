@@ -34,7 +34,7 @@ interface HabitualDB extends DBSchema {
 
 let dbPromise: Promise<IDBPDatabase<HabitualDB>> | null = null
 
-function getDB(): Promise<IDBPDatabase<HabitualDB>> {
+export function getDB(): Promise<IDBPDatabase<HabitualDB>> {
   if (!dbPromise) {
     dbPromise = openDB<HabitualDB>('habitual-db', 2, {
       upgrade(db) {
@@ -107,6 +107,11 @@ export async function deleteHabit(id: string): Promise<void> {
 }
 
 // ── Entries ─────────────────────────────────────────────────────────
+
+export async function getAllEntries(): Promise<HabitEntry[]> {
+  const db = await getDB()
+  return db.getAll('entries')
+}
 
 export async function getEntriesForHabit(
   habitId: string,

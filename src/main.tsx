@@ -7,6 +7,7 @@ import HabitCalendarPage from './pages/HabitCalendarPage'
 import HabitStatsPage from './pages/HabitStatsPage'
 import SettingsPage from './pages/SettingsPage'
 import { useHabitStore } from './store/habitStore'
+import { scheduleReminders } from './services/notificationService'
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,11 @@ function App() {
     useHabitStore
       .getState()
       .init()
-      .then(() => console.log('✅ Store ready'))
+      .then(() => {
+        console.log('✅ Store ready')
+        // Schedule notifications for habits with reminders
+        scheduleReminders(useHabitStore.getState().habits)
+      })
       .catch((err) => console.error('❌ Store init failed:', err))
   }, [])
 

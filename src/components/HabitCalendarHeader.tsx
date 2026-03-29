@@ -5,6 +5,7 @@ import type { Habit, Category } from '../types/index'
 interface HabitCalendarHeaderProps {
   habit: Habit
   category?: Category
+  onEditPress?: () => void
 }
 
 const getOrdinal = (n: number) => {
@@ -34,7 +35,7 @@ const formatSchedule = (habit: Habit) => {
   }
 }
 
-export default function HabitCalendarHeader({ habit, category }: HabitCalendarHeaderProps) {
+export default function HabitCalendarHeader({ habit, category, onEditPress }: HabitCalendarHeaderProps) {
   const scheduleText = formatSchedule(habit)
   
   return (
@@ -45,7 +46,7 @@ export default function HabitCalendarHeader({ habit, category }: HabitCalendarHe
         </h1>
         <button 
           className="p-1 text-muted hover:text-ink transition-colors"
-          onClick={() => alert('Edit coming soon')}
+          onClick={onEditPress}
         >
           <SlidersHorizontal size={20} />
         </button>

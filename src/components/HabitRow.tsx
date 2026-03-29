@@ -104,7 +104,7 @@ function DayCell({
 export default function HabitRow({ habit }: HabitRowProps) {
   const navigate = useNavigate()
   const store = useHabitStore()
-  const entries = useHabitStore((state) => state.entries[habit.id] ?? [])
+  const entries = useHabitStore((state) => state.entries[habit.id]) ?? []
   const notes = useHabitStore((state) => state.notes)
   const [noteModalDate, setNoteModalDate] = useState<string | null>(null)
 
@@ -154,7 +154,7 @@ export default function HabitRow({ habit }: HabitRowProps) {
         </button>
 
         <div className="flex gap-1 shrink-0">
-          {cellDates.map((date, i) => {
+          {cellDates.map((date) => {
             const dateStr = format(date, 'yyyy-MM-dd')
             const state = getDayState(date, habit, entries)
             

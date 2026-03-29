@@ -6,6 +6,7 @@ import HabitCalendarHeader from '../components/HabitCalendarHeader'
 import WeekdayHeaders from '../components/WeekdayHeaders'
 import CalendarGrid from '../components/CalendarGrid'
 import HabitCalendarNav from '../components/HabitCalendarNav'
+import EditHabitModal from '../components/EditHabitModal'
 
 export default function HabitCalendarPage() {
   const { habitId } = useParams<{ habitId: string }>()
@@ -13,13 +14,14 @@ export default function HabitCalendarPage() {
     state.habits.find((h) => h.id === habitId)
   )
   const entries = useHabitStore((state) => 
-    state.entries[habitId ?? ''] ?? []
-  )
+    state.entries[habitId ?? '']
+  ) ?? []
   const categories = useHabitStore((state) => state.categories)
   const notes = useHabitStore((state) => state.notes)
   
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showBackToTop, setShowBackToTop] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
 
   const category = categories.find((c) => c.id === habit?.categoryId)
 
@@ -61,7 +63,7 @@ export default function HabitCalendarPage() {
     <div className="flex flex-col h-screen bg-cream overflow-hidden">
       {/* Sticky Header */}
       <div className="sticky top-0 z-10 bg-cream border-b border-muted/10">
-        <HabitCalendarHeader habit={habit} category={category} />
+        <HabitCalendarHeader habit={habit} category={category} onEditPress={() => setEditOpen(true)} />
         <WeekdayHeaders />
       </div>
 
@@ -92,6 +94,11 @@ export default function HabitCalendarPage() {
 
       {/* Sticky Nav */}
       <HabitCalendarNav habitId={habit.id} />
+
+      {/* Edit Habit Modal */}
+      {editOpen && (
+        <EditHabitModal habit={habit} onClose={() => setEditOpen(false)} />
+      )}
     </div>
   )
 }

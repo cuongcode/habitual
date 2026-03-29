@@ -3,9 +3,12 @@ import { Settings } from 'lucide-react'
 import HabitList from '../components/HabitList'
 import CategoryFilterBar from '../components/CategoryFilterBar'
 import BottomNav from '../components/BottomNav'
+import AddHabitDrawer from '../components/AddHabitDrawer'
+import { useUIStore } from '../store/uiStore'
 
 export default function HabitsPage() {
   const navigate = useNavigate()
+  const addHabitDrawerOpen = useUIStore((s) => s.addHabitDrawerOpen)
 
   return (
     <div className="flex flex-col h-screen bg-cream">
@@ -38,6 +41,9 @@ export default function HabitsPage() {
         <CategoryFilterBar />
         <BottomNav />
       </div>
+
+      {/* Add Habit Drawer */}
+      {addHabitDrawerOpen && <AddHabitDrawer />}
     </div>
   )
 }

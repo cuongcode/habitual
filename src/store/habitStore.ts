@@ -63,7 +63,7 @@ interface HabitStore {
 
   init(): Promise<void>
 
-  addCategory(category: Omit<Category, 'id'>): Promise<void>
+  addCategory(category: Category | Omit<Category, 'id'>): Promise<void>
   deleteCategory(id: string): Promise<void>
 
   addHabit(habit: Omit<Habit, 'id' | 'createdAt'>): Promise<void>
@@ -164,7 +164,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   // ── Categories ──────────────────────────────────────────────────
 
   async addCategory(data) {
-    const category: Category = { ...data, id: crypto.randomUUID() }
+    const category: Category = 'id' in data ? data as Category : { ...data, id: crypto.randomUUID() }
     const prev = get().categories
 
     set({ categories: [...prev, category] })

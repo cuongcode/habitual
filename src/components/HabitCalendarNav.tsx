@@ -7,9 +7,8 @@ interface HabitCalendarNavProps {
 
 export default function HabitCalendarNav({ habitId }: HabitCalendarNavProps) {
   return (
-    <div 
+    <nav 
       className="fixed bottom-0 left-0 right-0 bg-cream/95 backdrop-blur-sm border-t border-muted/10 z-20 pb-safe"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 16px)' }}
     >
       <div className="flex justify-between items-center px-6 py-4">
         <Link 
@@ -29,6 +28,6 @@ export default function HabitCalendarNav({ habitId }: HabitCalendarNavProps) {
           <span>Stats</span>
         </Link>
       </div>
-    </div>
+    </nav>
   )
 }

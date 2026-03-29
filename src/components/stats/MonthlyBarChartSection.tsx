@@ -1,4 +1,5 @@
 import type { MonthlyRate } from '../../services/statsEngine'
+import { SectionLabel } from '../SectionLabel'
 
 interface MonthlyBarChartSectionProps {
   monthlyRates: MonthlyRate[]
@@ -26,9 +27,7 @@ export default function MonthlyBarChartSection({ monthlyRates }: MonthlyBarChart
 
   return (
     <div className="space-y-3">
-      <div className="text-[11px] text-muted font-mono uppercase tracking-wider" style={{ fontFamily: 'var(--font-mono)' }}>
-        Monthly consistency
-      </div>
+      <SectionLabel>Monthly consistency</SectionLabel>
       
       <div className="w-full h-[110px]">
         <svg viewBox="0 0 280 110" width="100%" className="overflow-visible">

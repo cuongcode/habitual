@@ -90,33 +90,34 @@ export default function HabitList() {
 
   // Empty state
   if (groups.length === 0) {
+    if (activeCategoryId) {
+      return (
+        <div className="flex flex-col items-center justify-center flex-1 gap-2 px-8">
+          <p className="font-display text-ink text-base text-center m-0">No habits in this category</p>
+          <p className="font-mono text-muted text-xs text-center m-0">Add one with the + button</p>
+        </div>
+      )
+    }
+
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-4 px-8">
-        <svg
-          width="64"
-          height="64"
-          viewBox="0 0 64 64"
-          fill="none"
-          stroke="currentColor"
-          className="text-muted-light"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="16" y="8" width="32" height="48" rx="3" />
-          <line x1="24" y1="20" x2="40" y2="20" />
-          <line x1="24" y1="28" x2="36" y2="28" />
-          <line x1="44" y1="40" x2="52" y2="56" />
+      <div className="flex flex-col items-center justify-center flex-1 gap-4 px-8">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+          <rect x="16" y="12" width="48" height="58" rx="4" stroke="#9C8E85" strokeWidth="1.5"/>
+          <line x1="28" y1="30" x2="52" y2="30" stroke="#C4BAB3" strokeWidth="1.5" strokeLinecap="round"/>
+          <line x1="28" y1="40" x2="46" y2="40" stroke="#C4BAB3" strokeWidth="1.5" strokeLinecap="round"/>
+          <line x1="28" y1="50" x2="50" y2="50" stroke="#C4BAB3" strokeWidth="1.5" strokeLinecap="round"/>
+          <circle cx="24" cy="30" r="2" fill="#C4BAB3"/>
+          <circle cx="24" cy="40" r="2" fill="#C4BAB3"/>
+          <circle cx="24" cy="50" r="2" fill="#C4BAB3"/>
         </svg>
-        <p
-          className="text-muted text-center"
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: '16px',
-          }}
-        >
-          No habits yet
-        </p>
+        <div className="flex flex-col gap-1 mt-2">
+          <p className="font-display text-ink text-lg text-center m-0">
+            Your notebook is empty
+          </p>
+          <p className="font-mono text-muted text-xs text-center leading-relaxed m-0">
+            Tap the + button below to add your first habit
+          </p>
+        </div>
       </div>
     )
   }

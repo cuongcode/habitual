@@ -5,6 +5,7 @@ import { useHabitStore } from '../store/habitStore'
 import { useUIStore } from '../store/uiStore'
 import type { Category } from '../types/index'
 import { requestNotificationPermission, scheduleReminders } from '../services/notificationService'
+import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
 
 export default function AddHabitDrawer() {
   const [isVisible, setIsVisible] = useState(false)
@@ -57,17 +58,24 @@ export default function AddHabitDrawer() {
     handleClose()
   }
 
+  const { dragY, handlers } = useSwipeToDismiss(handleClose)
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
       {/* Overlay */}
       <div
-        className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+        className={`page-enter-fade absolute inset-0 bg-black/40 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         onClick={handleClose}
       />
 
       {/* Sheet */}
       <div
-        className={`relative w-full max-w-lg bg-cream rounded-t-2xl border-t border-muted-light shadow-xl transition-transform duration-300 ease-out max-h-[90vh] overflow-y-auto ${
+        {...handlers}
+        style={{
+          transform: dragY ? `translateY(${dragY}px)` : undefined,
+          transition: dragY ? 'none' : 'transform 0.3s ease',
+        }}
+        className={`relative w-full max-w-lg bg-cream rounded-t-2xl border-t border-muted-light shadow-xl max-h-[90vh] overflow-y-auto ${
           isVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
       >

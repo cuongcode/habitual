@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { ArrowLeft, ArrowUp } from 'lucide-react'
 import { useHabitStore } from '../store/habitStore'
 import HabitCalendarHeader from '../components/HabitCalendarHeader'
@@ -9,6 +9,7 @@ import HabitCalendarNav from '../components/HabitCalendarNav'
 import EditHabitModal from '../components/EditHabitModal'
 
 export default function HabitCalendarPage() {
+  const location = useLocation()
   const { habitId } = useParams<{ habitId: string }>()
   const habit = useHabitStore((state) => 
     state.habits.find((h) => h.id === habitId)
@@ -28,6 +29,11 @@ export default function HabitCalendarPage() {
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
+    
+    // Scroll to top to ensure today is visible
+    setTimeout(() => {
+      el.scrollTo({ top: 0 })
+    }, 10)
 
     const handleScroll = () => {
       setShowBackToTop(el.scrollTop > 600)
@@ -60,7 +66,7 @@ export default function HabitCalendarPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-cream overflow-hidden">
+    <div key={location.pathname} className="page-enter flex flex-col h-screen bg-cream overflow-hidden">
       {/* Sticky Header */}
       <div className="sticky top-0 z-10 bg-cream border-b border-muted/10">
         <HabitCalendarHeader habit={habit} category={category} onEditPress={() => setEditOpen(true)} />

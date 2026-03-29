@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { SectionLabel } from '../SectionLabel'
 
 interface CompletionRateSectionProps {
   rate: number
@@ -7,6 +8,7 @@ interface CompletionRateSectionProps {
 export default function CompletionRateSection({ rate }: CompletionRateSectionProps) {
   const [animatedRate, setAnimatedRate] = useState(0)
   
+  const safeRate = isNaN(rate) ? 0 : rate
   const radius = 52
   const circumference = 2 * Math.PI * radius
   const offset = circumference * (1 - animatedRate)
@@ -14,15 +16,15 @@ export default function CompletionRateSection({ rate }: CompletionRateSectionPro
   useEffect(() => {
     // Small delay to ensure the component is mounted before animating
     const timer = setTimeout(() => {
-      setAnimatedRate(rate)
+      setAnimatedRate(safeRate)
     }, 100)
     return () => clearTimeout(timer)
   }, [rate])
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="text-[11px] text-muted font-mono uppercase tracking-wider self-start" style={{ fontFamily: 'var(--font-mono)' }}>
-        Consistency
+      <div className="self-start">
+        <SectionLabel>Consistency</SectionLabel>
       </div>
       
       <div className="relative flex items-center justify-center">
@@ -54,12 +56,20 @@ export default function CompletionRateSection({ rate }: CompletionRateSectionPro
         </svg>
         
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-[28px] text-ink font-display" style={{ fontFamily: 'var(--font-display)' }}>
-            {Math.round(rate * 100)}%
-          </span>
-          <span className="text-[10px] text-muted font-mono uppercase tracking-tight" style={{ fontFamily: 'var(--font-mono)' }}>
-            completion rate
-          </span>
+          {safeRate === 0 ? (
+            <span className="text-[16px] text-muted font-mono px-4 text-center" style={{ fontFamily: 'var(--font-mono)' }}>
+              No data yet
+            </span>
+          ) : (
+            <>
+              <span className="text-[28px] text-ink font-display" style={{ fontFamily: 'var(--font-display)' }}>
+                {Math.round(safeRate * 100)}%
+              </span>
+              <span className="text-[10px] text-muted font-mono uppercase tracking-tight" style={{ fontFamily: 'var(--font-mono)' }}>
+                completion rate
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>

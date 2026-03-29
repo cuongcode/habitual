@@ -29,6 +29,8 @@ const router = createBrowserRouter([
 ])
 
 import { ToastContainer } from './components/Toast'
+import { InstallPrompt } from './components/InstallPrompt'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 function App() {
   useEffect(() => {
@@ -46,8 +48,11 @@ function App() {
 
   return (
     <StrictMode>
-      <ToastContainer />
-      <RouterProvider router={router} />
+      <ErrorBoundary>
+        <ToastContainer />
+        <InstallPrompt />
+        <RouterProvider router={router} />
+      </ErrorBoundary>
     </StrictMode>
   )
 }

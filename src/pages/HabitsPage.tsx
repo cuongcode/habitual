@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Settings } from 'lucide-react'
 import HabitList from '../components/HabitList'
 import CategoryFilterBar from '../components/CategoryFilterBar'
@@ -8,12 +8,13 @@ import { useUIStore } from '../store/uiStore'
 
 export default function HabitsPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const addHabitDrawerOpen = useUIStore((s) => s.addHabitDrawerOpen)
 
   return (
-    <div className="flex flex-col h-screen bg-cream">
+    <div key={location.pathname} className="page-enter flex flex-col h-screen bg-cream">
       {/* Header */}
-      <div className="shrink-0 flex items-center justify-between px-4 py-3">
+      <div className="sticky top-0 z-10 bg-cream border-b border-muted-light pt-safe shrink-0 flex items-center justify-between px-4 py-3">
         <h1
           className="text-ink"
           style={{

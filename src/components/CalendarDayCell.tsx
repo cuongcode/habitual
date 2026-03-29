@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { format } from 'date-fns'
 import { Check } from 'lucide-react'
 import { useHabitStore } from '../store/habitStore'
@@ -21,8 +21,11 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: Cale
   const isToday = format(new Date(), 'yyyy-MM-dd') === dateStr
 
   const { handlers } = useLongPress(() => onLongPress(dateStr))
+  const [popping, setPopping] = useState(false)
 
   const handleTap = () => {
+    setPopping(true)
+    setTimeout(() => setPopping(false), 180)
     toggleEntry(habit.id, dateStr)
   }
 
@@ -50,10 +53,12 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: Cale
     <button
       {...handlers}
       onClick={handleTap}
+      style={{ WebkitTapHighlightColor: 'transparent' }}
       className={`
         relative aspect-square w-full rounded-sm border flex flex-col items-center justify-center transition-all active:scale-95
         ${getStyles()}
         ${isToday ? 'ring-1 ring-offset-1 ring-rust/50' : ''}
+        ${popping ? 'cell-pop' : ''}
       `}
     >
       <span className="absolute top-1 left-1.5 text-[10px] font-mono leading-none opacity-60">

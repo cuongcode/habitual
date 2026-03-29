@@ -1,4 +1,5 @@
 import { format, differenceInCalendarDays } from 'date-fns'
+import { SectionLabel } from '../SectionLabel'
 
 interface BestPeriodSectionProps {
   bestPeriod: { start: Date; end: Date } | null
@@ -8,9 +9,7 @@ export default function BestPeriodSection({ bestPeriod }: BestPeriodSectionProps
   if (!bestPeriod) {
     return (
       <div className="space-y-3">
-        <div className="text-[11px] text-muted font-mono uppercase tracking-wider" style={{ fontFamily: 'var(--font-mono)' }}>
-          Best period
-        </div>
+        <SectionLabel>Best period</SectionLabel>
         <div className="bg-[#F2EFE9] rounded-xl border border-muted/10 p-4">
           <div className="text-[16px] text-muted font-display" style={{ fontFamily: 'var(--font-display)' }}>
             No completed streaks yet
@@ -24,9 +23,7 @@ export default function BestPeriodSection({ bestPeriod }: BestPeriodSectionProps
 
   return (
     <div className="space-y-3">
-      <div className="text-[11px] text-muted font-mono uppercase tracking-wider" style={{ fontFamily: 'var(--font-mono)' }}>
-        Best period
-      </div>
+      <SectionLabel>Best period</SectionLabel>
       <div className="bg-[#F2EFE9] rounded-xl border border-muted/10 p-4">
         <div className="text-[16px] text-ink font-serif" style={{ fontFamily: 'var(--font-serif), Lora, serif' }}>
           {format(bestPeriod.start, 'MMM d, yyyy')} – {format(bestPeriod.end, 'MMM d, yyyy')}

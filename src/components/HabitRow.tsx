@@ -103,7 +103,6 @@ function DayCell({
 
 export default function HabitRow({ habit }: HabitRowProps) {
   const navigate = useNavigate()
-  const store = useHabitStore()
   const entries = useHabitStore((state) => state.entries[habit.id]) ?? []
   const notes = useHabitStore((state) => state.notes)
   const [noteModalDate, setNoteModalDate] = useState<string | null>(null)
@@ -158,29 +157,16 @@ export default function HabitRow({ habit }: HabitRowProps) {
             const dateStr = format(date, 'yyyy-MM-dd')
             const state = getDayState(date, habit, entries)
             
-            // Interaction logic
-            const longPress = useLongPress(() => setNoteModalDate(dateStr))
-            
             return (
-              <button
+              <InteractiveDayCell
                 key={dateStr}
-                {...longPress.handlers}
-                onClick={() => {
-                  if (longPress.isLongPress.current) return
-                  store.toggleEntry(habit.id, dateStr)
-                }}
-                onContextMenu={(e) => {
-                  e.preventDefault()
-                  setNoteModalDate(dateStr)
-                }}
-                className="relative flex-shrink-0 focus:outline-none"
-              >
-                <DayCell
-                  state={state}
-                  date={date}
-                  hasNote={hasNote(dateStr)}
-                />
-              </button>
+                habitId={habit.id}
+                date={date}
+                dateStr={dateStr}
+                state={state}
+                hasNote={hasNote(dateStr)}
+                setNoteModalDate={setNoteModalDate}
+              />
             )
           })}
         </div>
@@ -194,5 +180,47 @@ export default function HabitRow({ habit }: HabitRowProps) {
         />
       )}
     </>
+  )
+}
+
+function InteractiveDayCell({
+  habitId,
+  date,
+  dateStr,
+  state,
+  hasNote,
+  setNoteModalDate,
+}: {
+  habitId: string
+  date: Date
+  dateStr: string
+  state: DayState
+  hasNote: boolean
+  setNoteModalDate: (dateStr: string) => void
+}) {
+  const store = useHabitStore()
+  const longPress = useLongPress(() => setNoteModalDate(dateStr))
+  const [popping, setPopping] = useState(false)
+
+  const handleTap = () => {
+    if (longPress.isLongPress.current) return
+    setPopping(true)
+    setTimeout(() => setPopping(false), 180)
+    store.toggleEntry(habitId, dateStr)
+  }
+
+  return (
+    <button
+      {...longPress.handlers}
+      onClick={handleTap}
+      onContextMenu={(e) => {
+        e.preventDefault()
+        setNoteModalDate(dateStr)
+      }}
+      style={{ WebkitTapHighlightColor: 'transparent' }}
+      className={`relative flex-shrink-0 focus:outline-none ${popping ? 'cell-pop' : ''}`}
+    >
+      <DayCell state={state} date={date} hasNote={hasNote} />
+    </button>
   )
 }

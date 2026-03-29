@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { format } from 'date-fns'
 import { ArrowLeft, Download, Upload } from 'lucide-react'
 import { exportData } from '../services/exportService'
 import { ImportModal } from '../components/ImportModal'
@@ -16,7 +17,7 @@ function SettingsHeader() {
 function SettingsNav() {
   const navigate = useNavigate()
   return (
-    <div className="bg-cream border-t border-muted-light px-6 py-3 flex items-center">
+    <nav className="bg-cream border-t border-muted-light px-6 py-3 pb-safe flex items-center">
       <button
         onClick={() => navigate('/')}
         className="flex items-center gap-2 text-ink hover:text-ink-dark transition-colors"
@@ -24,7 +25,7 @@ function SettingsNav() {
         <ArrowLeft className="w-5 h-5" />
         <span className="font-serif text-[15px]">Habits</span>
       </button>
-    </div>
+    </nav>
   )
 }
 
@@ -40,7 +41,7 @@ function DataSection() {
     if (stored) {
       try {
         const d = new Date(stored)
-        setLastExport(d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
+        setLastExport(format(d, 'MMM d, yyyy h:mm a'))
       } catch (e) {
         setLastExport('never')
       }
@@ -54,7 +55,7 @@ function DataSection() {
       const nowStr = new Date().toISOString()
       localStorage.setItem('lastExport', nowStr)
       const d = new Date(nowStr)
-      setLastExport(d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
+      setLastExport(format(d, 'MMM d, yyyy h:mm a'))
       
       showToast('Backup exported successfully')
       
@@ -138,8 +139,9 @@ function AboutSection() {
 }
 
 export default function SettingsPage() {
+  const location = useLocation()
   return (
-    <div className="flex flex-col h-screen bg-cream">
+    <div key={location.pathname} className="page-enter flex flex-col h-screen bg-cream">
       <div className="sticky top-0 z-10 bg-cream border-b border-muted-light shrink-0">
         <SettingsHeader />
       </div>

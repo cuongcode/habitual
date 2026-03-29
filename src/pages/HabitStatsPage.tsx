@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { useHabitStore } from '../store/habitStore'
 import {
@@ -23,6 +23,7 @@ import HabitStatsNav from '../components/stats/HabitStatsNav'
 const EMPTY_ENTRIES: any[] = []
 
 export default function HabitStatsPage() {
+  const location = useLocation()
   const { habitId } = useParams<{ habitId: string }>()
   const habit = useHabitStore((state) =>
     state.habits.find((h) => h.id === habitId),
@@ -81,7 +82,7 @@ export default function HabitStatsPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-[#FAF9F6]">
+    <div key={location.pathname} className="page-enter flex flex-col h-screen bg-[#FAF9F6]">
       {/* Sticky Header */}
       <div className="sticky top-0 z-10 bg-[#FAF9F6] border-b border-muted/10">
         <HabitStatsHeader habit={habit} category={category} />

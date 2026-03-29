@@ -1,5 +1,6 @@
-import { startOfWeek, addDays, subWeeks, format, isAfter, isSameMonth, startOfMonth } from 'date-fns'
+import { startOfWeek, addDays, subWeeks, format } from 'date-fns'
 import { getDayState } from '../../services/scheduleEngine'
+import { SectionLabel } from '../SectionLabel'
 import type { Habit, HabitEntry } from '../../types/index'
 
 interface HeatmapSectionProps {
@@ -55,9 +56,7 @@ export default function HeatmapSection({ habit, entries }: HeatmapSectionProps) 
 
   return (
     <div className="space-y-3">
-      <div className="text-[11px] text-muted font-mono uppercase tracking-wider" style={{ fontFamily: 'var(--font-mono)' }}>
-        Last 52 weeks
-      </div>
+      <SectionLabel>Last 52 weeks</SectionLabel>
 
       <div className="overflow-x-auto pb-2 scrollbar-hide">
         <div className="min-w-fit">

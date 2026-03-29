@@ -4,9 +4,8 @@ export default function BottomNav() {
   const openAddHabitDrawer = useUIStore((s) => s.openAddHabitDrawer)
 
   return (
-    <div
-      className="w-full bg-cream border-t border-muted-light flex items-center justify-center px-4 py-3"
-      style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
+    <nav
+      className="w-full bg-cream border-t border-muted-light flex items-center justify-center px-6 py-3 pb-safe"
     >
       <button
         onClick={openAddHabitDrawer}
@@ -27,6 +26,6 @@ export default function BottomNav() {
           <line x1="4" y1="10" x2="16" y2="10" />
         </svg>
       </button>
-    </div>
+    </nav>
   )
 }

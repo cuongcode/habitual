@@ -4,6 +4,7 @@ import { Check } from 'lucide-react'
 import { useHabitStore } from '../store/habitStore'
 import { useLongPress } from '../hooks/useLongPress'
 import type { DayState } from '../services/scheduleEngine'
+import { getDayStateStyles } from '../utils/theme'
 import type { Habit } from '../types/index'
 
 interface CalendarDayCellProps {
@@ -29,33 +30,14 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: Cale
     toggleEntry(habit.id, dateStr)
   }
 
-  // Visual mapping for states
-  const getStyles = () => {
-    switch (state) {
-      case 'target-open':
-        return 'bg-cream-dark border-[1.5px] border-rust text-ink'
-      case 'target-complete':
-      case 'window-bonus':
-        return 'bg-rust border-rust text-cream'
-      case 'target-missed':
-        return 'bg-cream border-muted-light text-muted'
-      case 'window-empty':
-        return 'bg-rust-light/40 border-transparent text-rust'
-      case 'future':
-        return 'bg-cream border-muted-light text-muted-light'
-      default:
-        return 'bg-cream border-muted-light text-muted'
-    }
-  }
-
   return (
     <button
       {...handlers}
       onClick={handleTap}
       style={{ WebkitTapHighlightColor: 'transparent' }}
       className={`
-        relative aspect-square w-full rounded-sm border flex flex-col items-center justify-center transition-all active:scale-95
-        ${getStyles()}
+        relative aspect-square w-full rounded-sm flex flex-col items-center justify-center transition-all active:scale-95
+        ${getDayStateStyles(state)}
         ${isToday ? 'ring-1 ring-offset-1 ring-rust/50' : ''}
         ${popping ? 'cell-pop' : ''}
       `}

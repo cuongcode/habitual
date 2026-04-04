@@ -14,7 +14,7 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center h-screen bg-cream gap-4 px-8">
+        <div className="flex flex-col items-center justify-center fixed inset-0 bg-cream gap-4 px-8 overflow-hidden">
           <p className="font-display text-ink text-xl text-center m-0">
             Something went wrong
           </p>

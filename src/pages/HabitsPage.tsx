@@ -12,7 +12,7 @@ export default function HabitsPage() {
   const addHabitDrawerOpen = useUIStore((s) => s.addHabitDrawerOpen)
 
   return (
-    <div key={location.pathname} className="page-enter flex flex-col h-screen bg-cream">
+    <div key={location.pathname} className="page-enter flex flex-col fixed inset-0 bg-cream overflow-hidden">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-cream border-b border-muted-light pt-safe shrink-0 flex items-center justify-between px-4 py-3">
         <h1

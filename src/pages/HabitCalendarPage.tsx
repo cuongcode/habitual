@@ -66,7 +66,7 @@ export default function HabitCalendarPage() {
   }
 
   return (
-    <div key={location.pathname} className="page-enter flex flex-col h-screen bg-cream overflow-hidden">
+    <div key={location.pathname} className="page-enter flex flex-col fixed inset-0 bg-cream overflow-hidden">
       {/* Sticky Header */}
       <div className="sticky top-0 z-10 bg-cream border-b border-muted/10">
         <HabitCalendarHeader habit={habit} category={category} onEditPress={() => setEditOpen(true)} />

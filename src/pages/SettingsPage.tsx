@@ -141,7 +141,7 @@ function AboutSection() {
 export default function SettingsPage() {
   const location = useLocation()
   return (
-    <div key={location.pathname} className="page-enter flex flex-col h-screen bg-cream">
+    <div key={location.pathname} className="page-enter flex flex-col fixed inset-0 bg-cream overflow-hidden">
       <div className="sticky top-0 z-10 bg-cream border-b border-muted-light shrink-0">
         <SettingsHeader />
       </div>

@@ -125,7 +125,8 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
         }
       }
 
-      if (!habits.some((h) => h.id === 'h1')) {
+      // Only seed habits in development environment
+      if (import.meta.env.DEV && !habits.some((h) => h.id === 'h1')) {
         const seedHabits = makeSeedHabits()
         for (const habit of seedHabits) {
           if (!habits.some((prev) => prev.id === habit.id)) {

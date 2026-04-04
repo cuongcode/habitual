@@ -44,31 +44,33 @@ function DayCell({
     case 'target-complete':
       bgColor = 'bg-rust'
       borderColor = 'border-rust'
-      showCheck = true
+      textColor = 'text-cream'
+      // showCheck = true
       break
     case 'target-missed':
-      bgColor = 'bg-cream-dark'
-      borderColor = 'border-muted-light'
-      textColor = 'text-muted'
-      opacity = 'opacity-60'
+      // bgColor = 'bg-cream-dark'
+      // borderColor = 'border-muted-light'
+      // textColor = 'text-muted'
+      // opacity = 'opacity-60'
       break
     case 'window-empty':
-      bgColor = 'bg-cream'
-      borderColor = 'border-muted-light'
-      textColor = 'text-muted-light'
-      borderStyle = 'border border-dashed'
+      bgColor = 'bg-rust-light/40'
+      borderColor = 'bg-rust-light/40'
+      textColor = 'text-rust'
+      // borderStyle = 'border'
       break
     case 'window-bonus':
-      bgColor = 'bg-rust-light/40' // Using tailwind opacity for rust-light
-      borderColor = 'border-rust-light'
-      textColor = 'text-rust'
-      borderStyle = 'border border-dashed'
-      showCheck = true
-      checkColor = 'text-rust/60'
+      bgColor = 'bg-rust' // Using tailwind opacity for rust-light
+      borderColor = 'border-rust'
+      textColor = 'text-cream'
+      // textColor = 'text-rust'
+      // borderStyle = 'border'
+      // showCheck = true
+      // checkColor = 'text-rust/60'
       break
     case 'future':
-      bgColor = 'bg-cream'
-      borderColor = 'border-muted-light'
+      // bgColor = 'bg-cream'
+      // borderColor = 'border-muted-light'
       textColor = 'text-muted-light'
       break
   }

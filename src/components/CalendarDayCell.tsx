@@ -32,20 +32,19 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: Cale
   // Visual mapping for states
   const getStyles = () => {
     switch (state) {
-      case 'target-complete':
-        return 'bg-rust border-rust text-cream'
       case 'target-open':
-        return isToday ? 'bg-rust/10 border-rust text-ink' : 'bg-transparent border-rust/40 text-ink'
-      case 'target-missed':
-        return 'bg-transparent border-muted/20 text-muted/60'
-      case 'window-empty':
-        return 'bg-transparent border-dashed border-muted/10 text-muted/40'
+        return 'bg-cream-dark border-[1.5px] border-rust text-ink'
+      case 'target-complete':
       case 'window-bonus':
-        return 'bg-transparent border-dashed border-muted/30 text-ink'
+        return 'bg-rust border-rust text-cream'
+      case 'target-missed':
+        return 'bg-cream border-muted-light text-muted'
+      case 'window-empty':
+        return 'bg-rust-light/40 border-transparent text-rust'
       case 'future':
-        return 'bg-transparent border-muted/10 text-muted/30'
+        return 'bg-cream border-muted-light text-muted-light'
       default:
-        return ''
+        return 'bg-cream border-muted-light text-muted'
     }
   }
 
@@ -65,12 +64,8 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: Cale
         {dayNumber}
       </span>
 
-      {state === 'target-complete' && (
+      {(state === 'target-complete' || state === 'window-bonus') && (
         <Check size={14} strokeWidth={3} className="text-cream" />
-      )}
-      
-      {state === 'window-bonus' && (
-        <Check size={10} strokeWidth={2} className="text-muted/40" />
       )}
 
       {hasNote && (

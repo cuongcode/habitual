@@ -16,8 +16,9 @@ export type DayState =
   | 'target-open' // target date, not yet completed
   | 'target-complete' // target date, completed
   | 'target-missed' // target date, no entry, date is in the past
-  | 'window-empty' // non-target, within satisfied window, no entry
-  | 'window-bonus' // non-target, within satisfied window, has completed entry
+  | 'window-empty' // non-target, previous target missed, no entry
+  | 'window-on' // non-target, previous target completed, no entry
+  | 'window-bonus' // non-target, has completed entry
   | 'future' // date is after today (still fully interactive)
 
 // ── Schedule helpers ────────────────────────────────────────────────
@@ -125,13 +126,16 @@ export function getDayState(
   // Non-target date
   if (d > today) return 'future'
 
+  // Window bonus triggers if the non-target cell is completed, regardless of previous target
+  if (hasCompletedEntry(entries, dateStr)) return 'window-bonus'
+
   // Find the most recent past target date
   const prevTarget = getPrevTargetDate(subDays(d, 1), habit.schedule, habit)
   const prevTargetStr = toDateStr(prevTarget)
 
   if (hasCompletedEntry(entries, prevTargetStr)) {
-    // Previous target was completed — this is a "window" day
-    return hasCompletedEntry(entries, dateStr) ? 'window-bonus' : 'window-empty'
+    // Previous target was completed — this is a "window-on" day
+    return 'window-on'
   }
 
   // Previous target was missed

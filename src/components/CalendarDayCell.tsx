@@ -38,7 +38,7 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: Cale
       className={`
         relative aspect-square w-full rounded-sm flex flex-col items-center justify-center transition-all active:scale-95
         ${getDayStateStyles(state)}
-        ${isToday ? 'ring-1 ring-offset-1 ring-rust/50' : ''}
+        ${isToday ? 'border-2 border-rust' : ''}
         ${popping ? 'cell-pop' : ''}
       `}
     >

@@ -95,7 +95,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
 
   async init() {
     try {
-      let categories = await db.getAllCategories()
+      const categories = await db.getAllCategories()
       let habits = await db.getAllHabits()
 
       // ── Stale Seed Cleanup ──────────────────────────────────────────
@@ -116,7 +116,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
 
       // ── Seeding ─────────────────────────────────────────────────────
       let finalCategories = [...categories]
-      let finalHabits = [...habits]
+      const finalHabits = [...habits]
 
       if (categories.length === 0) {
         finalCategories = SEED_CATEGORIES

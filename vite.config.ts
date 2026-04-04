@@ -8,7 +8,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      strategies: 'generateSW',
+      includeAssets: ['favicon.svg', 'icons/*.png'],
+      devOptions: {
+        enabled: true
+      },
       manifest: {
         name: 'Habitual',
         short_name: 'Habitual',
@@ -25,6 +28,12 @@ export default defineConfig({
           {
             src: '/icons/icon-512x512.png',
             sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
+            src: '/icons/apple-touch-icon.png',
+            sizes: '180x180',
             type: 'image/png',
           },
         ],

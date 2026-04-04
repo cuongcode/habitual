@@ -51,7 +51,7 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: Cale
       )}
 
       {hasNote && (
-        <div className="absolute bottom-1 right-1 w-1 h-1 bg-rust rounded-full" />
+        <div className={`absolute bottom-1 right-1 w-1 h-1 rounded-full ${(state === 'target-complete' || state === 'window-bonus') ? 'bg-cream' : 'bg-rust'}`} />
       )}
     </button>
   )

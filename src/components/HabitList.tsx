@@ -18,6 +18,7 @@ import { useHabitStore } from '../store/habitStore'
 import HabitRow from './HabitRow'
 import type { Habit } from '../types/index'
 import { subDays, format } from 'date-fns'
+import { GripVertical } from 'lucide-react'
 
 export default function HabitList() {
   const habits = useHabitStore((s) => s.habits)
@@ -168,18 +169,12 @@ export default function HabitList() {
 // ── Drag overlay (simplified row) ──────────────────────────────────
 
 function DragOverlayRow({ habit }: { habit: Habit }) {
-  const today = new Date()
-  const days: Date[] = []
-  for (let i = 6; i >= 0; i--) {
-    days.push(subDays(today, i))
-  }
-  const todayStr = format(today, 'yyyy-MM-dd')
-
   return (
     <div
       className="flex items-center gap-2 px-4 py-3 bg-cream border-2 border-rust rounded-md shadow-lg"
       style={{ opacity: 0.85 }}
     >
+      <GripVertical size={16} />
       <span
         className="flex-1 truncate text-ink"
         style={{ fontFamily: "var(--font-body)", fontSize: '15px' }}
@@ -187,29 +182,6 @@ function DragOverlayRow({ habit }: { habit: Habit }) {
         {habit.name}
       </span>
       <div className="flex gap-1 shrink-0">
-        {days.map((day) => {
-          const dateStr = format(day, 'yyyy-MM-dd')
-          const dayNum = format(day, 'd')
-          const isToday = dateStr === todayStr
-          return (
-            <div
-              key={dateStr}
-              className={`w-7 h-7 rounded-md flex items-center justify-center bg-cream-dark
-                ${isToday ? 'border-2 border-rust' : 'border border-muted-light'}`}
-            >
-              <span
-                className="text-muted"
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: '10px',
-                  lineHeight: 1,
-                }}
-              >
-                {dayNum}
-              </span>
-            </div>
-          )
-        })}
       </div>
     </div>
   )

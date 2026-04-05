@@ -1,72 +1,32 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { format } from 'date-fns'
-import { ArrowLeft, Download, Upload, Check, Trash2, Plus, Tag } from 'lucide-react'
+import { ArrowLeft, Download, Upload, Plus, Tag } from 'lucide-react'
 import { exportData } from '../services/exportService'
 import { ImportModal } from '../components/ImportModal'
 import { useUIStore } from '../store/uiStore'
 import { useHabitStore } from '../store/habitStore'
 import type { Category } from '../types/index'
-
-// ── Color palette ──────────────────────────────────────────────────
-
-const COLOR_OPTIONS = [
-  { key: 'rust',  hex: '#B5451B' },
-  { key: 'brown', hex: '#6B4226' },
-  { key: 'muted', hex: '#9C8E85' },
-  { key: 'amber', hex: '#C4893A' },
-  { key: 'sage',  hex: '#4A7C59' },
-  { key: 'slate', hex: '#5B6FA6' },
-] as const
-
-type ColorKey = typeof COLOR_OPTIONS[number]['key']
-
-function colorHex(key: string): string {
-  return COLOR_OPTIONS.find(c => c.key === key)?.hex ?? '#9C8E85'
-}
+import { colorHex } from '../utils/colors'
+import { CategoryModal } from '../components/CategoryModal'
 
 // ── Category Section ───────────────────────────────────────────────
 
 function CategorySection() {
   const categories = useHabitStore(s => s.categories)
   const habits     = useHabitStore(s => s.habits)
-  const addCategory    = useHabitStore(s => s.addCategory)
-  const deleteCategory = useHabitStore(s => s.deleteCategory)
-  const showToast = useUIStore(s => s.showToast)
 
-  const [showAdd, setShowAdd]       = useState(false)
-  const [label, setLabel]           = useState('')
-  const [colorKey, setColorKey]     = useState<ColorKey>('rust')
-  const [deletingId, setDeletingId] = useState<string | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingCategory, setEditingCategory] = useState<Category | undefined>(undefined)
 
-  useEffect(() => {
-    if (showAdd) inputRef.current?.focus()
-  }, [showAdd])
-
-  function resetAdd() {
-    setLabel('')
-    setColorKey('rust')
-    setShowAdd(false)
+  function handleAddClick() {
+    setEditingCategory(undefined)
+    setIsModalOpen(true)
   }
 
-  async function handleAdd() {
-    const trimmed = label.trim()
-    if (!trimmed) return
-    const newCat: Category = {
-      id: crypto.randomUUID(),
-      label: trimmed,
-      colorKey,
-    }
-    await addCategory(newCat)
-    showToast(`"${trimmed}" added`)
-    resetAdd()
-  }
-
-  async function handleDelete(cat: Category) {
-    await deleteCategory(cat.id)
-    showToast(`"${cat.label}" deleted and habits moved to None`)
-    setDeletingId(null)
+  function handleEditClick(cat: Category) {
+    setEditingCategory(cat)
+    setIsModalOpen(true)
   }
 
   return (
@@ -77,62 +37,13 @@ function CategorySection() {
           Categories
         </h2>
         <button
-          onClick={() => setShowAdd(v => !v)}
+          onClick={handleAddClick}
           className="flex items-center gap-1 font-mono text-[11px] text-rust uppercase tracking-wide"
         >
           <Plus size={12} />
           Add
         </button>
       </div>
-
-      {/* Inline add form */}
-      {showAdd && (
-        <div className="mb-3 p-3 bg-cream-dark border border-muted-light rounded-xl space-y-3">
-          <input
-            ref={inputRef}
-            type="text"
-            value={label}
-            onChange={e => setLabel(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter') handleAdd() }}
-            placeholder="Category name"
-            className="w-full bg-cream border border-muted-light rounded-md text-ink focus:outline-none focus:ring-1 focus:ring-rust placeholder:text-muted"
-            style={{ fontFamily: 'var(--font-body)', padding: '8px 12px', fontSize: '14px' }}
-          />
-
-          {/* Color picker */}
-          <div className="flex items-center gap-2.5">
-            {COLOR_OPTIONS.map(c => (
-              <button
-                key={c.key}
-                onClick={() => setColorKey(c.key)}
-                className="relative w-7 h-7 rounded-full transition-transform hover:scale-110 flex items-center justify-center"
-                style={{ backgroundColor: c.hex }}
-              >
-                {colorKey === c.key && (
-                  <Check size={14} color="#F5F0E8" strokeWidth={3} />
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* Actions */}
-          <div className="flex gap-2 justify-end">
-            <button
-              onClick={resetAdd}
-              className="font-mono text-[12px] text-muted px-3 py-1.5"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleAdd}
-              disabled={!label.trim()}
-              className="font-mono text-[12px] bg-rust text-cream rounded-full px-4 py-1.5 disabled:opacity-50 transition-opacity"
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Category list */}
       <div className="bg-cream-dark rounded-xl border border-muted-light overflow-hidden">
@@ -142,7 +53,7 @@ function CategorySection() {
             <p className="font-mono text-[12px] text-muted text-center m-0">
               No categories yet.{' '}
               <button
-                onClick={() => setShowAdd(true)}
+                onClick={handleAddClick}
                 className="text-rust underline"
               >
                 Add one
@@ -152,48 +63,25 @@ function CategorySection() {
         ) : (
           categories.map((cat, idx) => {
             const isLast = idx === categories.length - 1
-            const isConfirming = deletingId === cat.id
             const habitCount = habits.filter(h => h.categoryId === cat.id).length
 
             return (
               <div key={cat.id}>
                 <div className="flex items-center justify-between gap-3 px-4 py-3">
-                  {/* Left: color dot + label + count */}
-                  <div className="flex items-center gap-3 min-w-0">
+                  {/* Category row */}
+                  <button
+                    className="flex items-center gap-3 w-full min-w-0 text-left hover:opacity-80 transition-opacity"
+                    onClick={() => handleEditClick(cat)}
+                  >
                     <span
                       className="w-3 h-3 rounded-full shrink-0"
                       style={{ backgroundColor: colorHex(cat.colorKey) }}
                     />
-                    <span className="font-serif text-[15px] text-ink truncate">{cat.label}</span>
-                    <span className="font-mono text-[11px] text-muted shrink-0">
+                    <span className="font-serif text-[15px] text-ink truncate flex-1">{cat.label}</span>
+                    <span className="font-mono text-[11px] text-muted shrink-0 mt-0.5">
                       {habitCount} {habitCount === 1 ? 'habit' : 'habits'}
                     </span>
-                  </div>
-
-                  {/* Right: delete / confirm */}
-                  {isConfirming ? (
-                    <div className="flex items-center gap-2 shrink-0">
-                      <button
-                        onClick={() => setDeletingId(null)}
-                        className="font-mono text-[11px] text-muted px-2 py-1"
-                      >
-                        Keep
-                      </button>
-                      <button
-                        onClick={() => handleDelete(cat)}
-                        className="font-mono text-[11px] bg-rust text-cream rounded-full px-3 py-1"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => setDeletingId(cat.id)}
-                      className="text-muted hover:text-rust transition-colors shrink-0 p-1"
-                    >
-                      <Trash2 size={15} />
-                    </button>
-                  )}
+                  </button>
                 </div>
                 {!isLast && <div className="border-t border-muted-light mx-4" />}
               </div>
@@ -201,6 +89,12 @@ function CategorySection() {
           })
         )}
       </div>
+
+      <CategoryModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        categoryToEdit={editingCategory}
+      />
     </div>
   )
 }

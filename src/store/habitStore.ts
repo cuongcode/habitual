@@ -64,6 +64,7 @@ interface HabitStore {
   init(): Promise<void>
 
   addCategory(category: Category | Omit<Category, 'id'>): Promise<void>
+  updateCategory(id: string, updates: Partial<Category>): Promise<void>
   deleteCategory(id: string): Promise<void>
 
   addHabit(habit: Omit<Habit, 'id' | 'createdAt'>): Promise<void>
@@ -184,6 +185,25 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
     } catch (err) {
       console.error('Failed to save category to IDB:', err)
       set({ categories: prev })
+    }
+  },
+
+  async updateCategory(id, updates) {
+    const prevCategories = get().categories
+    const idx = prevCategories.findIndex((c) => c.id === id)
+    if (idx === -1) return
+
+    const updated = { ...prevCategories[idx], ...updates }
+    const newCategories = [...prevCategories]
+    newCategories[idx] = updated
+
+    set({ categories: newCategories })
+
+    try {
+      await db.saveCategory(updated)
+    } catch (err) {
+      console.error('Failed to update category in IDB:', err)
+      set({ categories: prevCategories })
     }
   },
 

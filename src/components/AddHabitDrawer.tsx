@@ -3,7 +3,6 @@ import HabitForm from './HabitForm'
 import type { HabitFormValues } from './HabitForm'
 import { useHabitStore } from '../store/habitStore'
 import { useUIStore } from '../store/uiStore'
-import type { Category } from '../types/index'
 import { requestNotificationPermission, scheduleReminders } from '../services/notificationService'
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
 
@@ -24,29 +23,17 @@ export default function AddHabitDrawer() {
   async function handleCreate(values: HabitFormValues) {
     const store = useHabitStore.getState()
 
-    // 1. If new category: create it first
-    let categoryId = values.categoryId
-    if (values.newCategoryLabel) {
-      const newCat: Category = {
-        id: crypto.randomUUID(),
-        label: values.newCategoryLabel,
-        colorKey: values.newCategoryColorKey ?? 'rust',
-      }
-      await store.addCategory(newCat)
-      categoryId = newCat.id
-    }
-
-    // 2. Create the habit
+    // Create the habit
     const habitData = {
       name: values.name,
-      categoryId,
+      categoryId: values.categoryId,
       schedule: values.schedule,
       reminderTime: values.reminderEnabled ? values.reminderTime : undefined,
       order: 0,
     }
     await store.addHabit(habitData)
 
-    // 3. Schedule reminder if enabled
+    // Schedule reminder if enabled
     if (values.reminderEnabled && values.reminderTime) {
       await requestNotificationPermission()
       const latestHabits = useHabitStore.getState().habits
@@ -54,7 +41,7 @@ export default function AddHabitDrawer() {
       if (newHabit) scheduleReminders([newHabit])
     }
 
-    // 4. Close drawer
+    // Close drawer
     handleClose()
   }
 

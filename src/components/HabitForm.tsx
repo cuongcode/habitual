@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Loader2, Check } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useHabitStore } from '../store/habitStore'
 import type { Schedule } from '../types/index'
 
@@ -8,8 +8,6 @@ import type { Schedule } from '../types/index'
 export interface HabitFormValues {
   name: string
   categoryId: string
-  newCategoryLabel?: string
-  newCategoryColorKey?: string
   schedule: Schedule
   reminderTime?: string
   reminderEnabled: boolean
@@ -27,14 +25,6 @@ interface HabitFormProps {
 const TABS = ['Basics', 'Schedule', 'Reminder'] as const
 type Tab = (typeof TABS)[number]
 
-const COLOR_OPTIONS = [
-  { key: 'rust', hex: '#B5451B' },
-  { key: 'brown', hex: '#6B4226' },
-  { key: 'muted', hex: '#9C8E85' },
-  { key: 'amber', hex: '#C4893A' },
-  { key: 'sage', hex: '#4A7C59' },
-  { key: 'slate', hex: '#5B6FA6' },
-]
 
 const WEEKDAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -61,9 +51,6 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
   const [activeTab, setActiveTab] = useState<Tab>('Basics')
   const [name, setName] = useState(initialValues?.name ?? '')
   const [categoryId, setCategoryId] = useState(initialValues?.categoryId ?? '')
-  const [showNewCategory, setShowNewCategory] = useState(false)
-  const [newCategoryLabel, setNewCategoryLabel] = useState(initialValues?.newCategoryLabel ?? '')
-  const [newCategoryColorKey, setNewCategoryColorKey] = useState(initialValues?.newCategoryColorKey ?? 'rust')
   const [schedule, setSchedule] = useState<Schedule>(initialValues?.schedule ?? getDefaultSchedule())
   const [reminderEnabled, setReminderEnabled] = useState(initialValues?.reminderEnabled ?? false)
   const [reminderTime, setReminderTime] = useState(initialValues?.reminderTime ?? '08:00')
@@ -82,11 +69,8 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
   function validate(): Record<string, string> {
     const errs: Record<string, string> = {}
     if (!name.trim()) errs.name = 'Habit name is required'
-    if (!categoryId && !newCategoryLabel.trim()) {
-      errs.category = 'Select or create a category'
-    }
-    if (showNewCategory && newCategoryLabel.trim() && !newCategoryColorKey) {
-      errs.category = 'Pick a color for the new category'
+    if (!categoryId) {
+      errs.category = 'Select a category'
     }
     // Schedule validation
     const s = schedule
@@ -125,9 +109,7 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
     try {
       await onSubmit({
         name: name.trim(),
-        categoryId: showNewCategory ? '' : categoryId,
-        newCategoryLabel: showNewCategory ? newCategoryLabel.trim() : undefined,
-        newCategoryColorKey: showNewCategory ? newCategoryColorKey : undefined,
+        categoryId,
         schedule,
         reminderTime: reminderEnabled ? reminderTime : undefined,
         reminderEnabled,
@@ -166,8 +148,11 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
   // ── Category color lookup ──────────────────────────────────────
 
   function getCategoryColor(colorKey: string): string {
-    const found = COLOR_OPTIONS.find(c => c.key === colorKey)
-    return found?.hex ?? '#9C8E85'
+    const map: Record<string, string> = {
+      rust: '#B5451B', brown: '#6B4226', muted: '#9C8E85',
+      amber: '#C4893A', sage: '#4A7C59', slate: '#5B6FA6',
+    }
+    return map[colorKey] ?? '#9C8E85'
   }
 
   // ── Render ─────────────────────────────────────────────────────
@@ -203,14 +188,8 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
             setName={setName}
             nameRef={nameRef}
             categoryId={categoryId}
-            setCategoryId={(id) => { setCategoryId(id); setShowNewCategory(false) }}
-            onNewCategoryClick={() => { setShowNewCategory(true); setCategoryId('') }}
+            setCategoryId={setCategoryId}
             categories={categories}
-            showNewCategory={showNewCategory}
-            newCategoryLabel={newCategoryLabel}
-            setNewCategoryLabel={setNewCategoryLabel}
-            newCategoryColorKey={newCategoryColorKey}
-            setNewCategoryColorKey={setNewCategoryColorKey}
             getCategoryColor={getCategoryColor}
             errors={errors}
           />
@@ -272,13 +251,7 @@ interface BasicsTabProps {
   nameRef: React.RefObject<HTMLInputElement | null>
   categoryId: string
   setCategoryId: (id: string) => void
-  onNewCategoryClick: () => void
   categories: { id: string; label: string; colorKey: string }[]
-  showNewCategory: boolean
-  newCategoryLabel: string
-  setNewCategoryLabel: (v: string) => void
-  newCategoryColorKey: string
-  setNewCategoryColorKey: (v: string) => void
   getCategoryColor: (colorKey: string) => string
   errors: Record<string, string>
 }
@@ -286,11 +259,7 @@ interface BasicsTabProps {
 function BasicsTab({
   name, setName, nameRef,
   categoryId, setCategoryId,
-  onNewCategoryClick,
   categories,
-  showNewCategory,
-  newCategoryLabel, setNewCategoryLabel,
-  newCategoryColorKey, setNewCategoryColorKey,
   getCategoryColor,
   errors,
 }: BasicsTabProps) {
@@ -332,71 +301,32 @@ function BasicsTab({
           Category
         </label>
 
-        {/* Category Pills */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setCategoryId(cat.id)}
-              className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors ${
-                categoryId === cat.id && !showNewCategory
-                  ? 'bg-rust text-cream'
-                  : 'bg-cream text-ink border border-muted-light'
-              }`}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full shrink-0"
-                style={{ backgroundColor: getCategoryColor(cat.colorKey) }}
-              />
-              {cat.label}
-            </button>
-          ))}
-
-          {/* + New pill */}
-          <button
-            onClick={onNewCategoryClick}
-            className={`shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors ${
-              showNewCategory
-                ? 'bg-rust text-cream border border-rust'
-                : 'bg-cream text-muted border border-dashed border-muted'
-            }`}
-            style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}
+        {categories.length === 0 ? (
+          <p
+            style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--color-muted)' }}
           >
-            + New
-          </button>
-        </div>
-
-        {/* New Category Sub-form */}
-        {showNewCategory && (
-          <div className="mt-3 space-y-3 p-3 bg-cream-dark rounded-lg">
-            <input
-              type="text"
-              value={newCategoryLabel}
-              onChange={(e) => setNewCategoryLabel(e.target.value)}
-              placeholder="Category name"
-              className="w-full bg-cream border border-muted-light rounded-md text-ink focus:outline-none focus:ring-1 focus:ring-rust placeholder:text-muted"
-              style={{
-                fontFamily: 'var(--font-body)',
-                padding: '8px 12px',
-                fontSize: '14px',
-              }}
-              autoFocus
-            />
-            <div className="flex gap-3 items-center">
-              {COLOR_OPTIONS.map((color) => (
-                <button
-                  key={color.key}
-                  onClick={() => setNewCategoryColorKey(color.key)}
-                  className="relative w-6 h-6 rounded-full transition-transform hover:scale-110 flex items-center justify-center"
-                  style={{ backgroundColor: color.hex }}
-                >
-                  {newCategoryColorKey === color.key && (
-                    <Check size={14} color="#F5F0E8" strokeWidth={3} />
-                  )}
-                </button>
-              ))}
-            </div>
+            No categories yet — add one in Settings.
+          </p>
+        ) : (
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setCategoryId(cat.id)}
+                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors ${
+                  categoryId === cat.id
+                    ? 'bg-rust text-cream'
+                    : 'bg-cream text-ink border border-muted-light'
+                }`}
+                style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full shrink-0"
+                  style={{ backgroundColor: getCategoryColor(cat.colorKey) }}
+                />
+                {cat.label}
+              </button>
+            ))}
           </div>
         )}
 

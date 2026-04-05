@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import HabitForm from './HabitForm'
 import type { HabitFormValues } from './HabitForm'
 import { useHabitStore } from '../store/habitStore'
-import type { Habit, Category } from '../types/index'
+import type { Habit } from '../types/index'
 import { requestNotificationPermission, scheduleReminders } from '../services/notificationService'
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
 
@@ -38,21 +38,9 @@ export default function EditHabitModal({ habit, onClose }: EditHabitModalProps) 
   async function handleSave(values: HabitFormValues) {
     const store = useHabitStore.getState()
 
-    // If new category: create it first
-    let categoryId = values.categoryId
-    if (values.newCategoryLabel) {
-      const newCat: Category = {
-        id: crypto.randomUUID(),
-        label: values.newCategoryLabel,
-        colorKey: values.newCategoryColorKey ?? 'rust',
-      }
-      await store.addCategory(newCat)
-      categoryId = newCat.id
-    }
-
     await store.updateHabit(habit.id, {
       name: values.name,
-      categoryId,
+      categoryId: values.categoryId,
       schedule: values.schedule,
       reminderTime: values.reminderEnabled ? values.reminderTime : undefined,
     })

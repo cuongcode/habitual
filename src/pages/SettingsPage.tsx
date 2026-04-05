@@ -64,14 +64,8 @@ function CategorySection() {
   }
 
   async function handleDelete(cat: Category) {
-    const inUse = habits.some(h => h.categoryId === cat.id)
-    if (inUse) {
-      showToast('Move or delete habits in this category first')
-      setDeletingId(null)
-      return
-    }
     await deleteCategory(cat.id)
-    showToast(`"${cat.label}" deleted`)
+    showToast(`"${cat.label}" deleted and habits moved to None`)
     setDeletingId(null)
   }
 

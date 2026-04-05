@@ -69,9 +69,6 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
   function validate(): Record<string, string> {
     const errs: Record<string, string> = {}
     if (!name.trim()) errs.name = 'Habit name is required'
-    if (!categoryId) {
-      errs.category = 'Select a category'
-    }
     // Schedule validation
     const s = schedule
     if (s.frequency === 'weekly' && (!(s as any).weekdays?.length)) {
@@ -109,7 +106,7 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
     try {
       await onSubmit({
         name: name.trim(),
-        categoryId,
+        categoryId: categoryId || 'none',
         schedule,
         reminderTime: reminderEnabled ? reminderTime : undefined,
         reminderEnabled,
@@ -312,7 +309,7 @@ function BasicsTab({
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setCategoryId(cat.id)}
+                onClick={() => setCategoryId(categoryId === cat.id ? 'none' : cat.id)}
                 className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors ${
                   categoryId === cat.id
                     ? 'bg-rust text-cream'

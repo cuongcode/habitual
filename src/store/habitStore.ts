@@ -188,14 +188,25 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   },
 
   async deleteCategory(id) {
-    const prev = get().categories
-    set({ categories: prev.filter((c) => c.id !== id) })
+    const prevCategories = get().categories
+    const prevHabits = get().habits
+    
+    const updatedHabits = prevHabits.map((h) => 
+      h.categoryId === id ? { ...h, categoryId: 'none' } : h
+    )
+
+    set({ 
+      categories: prevCategories.filter((c) => c.id !== id),
+      habits: updatedHabits
+    })
 
     try {
       await db.deleteCategory(id)
+      const habitsToUpdate = updatedHabits.filter((_, i) => prevHabits[i].categoryId === id)
+      await Promise.all(habitsToUpdate.map(h => db.saveHabit(h)))
     } catch (err) {
       console.error('Failed to delete category from IDB:', err)
-      set({ categories: prev })
+      set({ categories: prevCategories, habits: prevHabits })
     }
   },
 

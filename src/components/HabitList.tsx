@@ -47,7 +47,7 @@ export default function HabitList() {
     }
 
     // All view: group by category order
-    return categories
+    const allGroups = categories
       .map((cat) => ({
         category: cat,
         habits: habits
@@ -55,6 +55,19 @@ export default function HabitList() {
           .sort((a, b) => a.order - b.order),
       }))
       .filter((g) => g.habits.length > 0)
+      
+    const noneHabits = habits
+      .filter((h) => !h.categoryId || h.categoryId === 'none')
+      .sort((a, b) => a.order - b.order)
+      
+    if (noneHabits.length > 0) {
+      allGroups.push({
+        category: { id: 'none', label: 'None', colorKey: 'muted' },
+        habits: noneHabits,
+      })
+    }
+    
+    return allGroups
   }, [habits, categories, activeCategoryId])
 
   const activeHabit = activeId ? habits.find((h) => h.id === activeId) : null
@@ -133,7 +146,7 @@ export default function HabitList() {
         {groups.map((group) => (
           <div key={group.category.id} className="mb-4 last:mb-0">
             {/* Category Header (only show in 'All' view) */}
-            {!activeCategoryId && (
+            {!activeCategoryId && group.category.id !== 'none' && (
               <div className="px-4 py-2 bg-cream-dark/30 border-b border-muted-light/30">
                 <span
                   className="text-muted-dark uppercase tracking-wider font-semibold"

@@ -204,9 +204,9 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
             nameRef={nameRef}
             categoryId={categoryId}
             setCategoryId={(id) => { setCategoryId(id); setShowNewCategory(false) }}
+            onNewCategoryClick={() => { setShowNewCategory(true); setCategoryId('') }}
             categories={categories}
             showNewCategory={showNewCategory}
-            setShowNewCategory={setShowNewCategory}
             newCategoryLabel={newCategoryLabel}
             setNewCategoryLabel={setNewCategoryLabel}
             newCategoryColorKey={newCategoryColorKey}
@@ -272,9 +272,9 @@ interface BasicsTabProps {
   nameRef: React.RefObject<HTMLInputElement | null>
   categoryId: string
   setCategoryId: (id: string) => void
+  onNewCategoryClick: () => void
   categories: { id: string; label: string; colorKey: string }[]
   showNewCategory: boolean
-  setShowNewCategory: (v: boolean) => void
   newCategoryLabel: string
   setNewCategoryLabel: (v: string) => void
   newCategoryColorKey: string
@@ -286,8 +286,9 @@ interface BasicsTabProps {
 function BasicsTab({
   name, setName, nameRef,
   categoryId, setCategoryId,
+  onNewCategoryClick,
   categories,
-  showNewCategory, setShowNewCategory,
+  showNewCategory,
   newCategoryLabel, setNewCategoryLabel,
   newCategoryColorKey, setNewCategoryColorKey,
   getCategoryColor,
@@ -354,7 +355,7 @@ function BasicsTab({
 
           {/* + New pill */}
           <button
-            onClick={() => { setShowNewCategory(true); setCategoryId('') }}
+            onClick={onNewCategoryClick}
             className={`shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors ${
               showNewCategory
                 ? 'bg-rust text-cream border border-rust'

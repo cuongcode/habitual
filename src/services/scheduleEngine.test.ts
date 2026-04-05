@@ -43,9 +43,9 @@ describe('isTargetDate', () => {
     })
   })
 
-  describe('weekly', () => {
-    // weekday 4 = Thursday
-    const schedule: Schedule = { frequency: 'weekly', weekday: 4 }
+  describe('weekly — single day', () => {
+    // weekdays [4] = Thursday only
+    const schedule: Schedule = { frequency: 'weekly', weekdays: [4] }
 
     it('returns true on matching weekday (Thursday)', () => {
       expect(isTargetDate(new Date('2026-03-26'), schedule, habit)).toBe(true) // Thu
@@ -53,6 +53,53 @@ describe('isTargetDate', () => {
 
     it('returns false on non-matching weekday (Wednesday)', () => {
       expect(isTargetDate(new Date('2026-03-25'), schedule, habit)).toBe(false) // Wed
+    })
+  })
+
+  describe('weekly — two days (Mon + Thu)', () => {
+    // weekdays [1, 4] = Monday + Thursday
+    const schedule: Schedule = { frequency: 'weekly', weekdays: [1, 4] }
+
+    it('returns true on Monday', () => {
+      expect(isTargetDate(new Date('2026-03-23'), schedule, habit)).toBe(true) // Mon
+    })
+
+    it('returns true on Thursday', () => {
+      expect(isTargetDate(new Date('2026-03-26'), schedule, habit)).toBe(true) // Thu
+    })
+
+    it('returns false on Wednesday (between targets)', () => {
+      expect(isTargetDate(new Date('2026-03-25'), schedule, habit)).toBe(false) // Wed
+    })
+
+    it('returns false on Sunday', () => {
+      expect(isTargetDate(new Date('2026-03-22'), schedule, habit)).toBe(false) // Sun
+    })
+  })
+
+  describe('weekly — three days (Mon, Wed, Fri)', () => {
+    // weekdays [1, 3, 5] = Mon, Wed, Fri
+    const schedule: Schedule = { frequency: 'weekly', weekdays: [1, 3, 5] }
+
+    it('returns true on Monday', () => {
+      expect(isTargetDate(new Date('2026-03-23'), schedule, habit)).toBe(true) // Mon
+    })
+
+    it('returns true on Wednesday', () => {
+      expect(isTargetDate(new Date('2026-03-25'), schedule, habit)).toBe(true) // Wed
+    })
+
+    it('returns true on Friday', () => {
+      expect(isTargetDate(new Date('2026-03-27'), schedule, habit)).toBe(true) // Fri
+    })
+
+    it('returns false on Tuesday (gap between Mon and Wed)', () => {
+      expect(isTargetDate(new Date('2026-03-24'), schedule, habit)).toBe(false) // Tue
+    })
+
+    it('returns false on weekend', () => {
+      expect(isTargetDate(new Date('2026-03-22'), schedule, habit)).toBe(false) // Sun
+      expect(isTargetDate(new Date('2026-03-28'), schedule, habit)).toBe(false) // Sat
     })
   })
 
@@ -119,9 +166,9 @@ describe('getDayState', () => {
     vi.useRealTimers()
   })
 
-  describe('weekly habit with completed entry', () => {
-    // Weekly on Thursday (weekday 4)
-    const habit = makeHabit({ frequency: 'weekly', weekday: 4 })
+  describe('weekly habit (single day) with completed entry', () => {
+    // Weekly on Thursday (weekdays: [4])
+    const habit = makeHabit({ frequency: 'weekly', weekdays: [4] })
     // Thursday 2026-03-19 was completed
     const entries = [makeEntry(habit.id, '2026-03-19')]
 
@@ -131,21 +178,21 @@ describe('getDayState', () => {
       )
     })
 
-    it('Friday after completed Thursday → window-empty', () => {
+    it('Friday after completed Thursday → window-on', () => {
       expect(getDayState(new Date('2026-03-20'), habit, entries)).toBe(
-        'window-empty',
+        'window-on',
       )
     })
 
-    it('Tuesday in window → window-empty', () => {
+    it('Tuesday in window → window-on', () => {
       expect(getDayState(new Date('2026-03-24'), habit, entries)).toBe(
-        'window-empty',
+        'window-on',
       )
     })
 
-    it('today Wednesday in window → window-empty', () => {
+    it('today Wednesday in window → window-on', () => {
       expect(getDayState(new Date('2026-03-25'), habit, entries)).toBe(
-        'window-empty',
+        'window-on',
       )
     })
 
@@ -156,8 +203,8 @@ describe('getDayState', () => {
     })
   })
 
-  describe('weekly habit with no entries (missed)', () => {
-    const habit = makeHabit({ frequency: 'weekly', weekday: 4 })
+  describe('weekly habit (single day) with no entries (missed)', () => {
+    const habit = makeHabit({ frequency: 'weekly', weekdays: [4] })
     const entries: HabitEntry[] = []
 
     it('past Thursday with no check → target-missed', () => {
@@ -176,6 +223,32 @@ describe('getDayState', () => {
       expect(getDayState(new Date('2026-03-26'), habit, entries)).toBe(
         'future',
       )
+    })
+  })
+
+  describe('weekly habit — two days (Mon + Thu), today is Wed 2026-03-25', () => {
+    // Mon Mar 23 and Thu Mar 26 are target days; today is Wed Mar 25
+    const habit = makeHabit({ frequency: 'weekly', weekdays: [1, 4] })
+
+    it('Mon 2026-03-23 completed → target-complete', () => {
+      const entries = [makeEntry(habit.id, '2026-03-23')]
+      expect(getDayState(new Date('2026-03-23'), habit, entries)).toBe('target-complete')
+    })
+
+    it('Mon 2026-03-23 missed → target-missed', () => {
+      expect(getDayState(new Date('2026-03-23'), habit, [])).toBe('target-missed')
+    })
+
+    it('Tue 2026-03-24 (non-target, after missed Mon) → window-empty', () => {
+      expect(getDayState(new Date('2026-03-24'), habit, [])).toBe('window-empty')
+    })
+
+    it('Wed 2026-03-25 (today, non-target) → window-empty', () => {
+      expect(getDayState(new Date('2026-03-25'), habit, [])).toBe('window-empty')
+    })
+
+    it('Thu 2026-03-26 (next target) → future', () => {
+      expect(getDayState(new Date('2026-03-26'), habit, [])).toBe('future')
     })
   })
 

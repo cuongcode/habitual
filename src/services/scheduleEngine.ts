@@ -38,7 +38,7 @@ export function isTargetDate(
       return true
 
     case 'weekly':
-      return getDay(d) === schedule.weekday
+      return schedule.weekdays.includes(getDay(d) as 0 | 1 | 2 | 3 | 4 | 5 | 6)
 
     case 'monthly':
       return getDate(d) === schedule.dayOfMonth

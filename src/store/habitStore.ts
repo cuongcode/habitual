@@ -44,7 +44,7 @@ function makeSeedHabits(): Habit[] {
       id: 'f1',
       name: 'Deep work session',
       categoryId: 'cat-2',
-      schedule: { frequency: 'weekly', weekday: 4 },
+      schedule: { frequency: 'weekly', weekdays: [4] },
       order: 0,
       createdAt: now,
     },
@@ -112,6 +112,15 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       
       if (needsRefetch) {
         habits = await db.getAllHabits()
+      }
+
+      // ── Data Migration: weekday → weekdays[] ────────────────────────
+      for (const h of habits) {
+        if (h.schedule.frequency === 'weekly' && 'weekday' in h.schedule) {
+          const legacy = h.schedule as unknown as { frequency: 'weekly'; weekday: number }
+          h.schedule = { frequency: 'weekly', weekdays: [legacy.weekday as 0|1|2|3|4|5|6] }
+          await db.saveHabit(h)
+        }
       }
 
       // ── Seeding ─────────────────────────────────────────────────────

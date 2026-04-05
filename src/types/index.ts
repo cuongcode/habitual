@@ -2,7 +2,7 @@ export type Frequency = 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom'
 
 export type Schedule =
   | { frequency: 'daily' }
-  | { frequency: 'weekly'; weekday: 0 | 1 | 2 | 3 | 4 | 5 | 6 }
+  | { frequency: 'weekly'; weekdays: (0 | 1 | 2 | 3 | 4 | 5 | 6)[] }  // 1–3 items
   | { frequency: 'monthly'; dayOfMonth: number }
   | { frequency: 'yearly'; month: number; dayOfMonth: number }
   | { frequency: 'custom'; intervalDays: number; anchorDate: string }

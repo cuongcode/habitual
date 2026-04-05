@@ -19,9 +19,13 @@ const formatSchedule = (habit: Habit) => {
   switch (schedule.frequency) {
     case 'daily':
       return 'Every day'
-    case 'weekly':
-      // Using a reference date to get the weekday name correctly
-      return `Every ${format(setDay(new Date(), schedule.weekday), 'EEEE')}`
+    case 'weekly': {
+      const names = schedule.weekdays.map(wd => format(setDay(new Date(), wd), 'EEEE'))
+      if (names.length === 1) return `Every ${names[0]}`
+      const last = names[names.length - 1]
+      const rest = names.slice(0, -1)
+      return `Every ${rest.join(', ')} & ${last}`
+    }
     case 'monthly':
       return `Every month on the ${getOrdinal(schedule.dayOfMonth)}`
     case 'yearly': {

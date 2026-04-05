@@ -90,8 +90,8 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
     }
     // Schedule validation
     const s = schedule
-    if (s.frequency === 'weekly' && (s as any).weekday === undefined) {
-      errs.schedule = 'Pick a weekday'
+    if (s.frequency === 'weekly' && (!(s as any).weekdays?.length)) {
+      errs.schedule = 'Pick at least one weekday'
     }
     if (s.frequency === 'monthly' && !(s as any).dayOfMonth) {
       errs.schedule = 'Pick a day of the month'
@@ -147,9 +147,8 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
         setSchedule({ frequency: 'daily' })
         break
       case 'weekly': {
-        // JS getDay 0=Sun → our weekday type 0=Sun,1=Mon,...6=Sat
-        const jsDay = now.getDay()
-        setSchedule({ frequency: 'weekly', weekday: jsDay as 0 | 1 | 2 | 3 | 4 | 5 | 6 })
+        const jsDay = now.getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6
+        setSchedule({ frequency: 'weekly', weekdays: [jsDay] })
         break
       }
       case 'monthly':
@@ -423,7 +422,7 @@ interface ScheduleTabProps {
 
 const FREQUENCY_OPTIONS: { value: Schedule['frequency']; label: string; description: string }[] = [
   { value: 'daily', label: 'Daily', description: 'Every day' },
-  { value: 'weekly', label: 'Weekly', description: 'Pick a weekday' },
+  { value: 'weekly', label: 'Weekly', description: 'Pick 1–3 weekdays' },
   { value: 'monthly', label: 'Monthly', description: 'Pick a day of the month' },
   { value: 'yearly', label: 'Yearly', description: 'Pick a date each year' },
   { value: 'custom', label: 'Custom', description: 'Every X days' },
@@ -465,8 +464,8 @@ function ScheduleTab({ schedule, setSchedule, onFrequencyChange, errors }: Sched
       <div className="mt-5">
         {schedule.frequency === 'weekly' && (
           <WeekdayPicker
-            selected={(schedule as any).weekday}
-            onChange={(wd) => setSchedule({ frequency: 'weekly', weekday: wd as 0 | 1 | 2 | 3 | 4 | 5 | 6 })}
+            selected={(schedule as any).weekdays ?? []}
+            onChange={(wds) => setSchedule({ frequency: 'weekly', weekdays: wds })}
           />
         )}
 
@@ -507,34 +506,73 @@ function ScheduleTab({ schedule, setSchedule, onFrequencyChange, errors }: Sched
 
 // ── Weekday Picker ─────────────────────────────────────────────────
 
-function WeekdayPicker({ selected, onChange }: { selected: number; onChange: (wd: number) => void }) {
-  // Display Mon-Sun but value maps to JS weekday: 0=Sun,1=Mon,...,6=Sat
-  // Display index 0=Mon → JS weekday 1, ..., display index 6=Sun → JS weekday 0
-  const displayToJS = [1, 2, 3, 4, 5, 6, 0]
+type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6
+
+function WeekdayPicker({
+  selected,
+  onChange,
+}: {
+  selected: Weekday[]
+  onChange: (wds: Weekday[]) => void
+}) {
+  // Display Mon–Sun; map display index → JS weekday (0=Sun)
+  const displayToJS: Weekday[] = [1, 2, 3, 4, 5, 6, 0]
+  const atMax = selected.length >= 3
+
+  function toggle(jsDay: Weekday) {
+    if (selected.includes(jsDay)) {
+      // Never deselect the last one
+      if (selected.length === 1) return
+      onChange(selected.filter((d) => d !== jsDay))
+    } else {
+      // Cap at 3
+      if (atMax) return
+      onChange([...selected, jsDay])
+    }
+  }
 
   return (
-    <div className="flex gap-2 justify-between">
-      {WEEKDAY_LABELS.map((label, i) => {
-        const jsDay = displayToJS[i]
-        const isSelected = selected === jsDay
-        return (
-          <button
-            key={label}
-            onClick={() => onChange(jsDay)}
-            className="flex items-center justify-center rounded-full transition-colors"
-            style={{
-              width: '36px',
-              height: '36px',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '12px',
-              backgroundColor: isSelected ? 'var(--color-rust)' : 'var(--color-cream-dark, #EDE8DF)',
-              color: isSelected ? 'var(--color-cream)' : 'var(--color-ink)',
-            }}
-          >
-            {label}
-          </button>
-        )
-      })}
+    <div>
+      <div className="flex gap-2 justify-between">
+        {WEEKDAY_LABELS.map((label, i) => {
+          const jsDay = displayToJS[i]
+          const isSelected = selected.includes(jsDay)
+          const isDisabled = atMax && !isSelected
+          return (
+            <button
+              key={label}
+              onClick={() => toggle(jsDay)}
+              className="flex items-center justify-center rounded-full transition-all active:scale-90"
+              style={{
+                width: '36px',
+                height: '36px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '12px',
+                backgroundColor: isSelected
+                  ? 'var(--color-rust)'
+                  : 'var(--color-cream-dark, #EDE8DF)',
+                color: isSelected ? 'var(--color-cream)' : 'var(--color-ink)',
+                opacity: isDisabled ? 0.35 : 1,
+                cursor: isDisabled ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {label}
+            </button>
+          )
+        })}
+      </div>
+      {atMax && (
+        <p
+          className="mt-2 text-center"
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '11px',
+            color: 'var(--color-muted)',
+          }}
+        >
+          Maximum 3 days selected
+        </p>
+      )}
     </div>
   )
 }

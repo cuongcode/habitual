@@ -71,7 +71,7 @@ export default function HabitRow({ habit }: HabitRowProps) {
   }
 
   const today = startOfDay(new Date())
-  const cellDates = Array.from({ length: 7 }, (_, i) => subDays(today, i))
+  const cellDates = Array.from({ length: 7 }, (_, i) => subDays(today, 6 - i))
 
   const hasNote = (dateStr: string) => !!notes[`${habit.id}_${dateStr}`]
 

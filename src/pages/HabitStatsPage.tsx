@@ -14,7 +14,6 @@ import {
 import HabitStatsHeader from '../components/stats/HabitStatsHeader'
 import StreakSection from '../components/stats/StreakSection'
 import CompletionRateSection from '../components/stats/CompletionRateSection'
-import HeatmapSection from '../components/stats/HeatmapSection'
 import BestPeriodSection from '../components/stats/BestPeriodSection'
 import MonthlyBarChartSection from '../components/stats/MonthlyBarChartSection'
 import TotalCompletionsSection from '../components/stats/TotalCompletionsSection'
@@ -96,8 +95,6 @@ export default function HabitStatsPage() {
         />
         
         <CompletionRateSection rate={completionRate} />
-        
-        <HeatmapSection habit={habit} entries={entries} />
         
         <BestPeriodSection bestPeriod={bestPeriod} />
         

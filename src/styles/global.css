@@ -9,43 +9,43 @@
     --font-mono: 'IBM Plex Mono', monospace;
     --font-body: 'Lora', serif;
 
-    /* Theme Colors */
-    --color-cream: #F5F0E8;
-    --color-cream-dark: #EDE8DF;
-    --color-rust: #B5451B;
-    --color-rust-light: #D4622A;
-    --color-brown: #6B4226;
-    --color-amber: #C4893A;
-    --color-sage: #4A7C59;
-    --color-slate: #5B6FA6;
-    --color-ink: #3D3530;
-    --color-muted: #9C8E85;
-    --color-muted-light: #C4BAB3;
-    --color-surface: #F2EFE9;
+    /* Theme Colors (RGB format for Tailwind opacity support) */
+    --color-cream: 245 240 232;
+    --color-cream-dark: 237 232 223;
+    --color-rust: 181 69 27;
+    --color-rust-light: 212 98 42;
+    --color-brown: 107 66 38;
+    --color-amber: 196 137 58;
+    --color-sage: 74 124 89;
+    --color-slate: 91 111 166;
+    --color-ink: 61 53 48;
+    --color-muted: 156 142 133;
+    --color-muted-light: 196 186 179;
+    --color-surface: 242 239 233;
   }
 
   /* ── Dark Theme Tokens ──────────────────────────────────────────── */
   html.dark {
-    --color-cream: #1C1917;
-    --color-cream-dark: #292524;
-    --color-rust: #D46C34;
-    --color-rust-light: #E88048;
-    --color-brown: #A07858;
-    --color-amber: #DAAA60;
-    --color-sage: #6CA880;
-    --color-slate: #8296C8;
-    --color-ink: #EDE9E4;
-    --color-muted: #8C8278;
-    --color-muted-light: #443E3A;
-    --color-surface: #292524;
+    --color-cream: 28 25 23;
+    --color-cream-dark: 41 37 36;
+    --color-rust: 212 108 52;
+    --color-rust-light: 232 128 72;
+    --color-brown: 160 120 88;
+    --color-amber: 218 170 96;
+    --color-sage: 108 168 128;
+    --color-slate: 130 150 200;
+    --color-ink: 237 233 228;
+    --color-muted: 140 130 120;
+    --color-muted-light: 68 62 58;
+    --color-surface: 41 37 36;
   }
 
   body {
     margin: 0;
     padding: 0;
-    background-color: var(--color-cream);
+    background-color: rgb(var(--color-cream));
     font-family: 'Lora', serif;
-    color: var(--color-ink);
+    color: rgb(var(--color-ink));
     min-height: 100vh;
     overscroll-behavior: none;
     transition: background-color 0.3s ease, color 0.3s ease;

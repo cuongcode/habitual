@@ -1,5 +1,5 @@
+import { eachDayOfInterval, endOfYear, format, isAfter, isToday, startOfYear } from 'date-fns'
 import React, { useMemo } from 'react'
-import { startOfYear, endOfYear, eachDayOfInterval, format, isToday, isAfter } from 'date-fns'
 import { useUIStore } from '../store/uiStore'
 import type { Habit, HabitEntry } from '../types/index'
 
@@ -29,7 +29,7 @@ export const HeatmapCells = React.memo(function HeatmapCells({ habit, entries }:
       className="mode-fade"
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(18, 1fr)',
+        gridTemplateColumns: 'repeat(30, 1fr)',
         gap: '2px',
         width: '100%',
       }}

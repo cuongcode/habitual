@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { 
   format, 
   startOfMonth, 
@@ -7,7 +7,7 @@ import {
   addDays 
 } from 'date-fns'
 import type { Habit, HabitEntry } from '../types/index'
-import { getDayState } from '../services/scheduleEngine'
+import { getDayStateFast, buildCompletedSet } from '../services/scheduleEngine'
 import CalendarDayCell from './CalendarDayCell'
 import { getThemeTokens } from '../utils/theme'
 
@@ -32,6 +32,7 @@ const MonthBlock = memo(({
   onLongPress,
   colorKey
 }: MonthBlockProps) => {
+  const completedSet = useMemo(() => buildCompletedSet(entries), [entries])
   const firstDay = startOfMonth(new Date(year, month - 1))
   const totalDays = getDaysInMonth(firstDay)
   
@@ -57,7 +58,7 @@ const MonthBlock = memo(({
   const tokens = getThemeTokens(colorKey)
 
   return (
-    <div className="mb-6">
+    <div className="mb-6" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 320px' }}>
       <div className={`px-4 py-3 flex justify-end border-t border-muted/10 ${isFirst ? 'border-t-0' : ''}`}>
         <span className={`text-[13px] ${tokens.text} font-display`} style={{ fontFamily: 'var(--font-display)' }}>
           {monthLabel}
@@ -72,7 +73,7 @@ const MonthBlock = memo(({
           
           const date = cell as Date
           const dateStr = format(date, 'yyyy-MM-dd')
-          const state = getDayState(date, habit, entries)
+          const state = getDayStateFast(date, habit, completedSet)
           const hasNote = !!notes[`${habit.id}_${dateStr}`]
           
           return (

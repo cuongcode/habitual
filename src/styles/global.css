@@ -38,6 +38,12 @@ body::after {
   background-size: 256px 256px;
 }
 
+@media (max-width: 768px) {
+  body::after {
+    display: none;
+  }
+}
+
 /* Page Transitions */
 @keyframes fadeSlideUp {
   from { opacity: 0; transform: translateY(12px); }

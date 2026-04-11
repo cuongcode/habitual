@@ -96,6 +96,50 @@ function hasCompletedEntry(entries: HabitEntry[], dateStr: string): boolean {
   return entries.some((e) => e.date === dateStr && e.completed)
 }
 
+/**
+ * Build a Set of completed dates for O(1) lookups.
+ * Use this before rendering a batch of cells to avoid O(n) per-cell scans.
+ */
+export function buildCompletedSet(entries: HabitEntry[]): Set<string> {
+  const set = new Set<string>()
+  for (const e of entries) {
+    if (e.completed) set.add(e.date)
+  }
+  return set
+}
+
+/**
+ * Fast version of getDayState using a pre-built Set instead of linear scan.
+ */
+export function getDayStateFast(
+  date: Date,
+  habit: Habit,
+  completedSet: Set<string>,
+): DayState {
+  const d = startOfDay(date)
+  const today = startOfDay(new Date())
+  const dateStr = toDateStr(d)
+  const isTarget = isTargetDate(d, habit.schedule, habit)
+
+  if (isTarget) {
+    if (completedSet.has(dateStr)) return 'target-complete'
+    if (d > today) return 'future'
+    if (d.getTime() === today.getTime()) return 'target-open'
+    return 'target-missed'
+  }
+
+  // Non-target date
+  if (d > today) return 'future'
+  if (completedSet.has(dateStr)) return 'window-bonus'
+
+  // Find the most recent past target date
+  const prevTarget = getPrevTargetDate(subDays(d, 1), habit.schedule, habit)
+  const prevTargetStr = toDateStr(prevTarget)
+
+  if (completedSet.has(prevTargetStr)) return 'window-on'
+  return 'window-empty'
+}
+
 function toDateStr(d: Date): string {
   const y = d.getFullYear()
   const m = String(d.getMonth() + 1).padStart(2, '0')

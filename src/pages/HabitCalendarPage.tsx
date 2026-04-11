@@ -34,17 +34,24 @@ export default function HabitCalendarPage() {
     if (!el) return
     
     // Scroll to bottom to ensure today is visible
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       el.scrollTo({ top: el.scrollHeight })
-    }, 10)
+    })
 
+    let rafId = 0
     const handleScroll = () => {
-      // Show the button if we are scrolled up away from the bottom
-      setShowScrollBottom(el.scrollTop < el.scrollHeight - el.clientHeight - 300)
+      // Debounce with rAF to avoid excessive state updates during iOS momentum scroll
+      cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => {
+        setShowScrollBottom(el.scrollTop < el.scrollHeight - el.clientHeight - 300)
+      })
     }
 
-    el.addEventListener('scroll', handleScroll)
-    return () => el.removeEventListener('scroll', handleScroll)
+    el.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      el.removeEventListener('scroll', handleScroll)
+      cancelAnimationFrame(rafId)
+    }
   }, [])
 
   const scrollToBottom = () => {
@@ -83,7 +90,8 @@ export default function HabitCalendarPage() {
       {/* Scrollable Grid */}
       <div 
         ref={scrollRef} 
-        className="flex-1 overflow-y-auto scroll-smooth"
+        className="flex-1 overflow-y-auto"
+        style={{ WebkitOverflowScrolling: 'touch' }}
       >
         <CalendarGrid 
           habit={habit} 

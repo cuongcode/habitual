@@ -29,15 +29,24 @@ const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarGridProp
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          setMonths((prev) => {
-            const oldest = prev[prev.length - 1]
-            // JavaScript Date month is 0-indexed
-            const next = subMonths(new Date(oldest.year, oldest.month - 1), 1)
-            return [...prev, { year: next.getFullYear(), month: next.getMonth() + 1 }]
+          // Use rAF to avoid blocking the scroll thread on iOS
+          requestAnimationFrame(() => {
+            setMonths((prev) => {
+              const oldest = prev[prev.length - 1]
+              // Load 3 months at a time to reduce re-render frequency
+              const batch: { year: number; month: number }[] = []
+              let ref = new Date(oldest.year, oldest.month - 1)
+              for (let i = 0; i < 3; i++) {
+                ref = subMonths(ref, 1)
+                batch.push({ year: ref.getFullYear(), month: ref.getMonth() + 1 })
+              }
+              return [...prev, ...batch]
+            })
           })
         }
       },
-      { threshold: 0.1 }
+      // Pre-load before sentinel is visible to prevent visible loading gaps
+      { threshold: 0.1, rootMargin: '200px 0px' }
     )
 
     if (sentinelRef.current) observer.observe(sentinelRef.current)

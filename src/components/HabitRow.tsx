@@ -104,7 +104,7 @@ export default function HabitRow({ habit }: HabitRowProps) {
                 {habit.name}
               </button>
             </div>
-            <HeatmapCells habit={habit} entries={entries} />
+            <HeatmapCells entries={entries} />
           </div>
         ) : (
           <div className="flex items-center gap-2 flex-1 min-w-0">

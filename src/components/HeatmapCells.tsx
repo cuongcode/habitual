@@ -1,9 +1,9 @@
 import { eachDayOfInterval, endOfYear, format, isAfter, isToday, startOfYear } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useUIStore } from '../store/uiStore'
-import type { Habit, HabitEntry } from '../types/index'
+import type { HabitEntry } from '../types/index'
 
-export const HeatmapCells = React.memo(function HeatmapCells({ habit, entries }: { habit: Habit, entries: HabitEntry[] }) {
+export const HeatmapCells = React.memo(function HeatmapCells({ entries }: { entries: HabitEntry[] }) {
   const year = useUIStore(state => state.heatmapYear)
 
   const days = useMemo(() => {

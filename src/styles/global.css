@@ -95,3 +95,16 @@ button, a {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes modeFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.mode-fade {
+  animation: modeFadeIn 0.15s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-fade { animation: none; }
+}

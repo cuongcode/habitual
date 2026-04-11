@@ -128,11 +128,13 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       let finalCategories = [...categories]
       const finalHabits = [...habits]
 
-      if (categories.length === 0) {
+      const hasSeeded = localStorage.getItem('habitual_has_seeded')
+      if (!hasSeeded && categories.length === 0) {
         finalCategories = SEED_CATEGORIES
         for (const cat of finalCategories) {
           await db.saveCategory(cat)
         }
+        localStorage.setItem('habitual_has_seeded', 'true')
       }
 
       // Only seed habits in development environment

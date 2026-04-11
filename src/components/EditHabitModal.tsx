@@ -113,7 +113,7 @@ export default function EditHabitModal({ habit, onClose }: EditHabitModalProps) 
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '14px',
-                color: 'var(--color-rust)',
+                color: 'rgb(var(--color-rust))',
                 border: '1px solid rgba(181, 69, 27, 0.3)',
               }}
             >
@@ -125,7 +125,7 @@ export default function EditHabitModal({ habit, onClose }: EditHabitModalProps) 
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '14px',
-                  color: 'var(--color-ink)',
+                  color: 'rgb(var(--color-ink))',
                 }}
               >
                 Are you sure?

@@ -38,7 +38,7 @@ export default function HabitsPage() {
               className="text-ink hover:text-rust transition-colors"
               aria-label="Settings"
             >
-              <Settings size={20} color="var(--color-ink)" />
+              <Settings size={20} />
             </button>
           </div>
 

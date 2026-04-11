@@ -17,9 +17,15 @@ export function colorHex(key: string): string {
   // Try reading from the computed CSS variable
   const varName = `--color-${key}`
   const val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+  
   if (val) {
+    // If it's a raw RGB sequence (e.g. "181 69 27"), wrap it in rgb()
+    if (/^\d+ \d+ \d+$/.test(val)) {
+      return `rgb(${val})`
+    }
     return val
   }
+
   // Fallback to static map
   return COLOR_OPTIONS.find(c => c.key === key)?.hex ?? '#9C8E85'
 }

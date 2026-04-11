@@ -2,8 +2,9 @@ import { eachDayOfInterval, endOfYear, format, isAfter, isToday, startOfYear } f
 import React, { useMemo } from 'react'
 import { useUIStore } from '../store/uiStore'
 import type { HabitEntry } from '../types/index'
+import { getThemeTokens } from '../utils/theme'
 
-export const HeatmapCells = React.memo(function HeatmapCells({ entries }: { entries: HabitEntry[] }) {
+export const HeatmapCells = React.memo(function HeatmapCells({ entries, colorKey }: { entries: HabitEntry[], colorKey?: string }) {
   const year = useUIStore(state => state.heatmapYear)
 
   const days = useMemo(() => {
@@ -40,6 +41,7 @@ export const HeatmapCells = React.memo(function HeatmapCells({ entries }: { entr
           filled={isFilled(date)}
           isToday={isToday(date)}
           isFuture={isAfter(date, new Date())}
+          colorKey={colorKey}
         />
       ))}
       {/* Pad remaining cells to complete the last row */}
@@ -54,11 +56,14 @@ function HeatmapCell({
   filled,
   isToday,
   isFuture,
+  colorKey,
 }: {
   filled: boolean
   isToday: boolean
   isFuture: boolean
+  colorKey?: string
 }) {
+  const tokens = getThemeTokens(colorKey)
 
   return (
     <div
@@ -66,12 +71,12 @@ function HeatmapCell({
       className={`
         rounded-sm
         ${filled
-          ? 'bg-rust'
+          ? tokens.heatmapFilled
           : isFuture
-            ? 'bg-cream border border-muted-light opacity-40'
-            : 'bg-cream-dark border border-muted-light'
+            ? tokens.heatmapFuture
+            : tokens.heatmapEmpty
         }
-        ${isToday ? 'ring-1 ring-rust ring-offset-1' : ''}
+        ${isToday ? tokens.heatmapTodayRing : ''}
       `}
     />
   )

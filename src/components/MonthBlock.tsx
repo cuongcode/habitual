@@ -18,6 +18,7 @@ interface MonthBlockProps {
   notes: Record<string, any>
   isFirst?: boolean
   onLongPress: (dateStr: string) => void
+  colorKey?: string
 }
 
 const MonthBlock = memo(({ 
@@ -27,7 +28,8 @@ const MonthBlock = memo(({
   entries, 
   notes, 
   isFirst, 
-  onLongPress 
+  onLongPress,
+  colorKey
 }: MonthBlockProps) => {
   const firstDay = startOfMonth(new Date(year, month - 1))
   const totalDays = getDaysInMonth(firstDay)
@@ -78,6 +80,7 @@ const MonthBlock = memo(({
               state={state}
               hasNote={hasNote}
               onLongPress={onLongPress}
+              colorKey={colorKey}
             />
           )
         })}

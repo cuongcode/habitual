@@ -7,6 +7,7 @@ import WeekdayHeaders from '../components/WeekdayHeaders'
 import CalendarGrid from '../components/CalendarGrid'
 import HabitCalendarNav from '../components/HabitCalendarNav'
 import EditHabitModal from '../components/EditHabitModal'
+import { getThemeTokens } from '../utils/theme'
 
 export default function HabitCalendarPage() {
   const location = useLocation()
@@ -25,6 +26,8 @@ export default function HabitCalendarPage() {
   const [editOpen, setEditOpen] = useState(false)
 
   const category = categories.find((c) => c.id === habit?.categoryId)
+  const colorKey = category?.colorKey || 'rust'
+  const tokens = getThemeTokens(colorKey)
 
   useEffect(() => {
     const el = scrollRef.current
@@ -85,7 +88,8 @@ export default function HabitCalendarPage() {
         <CalendarGrid 
           habit={habit} 
           entries={entries} 
-          notes={notes} 
+          notes={notes}
+          colorKey={colorKey} 
         />
       </div>
 
@@ -93,7 +97,7 @@ export default function HabitCalendarPage() {
       <button
         onClick={scrollToBottom}
         className={`
-          fixed bottom-[84px] right-4 w-10 h-10 bg-rust text-cream rounded-full 
+          fixed bottom-[84px] right-4 w-10 h-10 ${tokens.bg} text-cream rounded-full 
           flex items-center justify-center shadow-lg transition-all duration-300 z-30
           active:scale-90
           ${showScrollBottom ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}

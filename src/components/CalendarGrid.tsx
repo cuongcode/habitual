@@ -8,9 +8,10 @@ interface CalendarGridProps {
   habit: Habit
   entries: HabitEntry[]
   notes: Record<string, HabitDayNote>
+  colorKey?: string
 }
 
-const CalendarGrid = memo(({ habit, entries, notes }: CalendarGridProps) => {
+const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarGridProps) => {
   const [months, setMonths] = useState<{ year: number; month: number }[]>(() => {
     const now = new Date()
     // 0 is current month. In flex-col-reverse, it will be at the bottom.
@@ -55,6 +56,7 @@ const CalendarGrid = memo(({ habit, entries, notes }: CalendarGridProps) => {
           notes={notes}
           isFirst={i === 0}
           onLongPress={setNoteModalDate}
+          colorKey={colorKey}
         />
       ))}
       

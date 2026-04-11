@@ -4,7 +4,7 @@ import { Check } from 'lucide-react'
 import { useHabitStore } from '../store/habitStore'
 import { useLongPress } from '../hooks/useLongPress'
 import type { DayState } from '../services/scheduleEngine'
-import { getDayStateStyles } from '../utils/theme'
+import { getDayStateStyles, getThemeTokens } from '../utils/theme'
 import type { Habit } from '../types/index'
 
 interface CalendarDayCellProps {
@@ -13,13 +13,15 @@ interface CalendarDayCellProps {
   state: DayState
   hasNote: boolean
   onLongPress: (dateStr: string) => void
+  colorKey?: string
 }
 
-const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: CalendarDayCellProps) => {
+const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress, colorKey }: CalendarDayCellProps) => {
   const toggleEntry = useHabitStore((s) => s.toggleEntry)
   const dateStr = format(date, 'yyyy-MM-dd')
   const dayNumber = format(date, 'd')
   const isToday = format(new Date(), 'yyyy-MM-dd') === dateStr
+  const tokens = getThemeTokens(colorKey)
 
   const { handlers } = useLongPress(() => onLongPress(dateStr))
   const [popping, setPopping] = useState(false)
@@ -37,8 +39,8 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: Cale
       style={{ WebkitTapHighlightColor: 'transparent' }}
       className={`
         relative aspect-square w-full rounded-sm flex flex-col items-center justify-center transition-all active:scale-95
-        ${getDayStateStyles(state)}
-        ${isToday ? 'border-2 border-rust' : ''}
+        ${getDayStateStyles(state, colorKey)}
+        ${isToday ? tokens.todayBorder : ''}
         ${popping ? 'cell-pop' : ''}
       `}
     >
@@ -51,7 +53,7 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress }: Cale
       )}
 
       {hasNote && (
-        <div className={`absolute bottom-1 right-1 w-1 h-1 rounded-full ${(state === 'target-complete' || state === 'window-bonus') ? 'bg-cream' : 'bg-rust'}`} />
+        <div className={`absolute bottom-1 right-1 w-1 h-1 rounded-full ${(state === 'target-complete' || state === 'window-bonus') ? 'bg-cream' : tokens.dot}`} />
       )}
     </button>
   )

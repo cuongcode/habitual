@@ -8,7 +8,7 @@ import type { Habit } from '../types/index'
 import { useHabitStore } from '../store/habitStore'
 import { getDayState } from '../services/scheduleEngine'
 import type { DayState } from '../services/scheduleEngine'
-import { getDayStateStyles } from '../utils/theme'
+import { getDayStateStyles, getThemeTokens } from '../utils/theme'
 import { useLongPress } from '../hooks/useLongPress'
 import NoteModal from './NoteModal'
 import { useUIStore } from '../store/uiStore'
@@ -23,17 +23,20 @@ function DayCell({
   state,
   date,
   hasNote,
+  colorKey,
 }: {
   state: DayState
   date: Date
   hasNote: boolean
+  colorKey?: string
 }) {
   const dayNum = format(date, 'd')
+  const tokens = getThemeTokens(colorKey)
 
   return (
     <div className="relative flex flex-col items-center">
       <div
-        className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getDayStateStyles(state)}`}
+        className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getDayStateStyles(state, colorKey)}`}
       >
         <span
           style={{
@@ -46,7 +49,7 @@ function DayCell({
         </span>
       </div>
       {hasNote && (
-        <div className="absolute -bottom-2 w-[3px] h-[3px] rounded-full bg-rust" />
+        <div className={`absolute -bottom-2 w-[3px] h-[3px] rounded-full ${tokens.dot}`} />
       )}
     </div>
   )
@@ -56,6 +59,10 @@ export default function HabitRow({ habit }: HabitRowProps) {
   const navigate = useNavigate()
   const entries = useHabitStore((state) => state.entries[habit.id]) ?? []
   const notes = useHabitStore((state) => state.notes)
+  const categories = useHabitStore((state) => state.categories)
+  const category = categories.find((c) => c.id === habit.categoryId)
+  const colorKey = category?.colorKey || 'rust'
+  const tokens = getThemeTokens(colorKey)
   const [noteModalDate, setNoteModalDate] = useState<string | null>(null)
   const habitsDisplayMode = useUIStore((state) => state.habitsDisplayMode)
 
@@ -98,13 +105,13 @@ export default function HabitRow({ habit }: HabitRowProps) {
 
               <button
                 onClick={() => navigate(`/habit/${habit.id}`)}
-                className="flex-1 truncate text-left text-ink hover:text-rust transition-colors"
+                className={`flex-1 truncate text-left text-ink transition-colors ${tokens.textHover}`}
                 style={{ fontFamily: 'var(--font-body)', fontSize: '15px' }}
               >
                 {habit.name}
               </button>
             </div>
-            <HeatmapCells entries={entries} />
+            <HeatmapCells entries={entries} colorKey={colorKey} />
           </div>
         ) : (
           <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -120,13 +127,13 @@ export default function HabitRow({ habit }: HabitRowProps) {
 
             <button
               onClick={() => navigate(`/habit/${habit.id}`)}
-              className="flex-1 truncate text-left text-ink hover:text-rust transition-colors"
+              className={`flex-1 truncate text-left text-ink transition-colors ${tokens.textHover}`}
               style={{ fontFamily: 'var(--font-body)', fontSize: '15px' }}
             >
               {habit.name}
             </button>
 
-            <WeekCells habit={habit} entries={entries} hasNote={hasNote} setNoteModalDate={setNoteModalDate} />
+            <WeekCells habit={habit} entries={entries} hasNote={hasNote} setNoteModalDate={setNoteModalDate} colorKey={colorKey} />
           </div>
         )}
       </div>
@@ -149,6 +156,7 @@ function InteractiveDayCell({
   state,
   hasNote,
   setNoteModalDate,
+  colorKey,
 }: {
   habitId: string
   date: Date
@@ -156,6 +164,7 @@ function InteractiveDayCell({
   state: DayState
   hasNote: boolean
   setNoteModalDate: (dateStr: string) => void
+  colorKey?: string
 }) {
   const store = useHabitStore()
   const longPress = useLongPress(() => setNoteModalDate(dateStr))
@@ -179,7 +188,7 @@ function InteractiveDayCell({
       style={{ WebkitTapHighlightColor: 'transparent' }}
       className={`relative flex-shrink-0 focus:outline-none ${popping ? 'cell-pop' : ''}`}
     >
-      <DayCell state={state} date={date} hasNote={hasNote} />
+      <DayCell state={state} date={date} hasNote={hasNote} colorKey={colorKey} />
     </button>
   )
 }
@@ -189,11 +198,13 @@ function WeekCells({
   entries,
   hasNote,
   setNoteModalDate,
+  colorKey,
 }: {
   habit: Habit
   entries: HabitEntry[]
   hasNote: (dateStr: string) => boolean
   setNoteModalDate: (dateStr: string) => void
+  colorKey?: string
 }) {
   const today = startOfDay(new Date())
   const cellDates = Array.from({ length: 7 }, (_, i) => subDays(today, 6 - i))
@@ -213,6 +224,7 @@ function WeekCells({
             state={state}
             hasNote={hasNote(dateStr)}
             setNoteModalDate={setNoteModalDate}
+            colorKey={colorKey}
           />
         )
       })}

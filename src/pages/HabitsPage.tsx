@@ -1,10 +1,10 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { format, startOfDay, subDays } from 'date-fns'
 import { Settings } from 'lucide-react'
-import { startOfDay, subDays, format } from 'date-fns'
-import HabitList from '../components/HabitList'
-import CategoryFilterBar from '../components/CategoryFilterBar'
-import BottomNav from '../components/BottomNav'
+import { useLocation, useNavigate } from 'react-router-dom'
 import AddHabitDrawer from '../components/AddHabitDrawer'
+import BottomNav from '../components/BottomNav'
+import CategoryFilterBar from '../components/CategoryFilterBar'
+import HabitList from '../components/HabitList'
 import { YearNav } from '../components/YearNav'
 import { useUIStore } from '../store/uiStore'
 
@@ -50,8 +50,9 @@ export default function HabitsPage() {
                   <div 
                     key={i} 
                     className="w-7 text-center text-[10px] text-muted font-mono uppercase tracking-widest"
+                    style={{ fontFamily: 'var(--font-mono)' }}
                   >
-                    {format(date, 'EEEEE')}
+                    {format(date, 'EEEEEE')}
                   </div>
                 ))}
               </div>

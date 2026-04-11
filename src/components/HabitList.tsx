@@ -144,9 +144,9 @@ export default function HabitList() {
     >
       <div className="flex-1 overflow-y-auto">
         {groups.map((group) => (
-          <div key={group.category.id} className="mb-4 last:mb-0">
+          <div key={group.category.id} className="mb-0 last:mb-0">
             {/* Category Header (only show in 'All' view) */}
-            {!activeCategoryId && group.category.id !== 'none' && (
+            {/* {!activeCategoryId && group.category.id !== 'none' && (
               <div className="px-4 py-2 bg-cream-dark/30 border-b border-muted-light/30">
                 <span
                   className="text-muted-dark uppercase tracking-wider font-semibold"
@@ -155,7 +155,7 @@ export default function HabitList() {
                   {group.category.label}
                 </span>
               </div>
-            )}
+            )} */}
 
             <SortableContext
               items={group.habits.map((h) => h.id)}

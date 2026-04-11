@@ -32,6 +32,7 @@ export default function HabitStatsPage() {
   )
   const categories = useHabitStore((state) => state.categories)
   const category = categories.find((c) => c.id === habit?.categoryId)
+  const colorKey = category?.colorKey || 'rust'
 
   // Compute all stats once
   const currentStreak = useMemo(
@@ -92,15 +93,16 @@ export default function HabitStatsPage() {
         <StreakSection
           currentStreak={currentStreak}
           longestStreak={longestStreak}
+          colorKey={colorKey}
         />
         
-        <CompletionRateSection rate={completionRate} />
+        <CompletionRateSection rate={completionRate} colorKey={colorKey} />
         
-        <BestPeriodSection bestPeriod={bestPeriod} />
+        <BestPeriodSection bestPeriod={bestPeriod} colorKey={colorKey} />
         
-        <MonthlyBarChartSection monthlyRates={monthlyRates} />
+        <MonthlyBarChartSection monthlyRates={monthlyRates} colorKey={colorKey} />
         
-        <TotalCompletionsSection total={totalCompletions} />
+        <TotalCompletionsSection total={totalCompletions} colorKey={colorKey} />
       </div>
 
       {/* Sticky Bottom Nav */}

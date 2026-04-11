@@ -1,8 +1,10 @@
 import type { MonthlyRate } from '../../services/statsEngine'
 import { SectionLabel } from '../SectionLabel'
+import { getThemeTokens } from '../../utils/theme'
 
 interface MonthlyBarChartSectionProps {
   monthlyRates: MonthlyRate[]
+  colorKey?: string
 }
 
 // Seeded pseudo-random per month so jitter is stable across renders
@@ -11,7 +13,9 @@ function seededJitter(seed: number): number {
   return (x - Math.floor(x) - 0.5) * 3 // ±1.5px jitter
 }
 
-export default function MonthlyBarChartSection({ monthlyRates }: MonthlyBarChartSectionProps) {
+export default function MonthlyBarChartSection({ monthlyRates, colorKey }: MonthlyBarChartSectionProps) {
+  const tokens = getThemeTokens(colorKey)
+
   // Show last 6 months, oldest left, newest right
   const data = [...monthlyRates].reverse()
   const maxBarHeight = 80
@@ -19,10 +23,10 @@ export default function MonthlyBarChartSection({ monthlyRates }: MonthlyBarChart
   const barWidth = 28
   const barGap = 16
 
-  const getBarColor = (rate: number) => {
-    if (rate >= 0.7) return '#A85743' // rust
-    if (rate >= 0.4) return '#D99B8C' // rust-light
-    return '#D1CDC7' // muted-light
+  const getBarClass = (rate: number) => {
+    if (rate >= 0.7) return `${tokens.text} fill-current opacity-100`
+    if (rate >= 0.4) return `${tokens.text} fill-current opacity-50`
+    return 'text-muted-light fill-current opacity-50'
   }
 
   return (
@@ -45,9 +49,8 @@ export default function MonthlyBarChartSection({ monthlyRates }: MonthlyBarChart
                   y={y}
                   width={barWidth}
                   height={Math.max(barHeight, 0)}
-                  fill={getBarColor(m.rate)}
                   rx="3"
-                  className="transition-all duration-700 ease-out"
+                  className={`transition-all duration-700 ease-out ${getBarClass(m.rate)}`}
                 />
                 
                 {/* Percentage label */}

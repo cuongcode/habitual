@@ -2,13 +2,16 @@ import { startOfWeek, addDays, subWeeks, format } from 'date-fns'
 import { getDayState } from '../../services/scheduleEngine'
 import { SectionLabel } from '../SectionLabel'
 import type { Habit, HabitEntry } from '../../types/index'
+import { getThemeTokens } from '../../utils/theme'
 
 interface HeatmapSectionProps {
   habit: Habit
   entries: HabitEntry[]
+  colorKey?: string
 }
 
-export default function HeatmapSection({ habit, entries }: HeatmapSectionProps) {
+export default function HeatmapSection({ habit, entries, colorKey }: HeatmapSectionProps) {
+  const tokens = getThemeTokens(colorKey)
   // 52 weeks ago, starting from Monday
   const gridStart = startOfWeek(subWeeks(new Date(), 52), { weekStartsOn: 1 })
   const allDates = Array.from({ length: 364 }, (_, i) => addDays(gridStart, i))
@@ -39,16 +42,16 @@ export default function HeatmapSection({ habit, entries }: HeatmapSectionProps) 
     
     switch (state) {
       case 'target-complete':
-        return 'bg-rust'
+        return tokens.heatmapFilled
       case 'window-bonus':
-        return 'bg-rust/40'
+        return `${tokens.heatmapFilled} opacity-60`
       case 'target-missed':
         return 'bg-[#D1CDC7]' // muted-light
       case 'window-empty':
       case 'future':
         return 'bg-[#F2EFE9]' // cream-dark
       case 'target-open':
-        return 'border border-rust bg-[#FAF9F6]' // cream fill (approx)
+        return `border ${tokens.todayBorder.replace('border-2 ', '')} bg-[#FAF9F6]`
       default:
         return 'bg-[#F2EFE9]'
     }

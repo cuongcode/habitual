@@ -1,12 +1,16 @@
 import { Flame } from 'lucide-react'
 import { SectionLabel } from '../SectionLabel'
+import { getThemeTokens } from '../../utils/theme'
 
 interface StreakSectionProps {
   currentStreak: number
   longestStreak: number
+  colorKey?: string
 }
 
-export default function StreakSection({ currentStreak, longestStreak }: StreakSectionProps) {
+export default function StreakSection({ currentStreak, longestStreak, colorKey }: StreakSectionProps) {
+  const tokens = getThemeTokens(colorKey)
+
   return (
     <div className="flex gap-3">
       {/* Current Streak */}
@@ -19,7 +23,7 @@ export default function StreakSection({ currentStreak, longestStreak }: StreakSe
           >
             {isNaN(currentStreak) ? 0 : currentStreak}
           </span>
-          {(!isNaN(currentStreak) && currentStreak > 0) && <Flame size={16} className="text-rust fill-rust" />}
+          {(!isNaN(currentStreak) && currentStreak > 0) && <Flame size={16} className={`${tokens.text} fill-current`} />}
         </div>
         <div className="text-[12px] text-muted font-mono" style={{ fontFamily: 'var(--font-mono)' }}>
           days

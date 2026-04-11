@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { SectionLabel } from '../SectionLabel'
+import { getThemeTokens } from '../../utils/theme'
 
 interface CompletionRateSectionProps {
   rate: number
+  colorKey?: string
 }
 
-export default function CompletionRateSection({ rate }: CompletionRateSectionProps) {
+export default function CompletionRateSection({ rate, colorKey }: CompletionRateSectionProps) {
   const [animatedRate, setAnimatedRate] = useState(0)
+  const tokens = getThemeTokens(colorKey)
   
   const safeRate = isNaN(rate) ? 0 : rate
   const radius = 52
@@ -50,7 +53,7 @@ export default function CompletionRateSection({ rate }: CompletionRateSectionPro
             strokeDasharray={circumference}
             strokeDashoffset={offset}
             strokeLinecap="round"
-            className="text-rust transition-all duration-1000 ease-out"
+            className={`${tokens.text} transition-all duration-1000 ease-out`}
             style={{ transitionProperty: 'stroke-dashoffset' }}
           />
         </svg>

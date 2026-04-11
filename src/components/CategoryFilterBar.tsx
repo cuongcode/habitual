@@ -1,4 +1,5 @@
 import { useHabitStore } from '../store/habitStore'
+import { colorHex } from '../utils/colors'
 
 export default function CategoryFilterBar() {
   const categories = useHabitStore((s) => s.categories)
@@ -11,11 +12,11 @@ export default function CategoryFilterBar() {
         {/* "All" pill — always first */}
         <button
           onClick={() => setActiveCategoryId(null)}
-          className={`shrink-0 px-3 py-1 rounded-full text-xs uppercase tracking-wide transition-colors
+          className={`shrink-0 px-3 py-1 rounded-full text-xs uppercase tracking-wide transition-colors border
             ${
               activeCategoryId === null
-                ? 'bg-rust text-cream'
-                : 'bg-cream text-ink border border-ink'
+                ? 'bg-rust border-rust text-cream'
+                : 'bg-cream text-ink border-ink'
             }`}
           style={{ fontFamily: "var(--font-mono)", fontSize: '12px' }}
         >
@@ -26,13 +27,20 @@ export default function CategoryFilterBar() {
           <button
             key={cat.id}
             onClick={() => setActiveCategoryId(cat.id)}
-            className={`shrink-0 px-3 py-1 rounded-full text-xs uppercase tracking-wide transition-colors
+            className={`shrink-0 px-3 py-1 rounded-full text-xs uppercase tracking-wide transition-colors border
               ${
                 activeCategoryId === cat.id
-                  ? 'bg-rust text-cream'
-                  : 'bg-cream text-ink border border-ink'
+                  ? 'text-cream'
+                  : 'bg-cream text-ink border-ink'
               }`}
-            style={{ fontFamily: "var(--font-mono)", fontSize: '12px' }}
+            style={{ 
+              fontFamily: "var(--font-mono)", 
+              fontSize: '12px',
+              ...(activeCategoryId === cat.id ? {
+                backgroundColor: colorHex(cat.colorKey),
+                borderColor: colorHex(cat.colorKey)
+              } : {})
+            }}
           >
             {cat.label}
           </button>

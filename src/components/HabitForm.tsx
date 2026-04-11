@@ -310,16 +310,23 @@ function BasicsTab({
               <button
                 key={cat.id}
                 onClick={() => setCategoryId(categoryId === cat.id ? 'none' : cat.id)}
-                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors ${
+                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors border ${
                   categoryId === cat.id
-                    ? 'bg-rust text-cream'
-                    : 'bg-cream text-ink border border-muted-light'
+                    ? 'text-cream'
+                    : 'bg-cream text-ink border-muted-light'
                 }`}
-                style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}
+                style={{ 
+                  fontFamily: 'var(--font-mono)', 
+                  fontSize: '12px',
+                  ...(categoryId === cat.id ? {
+                    backgroundColor: getCategoryColor(cat.colorKey),
+                    borderColor: getCategoryColor(cat.colorKey)
+                  } : {})
+                }}
               >
                 <span
                   className="w-1.5 h-1.5 rounded-full shrink-0"
-                  style={{ backgroundColor: getCategoryColor(cat.colorKey) }}
+                  style={{ backgroundColor: categoryId === cat.id ? 'var(--color-cream)' : getCategoryColor(cat.colorKey) }}
                 />
                 {cat.label}
               </button>

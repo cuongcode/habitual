@@ -39,8 +39,8 @@ const MonthBlock = memo(({
   const days = Array.from({ length: totalDays }, (_, i) => addDays(firstDay, i))
   const monthLabel = format(firstDay, 'MMMM yyyy')
 
-  // To display the end of the month at the top and the start of the month at the bottom,
-  // we group the days into weeks, and then reverse the weeks.
+  // To display the start of the month at the top and the end of the month at the bottom,
+  // we just use the cells chronologically.
   const totalCells = offset + totalDays
   const remainder = totalCells % 7
   const paddingEnd = remainder === 0 ? 0 : 7 - remainder
@@ -51,14 +51,6 @@ const MonthBlock = memo(({
     ...Array.from({ length: paddingEnd }).fill(null)
   ]
 
-  const weeks = []
-  for (let i = 0; i < allCells.length; i += 7) {
-    weeks.push(allCells.slice(i, i + 7))
-  }
-  
-  weeks.reverse()
-  const reversedCells = weeks.flat()
-
   return (
     <div className="mb-6">
       <div className={`px-4 py-3 flex justify-end border-t border-muted/10 ${isFirst ? 'border-t-0' : ''}`}>
@@ -68,7 +60,7 @@ const MonthBlock = memo(({
       </div>
       
       <div className="grid grid-cols-7 gap-px px-4">
-        {reversedCells.map((cell, index) => {
+        {allCells.map((cell, index) => {
           if (!cell) {
             return <div key={`empty-${index}`} className="aspect-square bg-transparent" />
           }

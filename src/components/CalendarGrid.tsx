@@ -13,6 +13,8 @@ interface CalendarGridProps {
 const CalendarGrid = memo(({ habit, entries, notes }: CalendarGridProps) => {
   const [months, setMonths] = useState<{ year: number; month: number }[]>(() => {
     const now = new Date()
+    // 0 is current month. In flex-col-reverse, it will be at the bottom.
+    // 1 is last month, 2 is two months ago. 
     return [0, 1, 2].map((i) => {
       const d = subMonths(now, i)
       return { year: d.getFullYear(), month: d.getMonth() + 1 }
@@ -42,7 +44,7 @@ const CalendarGrid = memo(({ habit, entries, notes }: CalendarGridProps) => {
   }, [])
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 flex flex-col-reverse justify-end min-h-full">
       {months.map((m, i) => (
         <MonthBlock
           key={`${m.year}-${m.month}`}
@@ -56,7 +58,8 @@ const CalendarGrid = memo(({ habit, entries, notes }: CalendarGridProps) => {
         />
       ))}
       
-      <div ref={sentinelRef} className="h-20 flex items-center justify-center">
+      {/* Sentinel at the bottom of the DOM so flex-col-reverse places it at the visual top */}
+      <div ref={sentinelRef} className="h-20 flex items-center justify-center shrink-0">
         <div className="w-1 h-1 bg-muted/20 rounded-full animate-pulse" />
       </div>
 

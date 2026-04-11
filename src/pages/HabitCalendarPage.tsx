@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link, useLocation } from 'react-router-dom'
-import { ArrowLeft, ArrowUp } from 'lucide-react'
+import { ArrowLeft, ArrowDown } from 'lucide-react'
 import { useHabitStore } from '../store/habitStore'
 import HabitCalendarHeader from '../components/HabitCalendarHeader'
 import WeekdayHeaders from '../components/WeekdayHeaders'
@@ -21,7 +21,7 @@ export default function HabitCalendarPage() {
   const notes = useHabitStore((state) => state.notes)
   
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [showBackToTop, setShowBackToTop] = useState(false)
+  const [showScrollBottom, setShowScrollBottom] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
 
   const category = categories.find((c) => c.id === habit?.categoryId)
@@ -30,21 +30,25 @@ export default function HabitCalendarPage() {
     const el = scrollRef.current
     if (!el) return
     
-    // Scroll to top to ensure today is visible
+    // Scroll to bottom to ensure today is visible
     setTimeout(() => {
-      el.scrollTo({ top: 0 })
+      el.scrollTo({ top: el.scrollHeight })
     }, 10)
 
     const handleScroll = () => {
-      setShowBackToTop(el.scrollTop > 600)
+      // Show the button if we are scrolled up away from the bottom
+      setShowScrollBottom(el.scrollTop < el.scrollHeight - el.clientHeight - 300)
     }
 
     el.addEventListener('scroll', handleScroll)
     return () => el.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const scrollToTop = () => {
-    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  const scrollToBottom = () => {
+    const el = scrollRef.current
+    if (el) {
+      el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+    }
   }
 
   if (!habit) {
@@ -85,17 +89,17 @@ export default function HabitCalendarPage() {
         />
       </div>
 
-      {/* Back to Top */}
+      {/* Scroll to Today */}
       <button
-        onClick={scrollToTop}
+        onClick={scrollToBottom}
         className={`
           fixed bottom-[84px] right-4 w-10 h-10 bg-rust text-cream rounded-full 
           flex items-center justify-center shadow-lg transition-all duration-300 z-30
           active:scale-90
-          ${showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}
+          ${showScrollBottom ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}
         `}
       >
-        <ArrowUp size={20} />
+        <ArrowDown size={20} />
       </button>
 
       {/* Sticky Nav */}

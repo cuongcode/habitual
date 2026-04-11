@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
 import { format } from 'date-fns'
-import { ArrowLeft, Download, Upload, Plus, Tag } from 'lucide-react'
-import { exportData } from '../services/exportService'
+import { ArrowLeft, Download, Plus, Tag, Upload } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { CategoryModal } from '../components/CategoryModal'
 import { ImportModal } from '../components/ImportModal'
-import { useUIStore } from '../store/uiStore'
+import { exportData } from '../services/exportService'
 import { useHabitStore } from '../store/habitStore'
+import { useUIStore } from '../store/uiStore'
 import type { Category } from '../types/index'
 import { colorHex } from '../utils/colors'
-import { CategoryModal } from '../components/CategoryModal'
 
 // ── Category Section ───────────────────────────────────────────────
 
@@ -229,7 +229,7 @@ function AboutSection() {
   return (
     <div className="flex flex-col items-center justify-center py-10 border-t border-muted-light">
       <h3 className="font-serif text-[18px] text-ink mb-1 mt-0">Habitual</h3>
-      <p className="font-mono text-[11px] text-muted mb-3 m-0">Version 1.0.0</p>
+      <p className="font-mono text-[11px] text-muted mb-3 m-0">Version 1.1.0</p>
       <p className="font-serif italic text-[13px] text-muted text-center max-w-[200px] m-0">
         A quiet place to build better habits.
       </p>

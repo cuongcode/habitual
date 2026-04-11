@@ -14,7 +14,7 @@ export default function BestPeriodSection({ bestPeriod, colorKey }: BestPeriodSe
     return (
       <div className="space-y-3">
         <SectionLabel>Best period</SectionLabel>
-        <div className="bg-[#F2EFE9] rounded-xl border border-muted/10 p-4">
+        <div className="bg-surface rounded-xl border border-muted/10 p-4">
           <div className="text-[16px] text-muted font-display" style={{ fontFamily: 'var(--font-display)' }}>
             No completed streaks yet
           </div>
@@ -28,7 +28,7 @@ export default function BestPeriodSection({ bestPeriod, colorKey }: BestPeriodSe
   return (
     <div className="space-y-3">
       <SectionLabel>Best period</SectionLabel>
-      <div className="bg-[#F2EFE9] rounded-xl border border-muted/10 p-4">
+      <div className="bg-surface rounded-xl border border-muted/10 p-4">
         <div className="text-[16px] text-ink font-serif" style={{ fontFamily: 'var(--font-serif), Lora, serif' }}>
           {format(bestPeriod.start, 'MMM d, yyyy')} – {format(bestPeriod.end, 'MMM d, yyyy')}
         </div>

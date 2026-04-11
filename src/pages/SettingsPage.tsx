@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { ArrowLeft, Download, Plus, Tag, Upload } from 'lucide-react'
+import { ArrowLeft, Download, Moon, Plus, Sun, Tag, Upload } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { CategoryModal } from '../components/CategoryModal'
@@ -95,6 +95,45 @@ function CategorySection() {
         onClose={() => setIsModalOpen(false)}
         categoryToEdit={editingCategory}
       />
+    </div>
+  )
+}
+
+// ── Appearance Section ─────────────────────────────────────────────
+
+function AppearanceSection() {
+  const theme = useUIStore(s => s.theme)
+  const setTheme = useUIStore(s => s.setTheme)
+
+  const options = [
+    { value: 'light' as const, label: 'Light', icon: <Sun size={14} /> },
+    { value: 'dark' as const, label: 'Dark', icon: <Moon size={14} /> },
+    { value: 'system' as const, label: 'System', icon: null },
+  ]
+
+  return (
+    <div className="flex flex-col">
+      <h2 className="font-mono text-[11px] text-muted uppercase tracking-wider mb-3 px-2 m-0">
+        Appearance
+      </h2>
+      <div className="bg-cream-dark rounded-xl border border-muted-light overflow-hidden p-4">
+        <div className="flex p-1 bg-cream rounded-xl border border-muted-light gap-1">
+          {options.map(opt => (
+            <button
+              key={opt.value}
+              onClick={() => setTheme(opt.value)}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-center text-[13px] font-mono transition-colors rounded-lg ${
+                theme === opt.value
+                  ? 'bg-rust text-cream shadow-sm'
+                  : 'text-muted hover:text-ink'
+              }`}
+            >
+              {opt.icon}
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
@@ -249,6 +288,7 @@ export default function SettingsPage() {
       <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col justify-between">
         <div className="space-y-8">
           <CategorySection />
+          <AppearanceSection />
           <DataSection />
         </div>
         <div className="mt-8">

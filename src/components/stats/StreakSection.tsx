@@ -14,7 +14,7 @@ export default function StreakSection({ currentStreak, longestStreak, colorKey }
   return (
     <div className="flex gap-3">
       {/* Current Streak */}
-      <div className="bg-[#F2EFE9] rounded-xl border border-muted/10 p-4 flex-1">
+      <div className="bg-surface rounded-xl border border-muted/10 p-4 flex-1">
         <SectionLabel>Current streak</SectionLabel>
         <div className="flex items-baseline gap-1 mt-1">
           <span 
@@ -31,7 +31,7 @@ export default function StreakSection({ currentStreak, longestStreak, colorKey }
       </div>
 
       {/* Longest Streak */}
-      <div className="bg-[#F2EFE9] rounded-xl border border-muted/10 p-4 flex-1">
+      <div className="bg-surface rounded-xl border border-muted/10 p-4 flex-1">
         <SectionLabel>Longest streak</SectionLabel>
         <div className="flex items-baseline gap-1 mt-1">
           <span 

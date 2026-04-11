@@ -9,6 +9,17 @@ export const COLOR_OPTIONS = [
 
 export type ColorKey = typeof COLOR_OPTIONS[number]['key']
 
+/**
+ * Returns the resolved color for a given color key.
+ * Uses the CSS custom property (which swaps in dark mode) so inline styles stay in sync.
+ */
 export function colorHex(key: string): string {
+  // Try reading from the computed CSS variable
+  const varName = `--color-${key}`
+  const val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+  if (val) {
+    return val
+  }
+  // Fallback to static map
   return COLOR_OPTIONS.find(c => c.key === key)?.hex ?? '#9C8E85'
 }

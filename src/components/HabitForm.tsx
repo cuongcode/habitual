@@ -2,6 +2,7 @@ import { Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useHabitStore } from '../store/habitStore'
 import type { Schedule } from '../types/index'
+import { colorHex } from '../utils/colors'
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -145,11 +146,7 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
   // ── Category color lookup ──────────────────────────────────────
 
   function getCategoryColor(colorKey: string): string {
-    const map: Record<string, string> = {
-      rust: '#B5451B', brown: '#6B4226', muted: '#9C8E85',
-      amber: '#C4893A', sage: '#4A7C59', slate: '#5B6FA6',
-    }
-    return map[colorKey] ?? '#9C8E85'
+    return colorHex(colorKey)
   }
 
   // ── Render ─────────────────────────────────────────────────────

@@ -2,26 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --font-display: 'Playfair Display', serif;
-  --font-mono: 'IBM Plex Mono', monospace;
-  --font-body: 'Lora', serif;
-  --color-cream: #F5F0E8;
-  --color-rust: #B5451B;
-  --color-brown: #6B4226;
-  --color-ink: #3D3530;
-  --color-muted: #9C8E85;
+@layer base {
+  /* ── Light Theme Tokens ─────────────────────────────────────────── */
+  :root {
+    --font-display: 'Playfair Display', serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-body: 'Lora', serif;
+
+    /* Theme Colors */
+    --color-cream: #F5F0E8;
+    --color-cream-dark: #EDE8DF;
+    --color-rust: #B5451B;
+    --color-rust-light: #D4622A;
+    --color-brown: #6B4226;
+    --color-amber: #C4893A;
+    --color-sage: #4A7C59;
+    --color-slate: #5B6FA6;
+    --color-ink: #3D3530;
+    --color-muted: #9C8E85;
+    --color-muted-light: #C4BAB3;
+    --color-surface: #F2EFE9;
+  }
+
+  /* ── Dark Theme Tokens ──────────────────────────────────────────── */
+  html.dark {
+    --color-cream: #1C1917;
+    --color-cream-dark: #292524;
+    --color-rust: #D46C34;
+    --color-rust-light: #E88048;
+    --color-brown: #A07858;
+    --color-amber: #DAAA60;
+    --color-sage: #6CA880;
+    --color-slate: #8296C8;
+    --color-ink: #EDE9E4;
+    --color-muted: #8C8278;
+    --color-muted-light: #443E3A;
+    --color-surface: #292524;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-cream);
+    font-family: 'Lora', serif;
+    color: var(--color-ink);
+    min-height: 100vh;
+    overscroll-behavior: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #F5F0E8;
-  font-family: 'Lora', serif;
-  color: var(--color-ink);
-  min-height: 100vh;
-  overscroll-behavior: none;
-}
+/* ── Base Styles ────────────────────────────────────────────────── */
 
 body::after {
   content: '';
@@ -36,6 +67,10 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
+}
+
+html.dark body::after {
+  opacity: 0.03;
 }
 
 @media (max-width: 768px) {

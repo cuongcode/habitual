@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,17 +8,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        cream: '#F5F0E8',
-        'cream-dark': '#EDE8DF',
-        rust: '#B5451B',
-        'rust-light': '#D4622A',
-        brown: '#6B4226',
-        amber: '#C4893A',
-        sage: '#4A7C59',
-        slate: '#5B6FA6',
-        ink: '#3D3530',
-        muted: '#9C8E85',
-        'muted-light': '#C4BAB3',
+        cream:        'var(--color-cream)',
+        'cream-dark': 'var(--color-cream-dark)',
+        rust:         'var(--color-rust)',
+        'rust-light': 'var(--color-rust-light)',
+        brown:        'var(--color-brown)',
+        amber:        'var(--color-amber)',
+        sage:         'var(--color-sage)',
+        slate:        'var(--color-slate)',
+        ink:          'var(--color-ink)',
+        muted:        'var(--color-muted)',
+        'muted-light':'var(--color-muted-light)',
+        surface:      'var(--color-surface)',
       },
     },
   },

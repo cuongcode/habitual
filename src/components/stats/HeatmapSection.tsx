@@ -46,14 +46,14 @@ export default function HeatmapSection({ habit, entries, colorKey }: HeatmapSect
       case 'window-bonus':
         return `${tokens.heatmapFilled} opacity-60`
       case 'target-missed':
-        return 'bg-[#D1CDC7]' // muted-light
+        return 'bg-muted-light' // muted-light
       case 'window-empty':
       case 'future':
-        return 'bg-[#F2EFE9]' // cream-dark
+        return 'bg-surface' // cream-dark
       case 'target-open':
-        return `border ${tokens.todayBorder.replace('border-2 ', '')} bg-[#FAF9F6]`
+        return `border ${tokens.todayBorder.replace('border-2 ', '')} bg-cream`
       default:
-        return 'bg-[#F2EFE9]'
+        return 'bg-surface'
     }
   }
 

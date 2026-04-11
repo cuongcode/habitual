@@ -73,8 +73,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
 
   return createPortal(
     <div
-      className="page-enter-fade fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(61, 53, 48, 0.5)' }}
+      className="page-enter-fade fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
       onClick={onClose}
     >
       <div

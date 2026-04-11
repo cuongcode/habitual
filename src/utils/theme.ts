@@ -30,7 +30,7 @@ export const THEME_COLORS: Record<string, ThemeColorTokens> = {
     heatmapFilled: 'bg-rust',
     heatmapFuture: 'bg-cream border border-muted-light opacity-40',
     heatmapEmpty: 'bg-cream-dark border border-muted-light',
-    heatmapTodayRing: 'ring-1 ring-rust ring-offset-1',
+    heatmapTodayRing: 'ring-1 ring-rust ring-offset-1 ring-offset-cream',
   },
   brown: {
     text: 'text-brown',
@@ -45,7 +45,7 @@ export const THEME_COLORS: Record<string, ThemeColorTokens> = {
     heatmapFilled: 'bg-brown',
     heatmapFuture: 'bg-cream border border-muted-light opacity-40',
     heatmapEmpty: 'bg-cream-dark border border-muted-light',
-    heatmapTodayRing: 'ring-1 ring-brown ring-offset-1',
+    heatmapTodayRing: 'ring-1 ring-brown ring-offset-1 ring-offset-cream',
   },
   muted: {
     text: 'text-muted',
@@ -60,7 +60,7 @@ export const THEME_COLORS: Record<string, ThemeColorTokens> = {
     heatmapFilled: 'bg-muted',
     heatmapFuture: 'bg-cream border border-muted-light opacity-40',
     heatmapEmpty: 'bg-cream-dark border border-muted-light',
-    heatmapTodayRing: 'ring-1 ring-muted ring-offset-1',
+    heatmapTodayRing: 'ring-1 ring-muted ring-offset-1 ring-offset-cream',
   },
   amber: {
     text: 'text-amber',
@@ -75,7 +75,7 @@ export const THEME_COLORS: Record<string, ThemeColorTokens> = {
     heatmapFilled: 'bg-amber',
     heatmapFuture: 'bg-cream border border-muted-light opacity-40',
     heatmapEmpty: 'bg-cream-dark border border-muted-light',
-    heatmapTodayRing: 'ring-1 ring-amber ring-offset-1',
+    heatmapTodayRing: 'ring-1 ring-amber ring-offset-1 ring-offset-cream',
   },
   sage: {
     text: 'text-sage',
@@ -90,7 +90,7 @@ export const THEME_COLORS: Record<string, ThemeColorTokens> = {
     heatmapFilled: 'bg-sage',
     heatmapFuture: 'bg-cream border border-muted-light opacity-40',
     heatmapEmpty: 'bg-cream-dark border border-muted-light',
-    heatmapTodayRing: 'ring-1 ring-sage ring-offset-1',
+    heatmapTodayRing: 'ring-1 ring-sage ring-offset-1 ring-offset-cream',
   },
   slate: {
     text: 'text-slate',
@@ -105,7 +105,7 @@ export const THEME_COLORS: Record<string, ThemeColorTokens> = {
     heatmapFilled: 'bg-slate',
     heatmapFuture: 'bg-cream border border-muted-light opacity-40',
     heatmapEmpty: 'bg-cream-dark border border-muted-light',
-    heatmapTodayRing: 'ring-1 ring-slate ring-offset-1',
+    heatmapTodayRing: 'ring-1 ring-slate ring-offset-1 ring-offset-cream',
   },
 }
 

@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
 import { Loader2 } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { useHabitStore } from '../store/habitStore'
 import type { Schedule } from '../types/index'
 
@@ -357,7 +357,7 @@ interface ScheduleTabProps {
 
 const FREQUENCY_OPTIONS: { value: Schedule['frequency']; label: string; description: string }[] = [
   { value: 'daily', label: 'Daily', description: 'Every day' },
-  { value: 'weekly', label: 'Weekly', description: 'Pick 1–3 weekdays' },
+  { value: 'weekly', label: 'Weekly', description: 'Pick 1–6 weekdays' },
   { value: 'monthly', label: 'Monthly', description: 'Pick a day of the month' },
   { value: 'yearly', label: 'Yearly', description: 'Pick a date each year' },
   { value: 'custom', label: 'Custom', description: 'Every X days' },
@@ -452,7 +452,7 @@ function WeekdayPicker({
 }) {
   // Display Mon–Sun; map display index → JS weekday (0=Sun)
   const displayToJS: Weekday[] = [1, 2, 3, 4, 5, 6, 0]
-  const atMax = selected.length >= 3
+  const atMax = selected.length >= 6
 
   function toggle(jsDay: Weekday) {
     if (selected.includes(jsDay)) {
@@ -460,7 +460,7 @@ function WeekdayPicker({
       if (selected.length === 1) return
       onChange(selected.filter((d) => d !== jsDay))
     } else {
-      // Cap at 3
+      // Cap at 6
       if (atMax) return
       onChange([...selected, jsDay])
     }
@@ -505,7 +505,7 @@ function WeekdayPicker({
             color: 'var(--color-muted)',
           }}
         >
-          Maximum 3 days selected
+          Maximum 6 days selected
         </p>
       )}
     </div>

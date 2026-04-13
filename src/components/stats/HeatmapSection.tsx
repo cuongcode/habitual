@@ -69,7 +69,7 @@ export default function HeatmapSection({ habit, entries, colorKey }: HeatmapSect
               <div 
                 key={i} 
                 className="absolute text-[9px] text-muted font-mono uppercase"
-                style={{ left: `${m.index * 12}px`, fontFamily: 'var(--font-mono)' }}
+                style={{ left: `${m.index * 12}px`, }}
               >
                 {m.label}
               </div>

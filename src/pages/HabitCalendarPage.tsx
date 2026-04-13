@@ -64,14 +64,13 @@ export default function HabitCalendarPage() {
   if (!habit) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-10 bg-cream">
-        <h1 className="text-2xl text-ink font-display" style={{ fontFamily: 'var(--font-display)' }}>
+        <h1 className="text-2xl text-ink font-display">
           Habit not found
         </h1>
         <Link 
           to="/" 
           className="mt-6 flex items-center gap-2 text-rust font-mono uppercase text-sm"
-          style={{ fontFamily: 'var(--font-mono)' }}
-        >
+       >
           <ArrowLeft size={16} />
           Go Back
         </Link>

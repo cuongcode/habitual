@@ -42,10 +42,10 @@ export default function HabitStatsHeader({ habit, category }: HabitStatsHeaderPr
   
   return (
     <div className="px-5 pt-6 pb-4 bg-cream">
-      <h1 className="text-[20px] text-ink font-display leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
+      <h1 className="text-[20px] text-ink font-display leading-tight">
         {habit.name}
       </h1>
-      <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted font-mono uppercase tracking-wider" style={{ fontFamily: 'var(--font-mono)' }}>
+      <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted font-mono uppercase tracking-wider">
         <span>{scheduleText}</span>
         {category && (
           <>

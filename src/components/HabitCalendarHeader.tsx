@@ -45,7 +45,7 @@ export default function HabitCalendarHeader({ habit, category, onEditPress }: Ha
   return (
     <div className="px-5 pt-6 pb-4 bg-cream">
       <div className="flex justify-between items-start">
-        <h1 className="text-[20px] text-ink font-display leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
+        <h1 className="text-[20px] text-ink font-display leading-tight">
           {habit.name}
         </h1>
         <button 
@@ -55,7 +55,7 @@ export default function HabitCalendarHeader({ habit, category, onEditPress }: Ha
           <SlidersHorizontal size={20} />
         </button>
       </div>
-      <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted font-mono uppercase tracking-wider" style={{ fontFamily: 'var(--font-mono)' }}>
+      <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted font-mono uppercase tracking-wider">
         <span>{scheduleText}</span>
         {category && (
           <>

@@ -60,7 +60,7 @@ const MonthBlock = memo(({
   return (
     <div className="mb-6" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 320px' }}>
       <div className={`px-4 py-3 flex justify-end border-t border-muted/10 ${isFirst ? 'border-t-0' : ''}`}>
-        <span className={`text-[13px] ${tokens.text} font-display`} style={{ fontFamily: 'var(--font-display)' }}>
+        <span className={`text-[13px] ${tokens.text} font-display`} className="font-display">
           {monthLabel}
         </span>
       </div>

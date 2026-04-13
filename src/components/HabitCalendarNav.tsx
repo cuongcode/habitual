@@ -14,16 +14,14 @@ export default function HabitCalendarNav({ habitId }: HabitCalendarNavProps) {
         <Link 
           to="/" 
           className="flex items-center gap-1.5 text-[12px] text-ink font-mono uppercase tracking-wider"
-          style={{ fontFamily: 'var(--font-mono)' }}
-        >
+       >
           <ArrowLeft size={16} />
           <span>Habits</span>
         </Link>
         <Link 
           to={`/habit/${habitId}/stats`} 
           className="flex items-center gap-1.5 text-[12px] text-ink font-mono uppercase tracking-wider"
-          style={{ fontFamily: 'var(--font-mono)' }}
-        >
+       >
           <BarChart2 size={16} />
           <span>Stats</span>
         </Link>

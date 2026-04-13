@@ -60,15 +60,15 @@ export default function CompletionRateSection({ rate, colorKey }: CompletionRate
         
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {safeRate === 0 ? (
-            <span className="text-[16px] text-muted font-mono px-4 text-center" style={{ fontFamily: 'var(--font-mono)' }}>
+            <span className="text-[16px] text-muted font-mono px-4 text-center">
               No data yet
             </span>
           ) : (
             <>
-              <span className="text-[28px] text-ink font-display" style={{ fontFamily: 'var(--font-display)' }}>
+              <span className="text-[28px] text-ink font-display">
                 {Math.round(safeRate * 100)}%
               </span>
-              <span className="text-[10px] text-muted font-mono uppercase tracking-tight" style={{ fontFamily: 'var(--font-mono)' }}>
+              <span className="text-[10px] text-muted font-mono uppercase tracking-tight">
                 completion rate
               </span>
             </>

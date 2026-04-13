@@ -88,8 +88,8 @@ export default function EditHabitModal({ habit, onClose }: EditHabitModalProps) 
 
         {/* Title */}
         <h2
-          className="px-4 pt-2 pb-3 text-ink"
-          style={{ fontFamily: 'var(--font-display)', fontSize: '18px' }}
+          className="px-4 pt-2 pb-3 text-ink font-display"
+          style={{ fontSize: '18px' }}
         >
           Edit habit
         </h2>
@@ -109,9 +109,8 @@ export default function EditHabitModal({ habit, onClose }: EditHabitModalProps) 
           {!showDeleteConfirm ? (
             <button
               onClick={() => setShowDeleteConfirm(true)}
-              className="w-full py-2.5 px-4 rounded-full text-center transition-colors"
+              className="w-full py-2.5 px-4 rounded-full text-center transition-colors font-body"
               style={{
-                fontFamily: 'var(--font-body)',
                 fontSize: '14px',
                 color: 'rgb(var(--color-rust))',
                 border: '1px solid rgba(181, 69, 27, 0.3)',
@@ -122,26 +121,23 @@ export default function EditHabitModal({ habit, onClose }: EditHabitModalProps) 
           ) : (
             <div className="flex items-center justify-between gap-3">
               <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  color: 'rgb(var(--color-ink))',
-                }}
-              >
+                style={{ fontSize: '14px',
+                  color: 'rgb(var(--color-ink))', }}
+               className="font-body">
                 Are you sure?
               </span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="px-4 py-2 text-muted transition-colors hover:text-ink"
-                  style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}
+                  className="px-4 py-2 text-muted transition-colors hover:text-ink font-body"
+                  style={{ fontSize: '14px' }}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleDelete}
-                  className="px-4 py-2 bg-rust text-cream rounded-full transition-all active:scale-95"
-                  style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}
+                  className="px-4 py-2 bg-rust text-cream rounded-full transition-all active:scale-95 font-body"
+                  style={{ fontSize: '14px' }}
                 >
                   Delete
                 </button>

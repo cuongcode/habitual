@@ -7,8 +7,7 @@ export default function WeekdayHeaders() {
         <div 
           key={day} 
           className="text-center text-[10px] text-muted font-mono uppercase tracking-widest"
-          style={{ fontFamily: 'var(--font-mono)' }}
-        >
+       >
           {day}
         </div>
       ))}

@@ -188,8 +188,8 @@ function DragOverlayRow({ habit }: { habit: Habit }) {
     >
       <GripVertical size={16} />
       <span
-        className="flex-1 truncate text-ink"
-        style={{ fontFamily: "var(--font-body)", fontSize: '15px' }}
+        className="flex-1 truncate text-ink font-body"
+        style={{ fontSize: '15px' }}
       >
         {habit.name}
       </span>

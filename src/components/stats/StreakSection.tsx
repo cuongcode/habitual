@@ -19,13 +19,12 @@ export default function StreakSection({ currentStreak, longestStreak, colorKey }
         <div className="flex items-baseline gap-1 mt-1">
           <span 
             className={`text-[48px] font-display leading-none ${currentStreak > 0 ? 'text-ink' : 'text-muted'}`}
-            style={{ fontFamily: 'var(--font-display)' }}
           >
             {isNaN(currentStreak) ? 0 : currentStreak}
           </span>
           {(!isNaN(currentStreak) && currentStreak > 0) && <Flame size={16} className={`${tokens.text} fill-current`} />}
         </div>
-        <div className="text-[12px] text-muted font-mono" style={{ fontFamily: 'var(--font-mono)' }}>
+        <div className="text-[12px] text-muted font-mono">
           days
         </div>
       </div>
@@ -36,12 +35,11 @@ export default function StreakSection({ currentStreak, longestStreak, colorKey }
         <div className="flex items-baseline gap-1 mt-1">
           <span 
             className="text-[48px] text-ink font-display leading-none"
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
+         >
             {isNaN(longestStreak) ? 0 : longestStreak}
           </span>
         </div>
-        <div className="text-[12px] text-muted font-mono" style={{ fontFamily: 'var(--font-mono)' }}>
+        <div className="text-[12px] text-muted font-mono">
           days
         </div>
       </div>

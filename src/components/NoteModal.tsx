@@ -70,7 +70,7 @@ export default function NoteModal({ habitId, date, onClose }: NoteModalProps) {
         className={`relative w-full max-w-lg bg-cream rounded-t-2xl border-t border-muted-light p-5 shadow-xl ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl text-ink" style={{ fontFamily: 'var(--font-display)' }}>
+          <h2 className="text-2xl text-ink font-display">
             {formattedDate}
           </h2>
           <button onClick={handleClose} className="p-1 text-muted hover:text-ink">
@@ -83,12 +83,11 @@ export default function NoteModal({ habitId, date, onClose }: NoteModalProps) {
           value={text}
           onChange={(e) => setText(e.target.value.slice(0, 280))}
           placeholder="Add a note..."
-          className="w-full h-32 p-3 bg-cream border border-muted-light rounded-md text-ink resize-none focus:outline-none focus:ring-1 focus:ring-rust"
-          style={{ fontFamily: 'var(--font-body)' }}
+          className="w-full h-32 p-3 bg-cream border border-muted-light rounded-md text-ink resize-none focus:outline-none focus:ring-1 focus:ring-rust font-body"
         />
         
         <div className="flex justify-end mt-1 mb-6">
-          <span className="text-xs text-muted font-mono" style={{ fontFamily: 'var(--font-mono)' }}>
+          <span className="text-xs text-muted font-mono">
             {text.length} / 280
           </span>
         </div>

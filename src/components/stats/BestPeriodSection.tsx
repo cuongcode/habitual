@@ -15,7 +15,7 @@ export default function BestPeriodSection({ bestPeriod, colorKey }: BestPeriodSe
       <div className="space-y-3">
         <SectionLabel>Best period</SectionLabel>
         <div className="bg-surface rounded-xl border border-muted/10 p-4">
-          <div className="text-[16px] text-muted font-display" style={{ fontFamily: 'var(--font-display)' }}>
+          <div className="text-[16px] text-muted font-display">
             No completed streaks yet
           </div>
         </div>
@@ -29,14 +29,14 @@ export default function BestPeriodSection({ bestPeriod, colorKey }: BestPeriodSe
     <div className="space-y-3">
       <SectionLabel>Best period</SectionLabel>
       <div className="bg-surface rounded-xl border border-muted/10 p-4">
-        <div className="text-[16px] text-ink font-serif" style={{ fontFamily: 'var(--font-serif), Lora, serif' }}>
+        <div className="text-[16px] text-ink font-serif font-body" >
           {format(bestPeriod.start, 'MMM d, yyyy')} – {format(bestPeriod.end, 'MMM d, yyyy')}
         </div>
         <div className="mt-2 flex items-baseline gap-2">
-          <span className={`text-[32px] ${tokens.text} font-display leading-none`} style={{ fontFamily: 'var(--font-display)' }}>
+          <span className={`text-[32px] ${tokens.text} font-display leading-none`} className="font-display">
             {days}
           </span>
-          <span className="text-[14px] text-muted font-mono" style={{ fontFamily: 'var(--font-mono)' }}>
+          <span className="text-[14px] text-muted font-mono">
             days
           </span>
         </div>

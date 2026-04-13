@@ -14,8 +14,7 @@ export default function HabitStatsNav({ habitId }: HabitStatsNavProps) {
         <Link 
           to={`/habit/${habitId}`} 
           className="flex items-center gap-1.5 text-[12px] text-ink font-mono uppercase tracking-wider"
-          style={{ fontFamily: 'var(--font-mono)' }}
-        >
+       >
           <ArrowLeft size={16} />
           <span>Calendar</span>
         </Link>

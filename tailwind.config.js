@@ -7,6 +7,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['var(--font-display)'],
+        body: ['var(--font-body)'],
+        mono: ['var(--font-mono)'],
+      },
       colors: {
         cream:        'rgb(var(--color-cream))',
         'cream-dark': 'rgb(var(--color-cream-dark))',

@@ -72,10 +72,7 @@ export default function AddHabitDrawer() {
         </div>
 
         {/* Title */}
-        <h2
-          className="px-4 pt-2 pb-3 text-ink"
-          style={{ fontFamily: 'var(--font-display)', fontSize: '18px' }}
-        >
+        <h2 className="px-4 pt-2 pb-3 text-[18px] font-display text-ink">
           New habit
         </h2>
 

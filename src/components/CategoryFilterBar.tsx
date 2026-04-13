@@ -18,7 +18,6 @@ export default function CategoryFilterBar() {
                 ? 'bg-rust border-rust text-cream'
                 : 'bg-cream text-ink border-ink'
             }`}
-          style={{ fontSize: '12px' }}
         >
           All
         </button>
@@ -34,7 +33,6 @@ export default function CategoryFilterBar() {
                   : 'bg-cream text-ink border-ink'
               }`}
             style={{ 
-              fontSize: '12px',
               ...(activeCategoryId === cat.id ? {
                 backgroundColor: colorHex(cat.colorKey),
                 borderColor: colorHex(cat.colorKey)

@@ -300,10 +300,10 @@ function BasicsTab({
         ) : (
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
             {categories.map((cat) => (
-              <button className="font-mono"
+              <button
                 key={cat.id}
                 onClick={() => setCategoryId(categoryId === cat.id ? 'none' : cat.id)}
-                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors border ${
+                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors border font-mono ${
                   categoryId === cat.id
                     ? 'text-cream'
                     : 'bg-cream text-ink border-muted-light'
@@ -472,7 +472,7 @@ function WeekdayPicker({
               style={{
                 width: '36px',
                 height: '36px',
-ontSize: '12px',
+                fontSize: '12px',
                 backgroundColor: isSelected
                   ? 'rgb(var(--color-rust))'
                   : 'rgb(var(--color-cream-dark, #EDE8DF))',
@@ -515,7 +515,7 @@ function MonthDayPicker({ selected, onChange }: { selected: number; onChange: (d
             style={{
               width: '36px',
               height: '36px',
-ontSize: '12px',
+fontSize: '12px',
               backgroundColor: isSelected ? 'var(--color-rust)' : 'var(--color-cream-dark, #EDE8DF)',
               color: isSelected ? 'var(--color-cream)' : 'var(--color-ink)',
             }}
@@ -549,7 +549,7 @@ function YearlyPicker({
               onClick={() => onMonthChange(m)}
               className="font-mono flex items-center justify-center rounded-full transition-colors py-2"
               style={{
-ontSize: '11px',
+                fontSize: '11px',
                 backgroundColor: isSelected ? 'var(--color-rust)' : 'var(--color-cream-dark, #EDE8DF)',
                 color: isSelected ? 'var(--color-cream)' : 'var(--color-ink)',
               }}
@@ -572,7 +572,7 @@ ontSize: '11px',
               style={{
                 width: '32px',
                 height: '32px',
-ontSize: '11px',
+                fontSize: '11px',
                 backgroundColor: isSelected ? 'var(--color-rust)' : 'var(--color-cream-dark, #EDE8DF)',
                 color: isSelected ? 'var(--color-cream)' : 'var(--color-ink)',
               }}
@@ -610,7 +610,7 @@ function CustomPicker({
           }}
           className="font-mono w-[60px] text-center bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust"
           style={{
-olor: 'rgb(var(--color-ink))',
+            color: 'rgb(var(--color-ink))',
             padding: '8px',
           }}
         />
@@ -629,7 +629,7 @@ olor: 'rgb(var(--color-ink))',
           onChange={(e) => onAnchorChange(e.target.value)}
           className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust"
           style={{
-ontSize: '14px',
+            fontSize: '14px',
             color: 'rgb(var(--color-ink))',
             padding: '8px 12px',
           }}
@@ -690,7 +690,7 @@ function ReminderTab({ reminderEnabled, setReminderEnabled, reminderTime, setRem
             onChange={(e) => setReminderTime(e.target.value)}
             className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust"
             style={{
-ontSize: '14px',
+              fontSize: '14px',
               color: 'rgb(var(--color-ink))',
               padding: '8px 12px',
             }}

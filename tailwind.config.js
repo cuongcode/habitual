@@ -7,6 +7,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontSize: {
+        '2xs':   ['10px', { lineHeight: '1' }],
+        'label': ['11px', { lineHeight: '1.4' }],
+        'body':  ['15px', { lineHeight: '1.5' }],
+      },
       fontFamily: {
         display: ['var(--font-display)'],
         body: ['var(--font-body)'],

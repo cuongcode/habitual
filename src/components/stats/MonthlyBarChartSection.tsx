@@ -60,7 +60,6 @@ export default function MonthlyBarChartSection({ monthlyRates, colorKey }: Month
                     y={y - 4}
                     textAnchor="middle"
                     className="text-[9px] fill-muted font-mono"
-                    style={{ fontSize: '9px' }}
                   >
                     {Math.round(m.rate * 100)}%
                   </text>
@@ -72,7 +71,6 @@ export default function MonthlyBarChartSection({ monthlyRates, colorKey }: Month
                   y={baseline + 12}
                   textAnchor="middle"
                   className="text-[10px] fill-muted font-mono"
-                  style={{ fontSize: '10px' }}
                 >
                   {m.total > 0 ? m.label : '—'}
                 </text>

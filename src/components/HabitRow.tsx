@@ -39,9 +39,7 @@ function DayCell({
         className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getDayStateStyles(state, colorKey)}`}
       >
         <span
-          style={{ fontSize: '10px',
-            lineHeight: 1, }}
-         className="font-mono">
+         className="font-mono text-2xs leading-none">
           {dayNum}
         </span>
       </div>
@@ -102,8 +100,7 @@ export default function HabitRow({ habit }: HabitRowProps) {
 
               <button
                 onClick={() => navigate(`/habit/${habit.id}`)}
-                className={`flex-1 truncate text-left text-ink transition-colors ${tokens.textHover} font-body`}
-                style={{ fontSize: '15px' }}
+                className={`flex-1 truncate text-left text-ink transition-colors ${tokens.textHover} font-body text-body`}
               >
                 {habit.name}
               </button>
@@ -124,8 +121,7 @@ export default function HabitRow({ habit }: HabitRowProps) {
 
             <button
               onClick={() => navigate(`/habit/${habit.id}`)}
-              className={`flex-1 truncate text-left text-ink transition-colors ${tokens.textHover} font-body`}
-              style={{ fontSize: '15px' }}
+              className={`flex-1 truncate text-left text-ink transition-colors ${tokens.textHover} font-body text-body`}
             >
               {habit.name}
             </button>

@@ -159,13 +159,7 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className="font-mono flex-1 py-3 text-center transition-colors"
-            style={{fontSize: '12px',
-              color: activeTab === tab ? 'rgb(var(--color-ink))' : 'rgb(var(--color-muted))',
-              borderBottom: activeTab === tab ? '2px solid rgb(var(--color-rust))' : '2px solid transparent',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-            }}
+            className={`font-mono flex-1 py-3 text-center transition-colors text-xs uppercase tracking-wide ${activeTab === tab ? 'text-ink border-b-2 border-rust' : 'text-muted border-b-2 border-transparent'}`}
           >
             {tab}
           </button>
@@ -211,16 +205,14 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
         <button
           onClick={onCancel}
           disabled={submitting}
-          className="text-muted transition-colors hover:text-ink disabled:opacity-50 font-body"
-          style={{ fontSize: '14px' }}
+          className="text-muted transition-colors hover:text-ink disabled:opacity-50 font-body text-sm"
         >
           Cancel
         </button>
         <button
           onClick={handleSubmit}
           disabled={submitting}
-          className="flex items-center justify-center gap-2 bg-rust text-cream rounded-full px-6 py-3 transition-all active:scale-95 disabled:opacity-70 font-body"
-          style={{ fontSize: '15px' }}
+          className="flex items-center justify-center gap-2 bg-rust text-cream rounded-full px-6 py-3 transition-all active:scale-95 disabled:opacity-70 font-body text-body"
         >
           {submitting ? (
             <Loader2 size={16} className="animate-spin" />
@@ -260,8 +252,7 @@ function BasicsTab({
       {/* Habit Name */}
       <div>
         <label
-          className="block mb-2 uppercase tracking-wider font-mono"
-          style={{ fontSize: '11px', color: 'rgb(var(--color-muted))' }}
+          className="block mb-2 uppercase tracking-wider font-mono text-label text-muted"
         >
           Habit Name
         </label>
@@ -276,7 +267,7 @@ function BasicsTab({
           }}
         />
         {errors.name && (
-          <p style={{ fontSize: '11px', color: 'rgb(var(--color-rust))' }} className="mt-1 font-mono">
+          <p className="mt-1 font-mono text-label text-rust">
             {errors.name}
           </p>
         )}
@@ -285,16 +276,14 @@ function BasicsTab({
       {/* Category */}
       <div>
         <label
-          className="block mb-2 uppercase tracking-wider font-mono"
-          style={{ fontSize: '11px', color: 'var(--color-muted)' }}
+          className="block mb-2 uppercase tracking-wider font-mono text-label text-muted"
         >
           Category
         </label>
 
         {categories.length === 0 ? (
           <p
-            style={{ fontSize: '12px', color: 'rgb(var(--color-muted))' }}
-           className="font-mono">
+           className="font-mono text-xs text-muted">
             No categories yet — add one in Settings.
           </p>
         ) : (
@@ -308,7 +297,7 @@ function BasicsTab({
                     ? 'text-cream'
                     : 'bg-cream text-ink border-muted-light'
                 }`}
-                style={{fontSize: '12px',
+                style={{
                   ...(categoryId === cat.id ? {
                     backgroundColor: getCategoryColor(cat.colorKey),
                     borderColor: getCategoryColor(cat.colorKey)
@@ -326,7 +315,7 @@ function BasicsTab({
         )}
 
         {errors.category && (
-          <p style={{ fontSize: '11px', color: 'rgb(var(--color-rust))' }} className="mt-1 font-mono">
+          <p className="mt-1 font-mono text-label text-rust">
             {errors.category}
           </p>
         )}
@@ -365,10 +354,10 @@ function ScheduleTab({ schedule, setSchedule, onFrequencyChange, errors }: Sched
           className="w-full flex justify-between items-center py-3 border-b border-muted-light text-left"
         >
           <div>
-            <div style={{ fontSize: '15px', color: 'rgb(var(--color-ink))' }} className="font-body">
+            <div className="font-body text-body text-ink">
               {opt.label}
             </div>
-            <div style={{ fontSize: '11px', color: 'rgb(var(--color-muted))' }} className="font-mono">
+            <div className="font-mono text-label text-muted">
               {opt.description}
             </div>
           </div>
@@ -422,7 +411,7 @@ function ScheduleTab({ schedule, setSchedule, onFrequencyChange, errors }: Sched
       </div>
 
       {errors.schedule && (
-        <p style={{ fontSize: '11px', color: 'var(--color-rust)' }} className="mt-2 font-mono">
+        <p className="mt-2 font-mono text-label text-rust">
           {errors.schedule}
         </p>
       )}
@@ -468,18 +457,7 @@ function WeekdayPicker({
             <button
               key={label}
               onClick={() => toggle(jsDay)}
-              className="font-mono flex items-center justify-center rounded-full transition-all active:scale-90"
-              style={{
-                width: '36px',
-                height: '36px',
-                fontSize: '12px',
-                backgroundColor: isSelected
-                  ? 'rgb(var(--color-rust))'
-                  : 'rgb(var(--color-cream-dark, #EDE8DF))',
-                color: isSelected ? 'rgb(var(--color-cream))' : 'rgb(var(--color-ink))',
-                opacity: isDisabled ? 0.35 : 1,
-                cursor: isDisabled ? 'not-allowed' : 'pointer',
-              }}
+              className={`font-mono flex items-center justify-center rounded-full transition-all active:scale-90 text-xs w-9 h-9 ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'} ${isDisabled ? 'opacity-35 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               {label}
             </button>
@@ -488,9 +466,7 @@ function WeekdayPicker({
       </div>
       {atMax && (
         <p
-          className="mt-2 text-center font-mono"
-          style={{ fontSize: '11px',
-            color: 'rgb(var(--color-muted))', }}
+          className="mt-2 text-center font-mono text-label text-muted"
         >
           Maximum 6 days selected
         </p>
@@ -511,14 +487,7 @@ function MonthDayPicker({ selected, onChange }: { selected: number; onChange: (d
           <button
             key={d}
             onClick={() => onChange(d)}
-            className="font-mono flex items-center justify-center rounded-full transition-colors"
-            style={{
-              width: '36px',
-              height: '36px',
-fontSize: '12px',
-              backgroundColor: isSelected ? 'var(--color-rust)' : 'var(--color-cream-dark, #EDE8DF)',
-              color: isSelected ? 'var(--color-cream)' : 'var(--color-ink)',
-            }}
+            className={`font-mono flex items-center justify-center rounded-full transition-colors text-xs w-9 h-9 ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'}`}
           >
             {d}
           </button>
@@ -547,12 +516,7 @@ function YearlyPicker({
             <button
               key={label}
               onClick={() => onMonthChange(m)}
-              className="font-mono flex items-center justify-center rounded-full transition-colors py-2"
-              style={{
-                fontSize: '11px',
-                backgroundColor: isSelected ? 'var(--color-rust)' : 'var(--color-cream-dark, #EDE8DF)',
-                color: isSelected ? 'var(--color-cream)' : 'var(--color-ink)',
-              }}
+              className={`font-mono flex items-center justify-center rounded-full transition-colors py-2 text-label ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'}`}
             >
               {label}
             </button>
@@ -568,14 +532,7 @@ function YearlyPicker({
             <button
               key={d}
               onClick={() => onDayChange(d)}
-              className="font-mono flex items-center justify-center rounded-full transition-colors"
-              style={{
-                width: '32px',
-                height: '32px',
-                fontSize: '11px',
-                backgroundColor: isSelected ? 'var(--color-rust)' : 'var(--color-cream-dark, #EDE8DF)',
-                color: isSelected ? 'var(--color-cream)' : 'var(--color-ink)',
-              }}
+              className={`font-mono flex items-center justify-center rounded-full transition-colors text-label w-8 h-8 ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'}`}
             >
               {d}
             </button>
@@ -597,7 +554,7 @@ function CustomPicker({
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <span style={{ fontSize: '15px', color: 'rgb(var(--color-ink))' }} className="font-body">
+        <span className="font-body text-body text-ink">
           Every
         </span>
         <input
@@ -608,31 +565,23 @@ function CustomPicker({
             const v = parseInt(e.target.value, 10)
             if (!isNaN(v)) onIntervalChange(Math.max(2, v))
           }}
-          className="font-mono w-[60px] text-center bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust"
-          style={{
-            color: 'rgb(var(--color-ink))',
-            padding: '8px',
-          }}
+          className="font-mono w-[60px] text-center bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-ink p-2"
         />
-        <span style={{ fontSize: '15px', color: 'rgb(var(--color-ink))' }} className="font-body">
+        <span className="font-body text-body text-ink">
           days
         </span>
       </div>
 
       <div className="flex items-center gap-3">
-        <span style={{ fontSize: '15px', color: 'rgb(var(--color-ink))' }} className="font-body">
+        <span className="font-body text-body text-ink">
           Starting from
         </span>
         <input
           type="date"
           value={anchor}
           onChange={(e) => onAnchorChange(e.target.value)}
-          className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust"
-          style={{
-            fontSize: '14px',
-            color: 'rgb(var(--color-ink))',
-            padding: '8px 12px',
-          }}
+          className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-sm text-ink"
+          style={{ padding: '8px 12px' }}
         />
       </div>
     </div>
@@ -655,7 +604,7 @@ function ReminderTab({ reminderEnabled, setReminderEnabled, reminderTime, setRem
     <div className="space-y-5">
       {/* Toggle Row */}
       <div className="flex items-center justify-between">
-        <span style={{ fontSize: '15px', color: 'rgb(var(--color-ink))' }} className="font-body">
+        <span className="font-body text-body text-ink">
           Daily reminder
         </span>
         <button
@@ -681,25 +630,21 @@ function ReminderTab({ reminderEnabled, setReminderEnabled, reminderTime, setRem
       {/* Time Picker */}
       {reminderEnabled && (
         <div className="flex items-center gap-3">
-          <span style={{ fontSize: '15px', color: 'rgb(var(--color-ink))' }} className="font-body">
+          <span className="font-body text-body text-ink">
             Remind me at
           </span>
           <input
             type="time"
             value={reminderTime}
             onChange={(e) => setReminderTime(e.target.value)}
-            className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust"
-            style={{
-              fontSize: '14px',
-              color: 'rgb(var(--color-ink))',
-              padding: '8px 12px',
-            }}
+            className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-sm text-ink"
+            style={{ padding: '8px 12px' }}
           />
         </div>
       )}
 
       {/* Note */}
-      <p style={{ fontSize: '11px', color: 'rgb(var(--color-muted))' }} className="font-mono">
+      <p className="font-mono text-label text-muted">
         Notifications require permission. You'll be prompted on first use.
       </p>
     </div>

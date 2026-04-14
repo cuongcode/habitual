@@ -24,9 +24,7 @@ export default function HabitsPage() {
         <div className="border-b border-muted-light pt-safe shrink-0 flex flex-col bg-cream">
           <div className="flex items-center justify-between px-4 pt-3 pb-2">
             <h1
-              className="text-ink font-display"
-              style={{ fontSize: '20px',
-                fontWeight: 700, }}
+              className="text-ink font-display text-xl font-bold"
             >
               Habitual
             </h1>

@@ -149,8 +149,7 @@ export default function HabitList() {
             {/* {!activeCategoryId && group.category.id !== 'none' && (
               <div className="px-4 py-2 bg-cream-dark/30 border-b border-muted-light/30">
                 <span
-                  className="text-muted-dark uppercase tracking-wider font-semibold"
-                  style={{ fontSize: '11px' }}
+                  className="text-muted-dark uppercase tracking-wider font-semibold text-label"
                 >
                   {group.category.label}
                 </span>
@@ -188,8 +187,7 @@ function DragOverlayRow({ habit }: { habit: Habit }) {
     >
       <GripVertical size={16} />
       <span
-        className="flex-1 truncate text-ink font-body"
-        style={{ fontSize: '15px' }}
+        className="flex-1 truncate text-ink font-body text-body"
       >
         {habit.name}
       </span>

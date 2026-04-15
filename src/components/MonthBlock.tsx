@@ -1,15 +1,15 @@
-import { memo, useMemo } from 'react'
-import { 
-  format, 
-  startOfMonth, 
-  getDaysInMonth, 
-  getDay, 
-  addDays 
+import {
+  addDays,
+  format,
+  getDay,
+  getDaysInMonth,
+  startOfMonth
 } from 'date-fns'
+import { memo, useMemo } from 'react'
+import { buildCompletedSet, getDayStateFast } from '../services/scheduleEngine'
 import type { Habit, HabitEntry } from '../types/index'
-import { getDayStateFast, buildCompletedSet } from '../services/scheduleEngine'
-import CalendarDayCell from './CalendarDayCell'
 import { getThemeTokens } from '../utils/theme'
+import CalendarDayCell from './CalendarDayCell'
 
 interface MonthBlockProps {
   year: number
@@ -60,7 +60,7 @@ const MonthBlock = memo(({
   return (
     <div className="mb-6" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 320px' }}>
       <div className={`px-4 py-3 flex justify-end border-t border-muted/10 ${isFirst ? 'border-t-0' : ''}`}>
-        <span className={`text-[13px] ${tokens.text} font-display`} className="font-display">
+        <span className={`text-[13px] ${tokens.text} font-display`}>
           {monthLabel}
         </span>
       </div>

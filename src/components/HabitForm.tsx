@@ -262,9 +262,7 @@ function BasicsTab({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Morning walk"
-          className="font-body w-full bg-cream border border-muted-light rounded-md text-ink focus:outline-none focus:ring-1 focus:ring-rust placeholder:text-muted"
-          style={{padding: '10px 12px',
-          }}
+          className="font-body w-full bg-cream border border-muted-light rounded-md text-ink focus:outline-none focus:ring-1 focus:ring-rust placeholder:text-muted py-2.5 px-3"
         />
         {errors.name && (
           <p className="mt-1 font-mono text-label text-rust">
@@ -580,8 +578,7 @@ function CustomPicker({
           type="date"
           value={anchor}
           onChange={(e) => onAnchorChange(e.target.value)}
-          className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-sm text-ink"
-          style={{ padding: '8px 12px' }}
+          className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-sm text-ink py-2 px-3"
         />
       </div>
     </div>
@@ -637,8 +634,7 @@ function ReminderTab({ reminderEnabled, setReminderEnabled, reminderTime, setRem
             type="time"
             value={reminderTime}
             onChange={(e) => setReminderTime(e.target.value)}
-            className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-sm text-ink"
-            style={{ padding: '8px 12px' }}
+            className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-sm text-ink py-2 px-3"
           />
         </div>
       )}

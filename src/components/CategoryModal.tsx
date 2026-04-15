@@ -95,8 +95,7 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
             onChange={e => setLabel(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') handleSave() }}
             placeholder="Category name"
-            className="w-full bg-cream-dark border border-muted-light rounded-xl text-ink focus:outline-none focus:border-rust placeholder:text-muted font-body text-body"
-            style={{ padding: '12px 16px' }}
+            className="w-full bg-cream-dark border border-muted-light rounded-xl text-ink focus:outline-none focus:border-rust placeholder:text-muted font-body text-body py-3 px-4"
           />
 
           <div className="flex items-center justify-between px-1">

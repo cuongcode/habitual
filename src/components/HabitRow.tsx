@@ -91,8 +91,7 @@ export default function HabitRow({ habit }: HabitRowProps) {
               <div
                 {...attributes}
                 {...listeners}
-                className="shrink-0 text-muted cursor-grab active:cursor-grabbing p-1"
-                style={{ touchAction: 'none' }}
+                className="shrink-0 text-muted cursor-grab active:cursor-grabbing p-1 touch-none"
                 aria-label="Drag to reorder"
               >
                 <GripVertical size={16} />
@@ -112,8 +111,7 @@ export default function HabitRow({ habit }: HabitRowProps) {
             <div
               {...attributes}
               {...listeners}
-              className="shrink-0 text-muted cursor-grab active:cursor-grabbing p-1"
-              style={{ touchAction: 'none' }}
+              className="shrink-0 text-muted cursor-grab active:cursor-grabbing p-1 touch-none"
               aria-label="Drag to reorder"
             >
               <GripVertical size={16} />

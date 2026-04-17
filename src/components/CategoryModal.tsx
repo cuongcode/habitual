@@ -105,8 +105,7 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
                 <button
                   key={c.key}
                   onClick={() => setColorKey(c.key)}
-                  className="relative w-6 h-6 rounded-full transition-transform hover:scale-110 flex items-center justify-center"
-                  style={{ backgroundColor: c.hex }}
+                  className={`relative w-6 h-6 rounded-full transition-transform hover:scale-110 flex items-center justify-center bg-${c.key}`}
                 >
                   {colorKey === c.key && (
                     <Check size={14} color="#F5F0E8" strokeWidth={3} />

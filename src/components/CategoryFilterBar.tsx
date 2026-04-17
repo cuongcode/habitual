@@ -1,5 +1,4 @@
 import { useHabitStore } from '../store/habitStore'
-import { colorHex } from '../utils/colors'
 
 export default function CategoryFilterBar() {
   const categories = useHabitStore((s) => s.categories)
@@ -26,18 +25,11 @@ export default function CategoryFilterBar() {
           <button
             key={cat.id}
             onClick={() => setActiveCategoryId(cat.id)}
-            className={`shrink-0 px-3 py-1 rounded-full text-xs uppercase tracking-wide transition-colors border font-mono
-              ${
-                activeCategoryId === cat.id
-                  ? 'text-cream'
-                  : 'bg-cream text-ink border-ink'
-              }`}
-            style={{ 
-              ...(activeCategoryId === cat.id ? {
-                backgroundColor: colorHex(cat.colorKey),
-                borderColor: colorHex(cat.colorKey)
-              } : {})
-            }}
+            className={`shrink-0 px-3 py-1 rounded-full text-xs uppercase tracking-wide transition-colors border font-mono ${
+              activeCategoryId === cat.id
+                ? `text-cream bg-${cat.colorKey} border-${cat.colorKey}`
+                : 'bg-cream text-ink border-ink'
+            }`}
           >
             {cat.label}
           </button>

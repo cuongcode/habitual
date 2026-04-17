@@ -2,7 +2,6 @@ import { Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useHabitStore } from '../store/habitStore'
 import type { Schedule } from '../types/index'
-import { colorHex } from '../utils/colors'
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -143,11 +142,7 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
     }
   }
 
-  // ── Category color lookup ──────────────────────────────────────
 
-  function getCategoryColor(colorKey: string): string {
-    return colorHex(colorKey)
-  }
 
   // ── Render ─────────────────────────────────────────────────────
 
@@ -176,7 +171,6 @@ export default function HabitForm({ initialValues, onSubmit, onCancel, submitLab
             categoryId={categoryId}
             setCategoryId={setCategoryId}
             categories={categories}
-            getCategoryColor={getCategoryColor}
             errors={errors}
           />
         )}
@@ -236,7 +230,6 @@ interface BasicsTabProps {
   categoryId: string
   setCategoryId: (id: string) => void
   categories: { id: string; label: string; colorKey: string }[]
-  getCategoryColor: (colorKey: string) => string
   errors: Record<string, string>
 }
 
@@ -244,7 +237,6 @@ function BasicsTab({
   name, setName, nameRef,
   categoryId, setCategoryId,
   categories,
-  getCategoryColor,
   errors,
 }: BasicsTabProps) {
   return (
@@ -292,19 +284,12 @@ function BasicsTab({
                 onClick={() => setCategoryId(categoryId === cat.id ? 'none' : cat.id)}
                 className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors border font-mono ${
                   categoryId === cat.id
-                    ? 'text-cream'
+                    ? `text-cream bg-${cat.colorKey} border-${cat.colorKey}`
                     : 'bg-cream text-ink border-muted-light'
                 }`}
-                style={{
-                  ...(categoryId === cat.id ? {
-                    backgroundColor: getCategoryColor(cat.colorKey),
-                    borderColor: getCategoryColor(cat.colorKey)
-                  } : {})
-                }}
               >
                 <span
-                  className="w-1.5 h-1.5 rounded-full shrink-0"
-                  style={{ backgroundColor: categoryId === cat.id ? 'rgb(var(--color-cream))' : getCategoryColor(cat.colorKey) }}
+                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${categoryId === cat.id ? 'bg-cream' : `bg-${cat.colorKey}`}`}
                 />
                 {cat.label}
               </button>
@@ -360,11 +345,7 @@ function ScheduleTab({ schedule, setSchedule, onFrequencyChange, errors }: Sched
             </div>
           </div>
           <div
-            className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0"
-            style={{
-              borderColor: schedule.frequency === opt.value ? 'rgb(var(--color-rust))' : 'rgb(var(--color-muted-light))',
-              backgroundColor: schedule.frequency === opt.value ? 'rgb(var(--color-rust))' : 'transparent',
-            }}
+            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${schedule.frequency === opt.value ? 'border-rust bg-rust' : 'border-muted-light bg-transparent'}`}
           >
             {schedule.frequency === opt.value && (
               <div className="w-2 h-2 rounded-full bg-cream" />
@@ -606,20 +587,10 @@ function ReminderTab({ reminderEnabled, setReminderEnabled, reminderTime, setRem
         </span>
         <button
           onClick={() => setReminderEnabled(!reminderEnabled)}
-          className="relative rounded-full transition-colors duration-200"
-          style={{
-            width: '44px',
-            height: '24px',
-            backgroundColor: reminderEnabled ? 'rgb(var(--color-rust))' : 'rgb(var(--color-muted-light, #C4BAB3))',
-          }}
+          className={`relative rounded-full transition-colors duration-200 w-[44px] h-[24px] ${reminderEnabled ? 'bg-rust' : 'bg-muted-light'}`}
         >
           <span
-            className="absolute top-[2px] rounded-full bg-white transition-all duration-200"
-            style={{
-              width: '20px',
-              height: '20px',
-              left: reminderEnabled ? '22px' : '2px',
-            }}
+            className={`absolute top-[2px] rounded-full bg-white transition-all duration-200 w-[20px] h-[20px] ${reminderEnabled ? 'left-[22px]' : 'left-[2px]'}`}
           />
         </button>
       </div>

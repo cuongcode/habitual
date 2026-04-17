@@ -5,6 +5,9 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    { pattern: /^(bg|border|text)-(rust|brown|muted|amber|sage|slate|cream|ink)$/ },
+  ],
   theme: {
     extend: {
       fontSize: {

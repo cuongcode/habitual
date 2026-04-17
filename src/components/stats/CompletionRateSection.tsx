@@ -53,8 +53,7 @@ export default function CompletionRateSection({ rate, colorKey }: CompletionRate
             strokeDasharray={circumference}
             strokeDashoffset={offset}
             strokeLinecap="round"
-            className={`${tokens.text} transition-all duration-1000 ease-out`}
-            style={{ transitionProperty: 'stroke-dashoffset' }}
+            className={`${tokens.text} transition-[stroke-dashoffset] duration-1000 ease-out`}
           />
         </svg>
         

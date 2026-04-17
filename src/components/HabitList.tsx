@@ -182,8 +182,7 @@ export default function HabitList() {
 function DragOverlayRow({ habit }: { habit: Habit }) {
   return (
     <div
-      className="flex items-center gap-2 px-4 py-3 bg-cream border-2 border-rust rounded-md shadow-lg"
-      style={{ opacity: 0.85 }}
+      className="flex items-center gap-2 px-4 py-3 bg-cream border-2 border-rust rounded-md shadow-lg opacity-85"
     >
       <GripVertical size={16} />
       <span

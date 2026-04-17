@@ -27,13 +27,7 @@ export const HeatmapCells = React.memo(function HeatmapCells({ entries, colorKey
 
   return (
     <div
-      className="mode-fade"
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(30, 1fr)',
-        gap: '2px',
-        width: '100%',
-      }}
+      className="mode-fade grid gap-[2px] w-full grid-cols-[repeat(30,1fr)]"
     >
       {days.map(date => (
         <HeatmapCell
@@ -46,7 +40,7 @@ export const HeatmapCells = React.memo(function HeatmapCells({ entries, colorKey
       ))}
       {/* Pad remaining cells to complete the last row */}
       {Array.from({ length: (18 - (days.length % 18)) % 18 }).map((_, i) => (
-        <div key={`pad-${i}`} style={{ aspectRatio: '1' }} />
+        <div key={`pad-${i}`} className="aspect-square" />
       ))}
     </div>
   )
@@ -67,9 +61,7 @@ function HeatmapCell({
 
   return (
     <div
-      style={{ aspectRatio: '1' }}
-      className={`
-        rounded-sm
+      className={`aspect-square rounded-sm
         ${filled
           ? tokens.heatmapFilled
           : isFuture

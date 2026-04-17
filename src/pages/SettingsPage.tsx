@@ -8,7 +8,6 @@ import { exportData } from '../services/exportService'
 import { useHabitStore } from '../store/habitStore'
 import { useUIStore } from '../store/uiStore'
 import type { Category } from '../types/index'
-import { colorHex } from '../utils/colors'
 
 // ── Category Section ───────────────────────────────────────────────
 
@@ -74,8 +73,7 @@ function CategorySection() {
                     onClick={() => handleEditClick(cat)}
                   >
                     <span
-                      className="w-3 h-3 rounded-full shrink-0"
-                      style={{ backgroundColor: colorHex(cat.colorKey) }}
+                      className={`w-3 h-3 rounded-full shrink-0 bg-${cat.colorKey}`}
                     />
                     <span className="font-serif text-[15px] text-ink truncate flex-1">{cat.label}</span>
                     <span className="font-mono text-[11px] text-muted shrink-0 mt-0.5">

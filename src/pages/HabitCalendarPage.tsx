@@ -89,8 +89,7 @@ export default function HabitCalendarPage() {
       {/* Scrollable Grid */}
       <div 
         ref={scrollRef} 
-        className="flex-1 overflow-y-auto"
-        style={{ WebkitOverflowScrolling: 'touch' }}
+        className="flex-1 overflow-y-auto -[webkit-overflow-scrolling:touch]"
       >
         <CalendarGrid 
           habit={habit} 

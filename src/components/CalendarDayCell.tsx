@@ -33,11 +33,11 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress, colorK
   }
 
   return (
-    <button
+      <button
       {...handlers}
       onClick={handleTap}
-      style={{ WebkitTapHighlightColor: 'transparent' }}
       className={`
+        [-webkit-tap-highlight-color:transparent]
         relative aspect-square w-full rounded-sm flex flex-col items-center justify-center transition-all active:scale-95
         ${getDayStateStyles(state, colorKey)}
         ${isToday ? tokens.todayBorder : ''}

@@ -178,8 +178,7 @@ function InteractiveDayCell({
         e.preventDefault()
         setNoteModalDate(dateStr)
       }}
-      style={{ WebkitTapHighlightColor: 'transparent' }}
-      className={`relative flex-shrink-0 focus:outline-none ${popping ? 'cell-pop' : ''}`}
+      className={`[-webkit-tap-highlight-color:transparent] relative flex-shrink-0 focus:outline-none ${popping ? 'cell-pop' : ''}`}
     >
       <DayCell state={state} date={date} hasNote={hasNote} colorKey={colorKey} />
     </button>

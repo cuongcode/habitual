@@ -103,11 +103,11 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
             <div className="flex items-center gap-3">
               {COLOR_OPTIONS.map(c => (
                 <button
-                  key={c.key}
-                  onClick={() => setColorKey(c.key)}
-                  className={`relative w-6 h-6 rounded-full transition-transform hover:scale-110 flex items-center justify-center bg-${c.key}`}
+                  key={c}
+                  onClick={() => setColorKey(c)}
+                  className={`relative w-6 h-6 rounded-full transition-transform hover:scale-110 flex items-center justify-center bg-${c}`}
                 >
-                  {colorKey === c.key && (
+                  {colorKey === c && (
                     <Check size={14} color="#F5F0E8" strokeWidth={3} />
                   )}
                 </button>

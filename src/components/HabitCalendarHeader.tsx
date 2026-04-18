@@ -1,6 +1,7 @@
 import { format, setDay } from 'date-fns'
 import { SlidersHorizontal } from 'lucide-react'
-import type { Habit, Category } from '../types/index'
+
+import type { Category,Habit } from '../types/index'
 
 interface HabitCalendarHeaderProps {
   habit: Habit

@@ -1,4 +1,5 @@
-import { LayoutList, LayoutGrid } from 'lucide-react'
+import { LayoutGrid,LayoutList } from 'lucide-react'
+
 import { useUIStore } from '../store/uiStore'
 
 export function BottomNav() {

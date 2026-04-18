@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useEffect,useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HabitForm } from './HabitForm'
-import type { HabitFormValues } from './HabitForm'
+
+import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
+import { requestNotificationPermission, scheduleReminders } from '../services/notificationService'
 import { useHabitStore } from '../store/habitStore'
 import type { Habit } from '../types/index'
-import { requestNotificationPermission, scheduleReminders } from '../services/notificationService'
-import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
+import type { HabitFormValues } from './HabitForm'
+import { HabitForm } from './HabitForm'
 
 interface EditHabitModalProps {
   habit: Habit

@@ -1,6 +1,7 @@
 import { Flame } from 'lucide-react'
-import { SectionLabel } from '../SectionLabel'
+
 import { getThemeTokens } from '../../utils/theme'
+import { SectionLabel } from '../SectionLabel'
 
 interface StreakSectionProps {
   currentStreak: number

@@ -1,5 +1,6 @@
 import { format, setDay } from 'date-fns'
-import type { Habit, Category } from '../../types/index'
+
+import type { Category,Habit } from '../../types/index'
 
 interface HabitStatsHeaderProps {
   habit: Habit

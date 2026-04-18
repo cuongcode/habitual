@@ -6,6 +6,7 @@ import {
   startOfMonth
 } from 'date-fns'
 import { memo, useMemo } from 'react'
+
 import { buildCompletedSet, getDayStateFast } from '../services/scheduleEngine'
 import type { Habit, HabitEntry } from '../types/index'
 import { getThemeTokens } from '../utils/theme'

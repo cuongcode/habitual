@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
-import { SectionLabel } from '../SectionLabel'
+import { useEffect,useState } from 'react'
+
 import { getThemeTokens } from '../../utils/theme'
+import { SectionLabel } from '../SectionLabel'
 
 interface CompletionRateSectionProps {
   rate: number

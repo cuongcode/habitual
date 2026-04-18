@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
 import { format, parseISO } from 'date-fns'
 import { Trash2, X } from 'lucide-react'
-import { useHabitStore } from '../store/habitStore'
+import { useEffect,useState } from 'react'
+
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
+import { useHabitStore } from '../store/habitStore'
 
 interface NoteModalProps {
   habitId: string

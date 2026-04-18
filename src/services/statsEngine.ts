@@ -1,23 +1,24 @@
 import {
-  parseISO,
+  addDays,
+  endOfMonth,
+  format,
+  getMonth,
+  getYear,
   isAfter,
   isBefore,
   isSameDay,
+  parseISO,
   startOfDay,
-  addDays,
-  subDays,
-  getMonth,
-  getYear,
-  subMonths,
   startOfMonth,
-  endOfMonth,
-  format,
+  subDays,
+  subMonths,
 } from 'date-fns'
+
+import type { Habit, HabitEntry } from '../types'
 import {
   getNextTargetDate,
   getPrevTargetDate,
 } from './scheduleEngine'
-import type { Habit, HabitEntry } from '../types'
 
 export interface MonthlyRate {
   label: string // 'Jan', 'Feb' etc — IBM Plex Mono

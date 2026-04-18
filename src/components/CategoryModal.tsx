@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from 'react'
-import { createPortal } from 'react-dom'
 import { Check, X } from 'lucide-react'
+import { useEffect,useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+
 import { useHabitStore } from '../store/habitStore'
 import { useUIStore } from '../store/uiStore'
 import type { Category } from '../types/index'

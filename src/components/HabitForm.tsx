@@ -1,5 +1,6 @@
 import { Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+
 import { useHabitStore } from '../store/habitStore'
 import type { Schedule } from '../types/index'
 

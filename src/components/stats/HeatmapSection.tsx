@@ -1,8 +1,9 @@
-import { startOfWeek, addDays, subWeeks, format } from 'date-fns'
+import { addDays, format,startOfWeek, subWeeks } from 'date-fns'
+
 import { getDayState } from '../../services/scheduleEngine'
-import { SectionLabel } from '../SectionLabel'
 import type { Habit, HabitEntry } from '../../types/index'
 import { getThemeTokens } from '../../utils/theme'
+import { SectionLabel } from '../SectionLabel'
 
 interface HeatmapSectionProps {
   habit: Habit

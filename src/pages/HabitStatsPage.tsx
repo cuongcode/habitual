@@ -1,25 +1,25 @@
-import { useMemo } from 'react'
-import { useParams, Link, useLocation } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { useHabitStore } from '../store/habitStore'
-import {
-  getCurrentStreak,
-  getLongestStreak,
-  getCompletionRate,
-  getBestPeriod,
-  getTotalCompletions,
-  getMonthlyRates,
-} from '../services/statsEngine'
+import { useMemo } from 'react'
+import { Link, useLocation,useParams } from 'react-router-dom'
 
 import {
-  HabitStatsHeader,
-  StreakSection,
-  CompletionRateSection,
   BestPeriodSection,
+  CompletionRateSection,
+  HabitStatsHeader,
+  HabitStatsNav,
   MonthlyBarChartSection,
-  TotalCompletionsSection,
-  HabitStatsNav
-} from '@/components'
+  StreakSection,
+  TotalCompletionsSection} from '@/components'
+
+import {
+  getBestPeriod,
+  getCompletionRate,
+  getCurrentStreak,
+  getLongestStreak,
+  getMonthlyRates,
+  getTotalCompletions,
+} from '../services/statsEngine'
+import { useHabitStore } from '../store/habitStore'
 
 const EMPTY_ENTRIES: any[] = []
 

@@ -1,13 +1,15 @@
+import './styles/global.css'
+
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import './styles/global.css'
-import HabitsPage from './pages/HabitsPage'
+
 import HabitCalendarPage from './pages/HabitCalendarPage'
+import HabitsPage from './pages/HabitsPage'
 import HabitStatsPage from './pages/HabitStatsPage'
 import SettingsPage from './pages/SettingsPage'
-import { useHabitStore } from './store/habitStore'
 import { scheduleReminders } from './services/notificationService'
+import { useHabitStore } from './store/habitStore'
 
 const router = createBrowserRouter([
   {
@@ -28,7 +30,7 @@ const router = createBrowserRouter([
   },
 ])
 
-import { ToastContainer, InstallPrompt, ErrorBoundary } from '@/components'
+import { ErrorBoundary,InstallPrompt, ToastContainer } from '@/components'
 
 function App() {
   useEffect(() => {

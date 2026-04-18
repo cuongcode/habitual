@@ -1,6 +1,6 @@
 import type { MonthlyRate } from '../../services/statsEngine'
-import { SectionLabel } from '../SectionLabel'
 import { getThemeTokens } from '../../utils/theme'
+import { SectionLabel } from '../SectionLabel'
 
 interface MonthlyBarChartSectionProps {
   monthlyRates: MonthlyRate[]

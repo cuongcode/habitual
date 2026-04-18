@@ -1,6 +1,7 @@
-import { openDB } from 'idb'
 import type { DBSchema, IDBPDatabase } from 'idb'
-import type { Category, Habit, HabitEntry, HabitDayNote } from '../types/index'
+import { openDB } from 'idb'
+
+import type { Category, Habit, HabitDayNote,HabitEntry } from '../types/index'
 
 // ── Schema ──────────────────────────────────────────────────────────
 

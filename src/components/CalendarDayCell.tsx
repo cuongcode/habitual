@@ -1,11 +1,12 @@
-import { memo, useState } from 'react'
 import { format } from 'date-fns'
 import { Check } from 'lucide-react'
-import { useHabitStore } from '../store/habitStore'
+import { memo, useState } from 'react'
+
 import { useLongPress } from '../hooks/useLongPress'
 import type { DayState } from '../services/scheduleEngine'
-import { getDayStateStyles, getThemeTokens } from '../utils/theme'
+import { useHabitStore } from '../store/habitStore'
 import type { Habit } from '../types/index'
+import { getDayStateStyles, getThemeTokens } from '../utils/theme'
 
 interface CalendarDayCellProps {
   date: Date

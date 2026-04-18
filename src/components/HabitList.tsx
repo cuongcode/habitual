@@ -17,9 +17,9 @@ import { GripVertical } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useHabitStore } from '../store/habitStore'
 import type { Habit } from '../types/index'
-import HabitRow from './HabitRow'
+import { HabitRow } from './HabitRow'
 
-export default function HabitList() {
+export function HabitList() {
   const habits = useHabitStore((s) => s.habits)
   const categories = useHabitStore((s) => s.categories)
   const activeCategoryId = useHabitStore((s) => s.activeCategoryId)

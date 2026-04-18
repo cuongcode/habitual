@@ -39,7 +39,7 @@ const formatSchedule = (habit: Habit) => {
   }
 }
 
-export default function HabitCalendarHeader({ habit, category, onEditPress }: HabitCalendarHeaderProps) {
+export function HabitCalendarHeader({ habit, category, onEditPress }: HabitCalendarHeaderProps) {
   const scheduleText = formatSchedule(habit)
   
   return (

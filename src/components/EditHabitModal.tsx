@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import HabitForm from './HabitForm'
+import { HabitForm } from './HabitForm'
 import type { HabitFormValues } from './HabitForm'
 import { useHabitStore } from '../store/habitStore'
 import type { Habit } from '../types/index'
@@ -12,7 +12,7 @@ interface EditHabitModalProps {
   onClose: () => void
 }
 
-export default function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
+export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const navigate = useNavigate()

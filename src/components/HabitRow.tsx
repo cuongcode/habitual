@@ -10,7 +10,7 @@ import { getDayState } from '../services/scheduleEngine'
 import type { DayState } from '../services/scheduleEngine'
 import { getDayStateStyles, getThemeTokens } from '../utils/theme'
 import { useLongPress } from '../hooks/useLongPress'
-import NoteModal from './NoteModal'
+import { NoteModal } from './NoteModal'
 import { useUIStore } from '../store/uiStore'
 import { HeatmapCells } from './HeatmapCells'
 import type { HabitEntry } from '../types/index'
@@ -50,7 +50,7 @@ function DayCell({
   )
 }
 
-export default function HabitRow({ habit }: HabitRowProps) {
+export function HabitRow({ habit }: HabitRowProps) {
   const navigate = useNavigate()
   const entries = useHabitStore((state) => state.entries[habit.id]) ?? []
   const notes = useHabitStore((state) => state.notes)

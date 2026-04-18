@@ -16,7 +16,7 @@ interface CalendarDayCellProps {
   colorKey?: string
 }
 
-const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress, colorKey }: CalendarDayCellProps) => {
+export const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress, colorKey }: CalendarDayCellProps) => {
   const toggleEntry = useHabitStore((s) => s.toggleEntry)
   const dateStr = format(date, 'yyyy-MM-dd')
   const dayNumber = format(date, 'd')
@@ -61,4 +61,3 @@ const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress, colorK
 
 CalendarDayCell.displayName = 'CalendarDayCell'
 
-export default CalendarDayCell

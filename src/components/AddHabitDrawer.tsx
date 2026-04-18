@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import HabitForm from './HabitForm'
+import { HabitForm } from './HabitForm'
 import type { HabitFormValues } from './HabitForm'
 import { useHabitStore } from '../store/habitStore'
 import { useUIStore } from '../store/uiStore'
 import { requestNotificationPermission, scheduleReminders } from '../services/notificationService'
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
 
-export default function AddHabitDrawer() {
+export function AddHabitDrawer() {
   const [isVisible, setIsVisible] = useState(false)
   const closeDrawer = useUIStore((s) => s.closeAddHabitDrawer)
 

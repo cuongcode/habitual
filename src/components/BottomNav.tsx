@@ -1,7 +1,7 @@
 import { LayoutList, LayoutGrid } from 'lucide-react'
 import { useUIStore } from '../store/uiStore'
 
-export default function BottomNav() {
+export function BottomNav() {
   const openAddHabitDrawer = useUIStore((s) => s.openAddHabitDrawer)
   const habitsDisplayMode = useUIStore((s) => s.habitsDisplayMode)
   const setHabitsDisplayMode = useUIStore((s) => s.setHabitsDisplayMode)

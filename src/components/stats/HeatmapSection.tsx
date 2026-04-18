@@ -10,7 +10,7 @@ interface HeatmapSectionProps {
   colorKey?: string
 }
 
-export default function HeatmapSection({ habit, entries, colorKey }: HeatmapSectionProps) {
+export function HeatmapSection({ habit, entries, colorKey }: HeatmapSectionProps) {
   const tokens = getThemeTokens(colorKey)
   // 52 weeks ago, starting from Monday
   const gridStart = startOfWeek(subWeeks(new Date(), 52), { weekStartsOn: 1 })

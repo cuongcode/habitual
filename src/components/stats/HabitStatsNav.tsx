@@ -5,7 +5,7 @@ interface HabitStatsNavProps {
   habitId: string
 }
 
-export default function HabitStatsNav({ habitId }: HabitStatsNavProps) {
+export function HabitStatsNav({ habitId }: HabitStatsNavProps) {
   return (
     <nav 
       className="fixed bottom-0 left-0 right-0 bg-cream/95 backdrop-blur-sm border-t border-muted/10 z-20 pb-safe"

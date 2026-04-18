@@ -13,7 +13,7 @@ function seededJitter(seed: number): number {
   return (x - Math.floor(x) - 0.5) * 3 // ±1.5px jitter
 }
 
-export default function MonthlyBarChartSection({ monthlyRates, colorKey }: MonthlyBarChartSectionProps) {
+export function MonthlyBarChartSection({ monthlyRates, colorKey }: MonthlyBarChartSectionProps) {
   const tokens = getThemeTokens(colorKey)
 
   // Show last 6 months, oldest left, newest right

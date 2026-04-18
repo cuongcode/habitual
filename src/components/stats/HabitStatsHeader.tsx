@@ -37,7 +37,7 @@ const formatSchedule = (habit: Habit) => {
   }
 }
 
-export default function HabitStatsHeader({ habit, category }: HabitStatsHeaderProps) {
+export function HabitStatsHeader({ habit, category }: HabitStatsHeaderProps) {
   const scheduleText = formatSchedule(habit)
   
   return (

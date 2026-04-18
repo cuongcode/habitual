@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams, Link, useLocation } from 'react-router-dom'
 import { ArrowLeft, ArrowDown } from 'lucide-react'
 import { useHabitStore } from '../store/habitStore'
-import HabitCalendarHeader from '../components/HabitCalendarHeader'
-import WeekdayHeaders from '../components/WeekdayHeaders'
-import CalendarGrid from '../components/CalendarGrid'
-import HabitCalendarNav from '../components/HabitCalendarNav'
-import EditHabitModal from '../components/EditHabitModal'
+import {
+  HabitCalendarHeader,
+  WeekdayHeaders,
+  CalendarGrid,
+  HabitCalendarNav,
+  EditHabitModal
+} from '@/components'
 import { getThemeTokens } from '../utils/theme'
 
 export default function HabitCalendarPage() {

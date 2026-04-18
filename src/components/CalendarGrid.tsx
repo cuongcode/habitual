@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, memo } from 'react'
 import { subMonths } from 'date-fns'
 import type { Habit, HabitEntry, HabitDayNote } from '../types/index'
-import MonthBlock from './MonthBlock'
-import NoteModal from './NoteModal'
+import { MonthBlock } from './MonthBlock'
+import { NoteModal } from './NoteModal'
 
 interface CalendarGridProps {
   habit: Habit
@@ -11,7 +11,7 @@ interface CalendarGridProps {
   colorKey?: string
 }
 
-const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarGridProps) => {
+export const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarGridProps) => {
   const [months, setMonths] = useState<{ year: number; month: number }[]>(() => {
     const now = new Date()
     // 0 is current month. In flex-col-reverse, it will be at the bottom.
@@ -87,4 +87,3 @@ const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarGridProp
 
 CalendarGrid.displayName = 'CalendarGrid'
 
-export default CalendarGrid

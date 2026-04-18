@@ -42,7 +42,7 @@ function todayISO(): string {
 
 // ── Component ──────────────────────────────────────────────────────
 
-export default function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: HabitFormProps) {
+export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: HabitFormProps) {
   const categories = useHabitStore((s) => s.categories)
   const nameRef = useRef<HTMLInputElement>(null)
 

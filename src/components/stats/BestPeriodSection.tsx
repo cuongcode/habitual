@@ -7,7 +7,7 @@ interface BestPeriodSectionProps {
   colorKey?: string
 }
 
-export default function BestPeriodSection({ bestPeriod, colorKey }: BestPeriodSectionProps) {
+export function BestPeriodSection({ bestPeriod, colorKey }: BestPeriodSectionProps) {
   const tokens = getThemeTokens(colorKey)
 
   if (!bestPeriod) {

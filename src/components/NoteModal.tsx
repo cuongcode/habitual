@@ -10,7 +10,7 @@ interface NoteModalProps {
   onClose: () => void
 }
 
-export default function NoteModal({ habitId, date, onClose }: NoteModalProps) {
+export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
   const store = useHabitStore()
   const [text, setText] = useState('')
   const [isVisible, setIsVisible] = useState(false)

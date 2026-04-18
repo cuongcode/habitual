@@ -8,7 +8,7 @@ interface StreakSectionProps {
   colorKey?: string
 }
 
-export default function StreakSection({ currentStreak, longestStreak, colorKey }: StreakSectionProps) {
+export function StreakSection({ currentStreak, longestStreak, colorKey }: StreakSectionProps) {
   const tokens = getThemeTokens(colorKey)
 
   return (

@@ -7,7 +7,7 @@ interface CompletionRateSectionProps {
   colorKey?: string
 }
 
-export default function CompletionRateSection({ rate, colorKey }: CompletionRateSectionProps) {
+export function CompletionRateSection({ rate, colorKey }: CompletionRateSectionProps) {
   const [animatedRate, setAnimatedRate] = useState(0)
   const tokens = getThemeTokens(colorKey)
   

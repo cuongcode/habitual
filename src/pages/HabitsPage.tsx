@@ -1,11 +1,7 @@
 import { format, startOfDay, subDays } from 'date-fns'
 import { Settings } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import AddHabitDrawer from '../components/AddHabitDrawer'
-import BottomNav from '../components/BottomNav'
-import CategoryFilterBar from '../components/CategoryFilterBar'
-import HabitList from '../components/HabitList'
-import { YearNav } from '../components/YearNav'
+import { AddHabitDrawer, BottomNav, CategoryFilterBar, HabitList, YearNav } from '@/components'
 import { useUIStore } from '../store/uiStore'
 
 export default function HabitsPage() {

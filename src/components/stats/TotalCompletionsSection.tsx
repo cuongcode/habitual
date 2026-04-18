@@ -6,7 +6,7 @@ interface TotalCompletionsSectionProps {
   colorKey?: string
 }
 
-export default function TotalCompletionsSection({ total, colorKey }: TotalCompletionsSectionProps) {
+export function TotalCompletionsSection({ total, colorKey }: TotalCompletionsSectionProps) {
   const tokens = getThemeTokens(colorKey)
 
   return (

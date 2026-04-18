@@ -1,6 +1,6 @@
 import { useHabitStore } from '../store/habitStore'
 
-export default function CategoryFilterBar() {
+export function CategoryFilterBar() {
   const categories = useHabitStore((s) => s.categories)
   const activeCategoryId = useHabitStore((s) => s.activeCategoryId)
   const setActiveCategoryId = useHabitStore((s) => s.setActiveCategoryId)

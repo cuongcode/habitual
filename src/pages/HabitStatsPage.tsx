@@ -11,13 +11,15 @@ import {
   getMonthlyRates,
 } from '../services/statsEngine'
 
-import HabitStatsHeader from '../components/stats/HabitStatsHeader'
-import StreakSection from '../components/stats/StreakSection'
-import CompletionRateSection from '../components/stats/CompletionRateSection'
-import BestPeriodSection from '../components/stats/BestPeriodSection'
-import MonthlyBarChartSection from '../components/stats/MonthlyBarChartSection'
-import TotalCompletionsSection from '../components/stats/TotalCompletionsSection'
-import HabitStatsNav from '../components/stats/HabitStatsNav'
+import {
+  HabitStatsHeader,
+  StreakSection,
+  CompletionRateSection,
+  BestPeriodSection,
+  MonthlyBarChartSection,
+  TotalCompletionsSection,
+  HabitStatsNav
+} from '@/components'
 
 const EMPTY_ENTRIES: any[] = []
 

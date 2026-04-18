@@ -1,4 +1,4 @@
-export default function WeekdayHeaders() {
+export function WeekdayHeaders() {
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   
   return (

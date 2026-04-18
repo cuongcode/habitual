@@ -9,7 +9,7 @@ import { memo, useMemo } from 'react'
 import { buildCompletedSet, getDayStateFast } from '../services/scheduleEngine'
 import type { Habit, HabitEntry } from '../types/index'
 import { getThemeTokens } from '../utils/theme'
-import CalendarDayCell from './CalendarDayCell'
+import { CalendarDayCell } from './CalendarDayCell'
 
 interface MonthBlockProps {
   year: number
@@ -22,7 +22,7 @@ interface MonthBlockProps {
   colorKey?: string
 }
 
-const MonthBlock = memo(({ 
+export const MonthBlock = memo(({ 
   year, 
   month, 
   habit, 
@@ -95,4 +95,3 @@ const MonthBlock = memo(({
 
 MonthBlock.displayName = 'MonthBlock'
 
-export default MonthBlock

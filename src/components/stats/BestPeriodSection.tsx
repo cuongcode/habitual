@@ -1,6 +1,6 @@
-import { format, differenceInCalendarDays } from 'date-fns'
-import { SectionLabel } from '../SectionLabel'
-import { getThemeTokens } from '../../utils/theme'
+import { differenceInCalendarDays, format } from 'date-fns';
+import { getThemeTokens } from '../../utils/theme';
+import { SectionLabel } from '../SectionLabel';
 
 interface BestPeriodSectionProps {
   bestPeriod: { start: Date; end: Date } | null
@@ -33,7 +33,7 @@ export default function BestPeriodSection({ bestPeriod, colorKey }: BestPeriodSe
           {format(bestPeriod.start, 'MMM d, yyyy')} – {format(bestPeriod.end, 'MMM d, yyyy')}
         </div>
         <div className="mt-2 flex items-baseline gap-2">
-          <span className={`text-[32px] ${tokens.text} font-display leading-none`} className="font-display">
+          <span className={`text-[32px] ${tokens.text} font-display leading-none`}>
             {days}
           </span>
           <span className="text-[14px] text-muted font-mono">

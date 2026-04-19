@@ -26,18 +26,28 @@ export const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarG
   const [noteModalDate, setNoteModalDate] = useState<string | null>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
 
+  const isFetchingRef = useRef(false)
+
   useEffect(() => {
+    // Throttle: allows the browser to settle between loads.
+    const timer = setTimeout(() => {
+      isFetchingRef.current = false
+    }, 100)
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          // Use rAF to avoid blocking the scroll thread on iOS
+        if (entries[0].isIntersecting && !isFetchingRef.current) {
+          isFetchingRef.current = true
           requestAnimationFrame(() => {
             setMonths((prev) => {
               const oldest = prev[prev.length - 1]
-              // Load 3 months at a time to reduce re-render frequency
-              const batch: { year: number; month: number }[] = []
               let ref = new Date(oldest.year, oldest.month - 1)
-              for (let i = 0; i < 3; i++) {
+              const batch: { year: number; month: number }[] = []
+
+              // Load 4 months at a time (~1280px).
+              // Since this is > rootMargin (800px), it pushes the sentinel out of the trigger zone,
+              // preventing the "treadmill" effect while providing enough runway for fast scrolls.
+              for (let i = 0; i < 4; i++) {
                 ref = subMonths(ref, 1)
                 batch.push({ year: ref.getFullYear(), month: ref.getMonth() + 1 })
               }
@@ -46,13 +56,17 @@ export const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarG
           })
         }
       },
-      // Pre-load before sentinel is visible to prevent visible loading gaps
-      { threshold: 0.1, rootMargin: '200px 0px' },
+      // 800px buffer covers aggressive flings without hitting the "ceiling"
+      { threshold: 0.01, rootMargin: '800px 0px' },
     )
 
     if (sentinelRef.current) observer.observe(sentinelRef.current)
-    return () => observer.disconnect()
-  }, [])
+
+    return () => {
+      clearTimeout(timer)
+      observer.disconnect()
+    }
+  }, [months.length])
 
   return (
     <div className="flex min-h-full flex-col-reverse justify-end pb-24">

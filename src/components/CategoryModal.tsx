@@ -84,10 +84,16 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
         </div>
 
         <div className="space-y-4">
+          <div className="flex justify-end px-1 w-full">
+            <span className="font-mono text-[10px] tabular-nums tracking-wider text-muted-light">
+              {label.length}/25
+            </span>
+          </div>
           <input
             ref={inputRef}
             type="text"
             value={label}
+            maxLength={25}
             onChange={(e) => setLabel(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSave()

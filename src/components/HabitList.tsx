@@ -12,9 +12,9 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 import { GripVertical } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
-import { useHabitStore } from '../store/habitStore'
-import type { Habit } from '../types/index'
-import { HabitRow } from './HabitRow'
+import { useHabitStore } from '@/store/habitStore'
+import type { Habit } from '@/types'
+import { HabitRow } from '@/components'
 
 export function HabitList() {
   const habits = useHabitStore((s) => s.habits)

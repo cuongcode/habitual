@@ -23,13 +23,19 @@ export function BasicsTab({
     <div className="space-y-6">
       {/* Habit Name */}
       <div>
-        <label className="mb-2 block font-mono text-label uppercase tracking-wider text-muted">
-          Habit Name
-        </label>
+        <div className="mb-2 flex items-end justify-between">
+          <label className="block font-mono text-label uppercase tracking-wider text-muted">
+            Habit Name
+          </label>
+          <span className="font-mono text-[10px] tabular-nums tracking-wider text-muted-light">
+            {name.length}/25
+          </span>
+        </div>
         <input
           ref={nameRef}
           type="text"
           value={name}
+          maxLength={25}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Morning walk"
           className="w-full rounded-md border border-muted-light bg-cream px-3 py-2.5 font-body text-ink placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-rust"

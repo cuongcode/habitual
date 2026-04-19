@@ -13,18 +13,15 @@ interface NoteModalProps {
 
 export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
   const store = useHabitStore()
-  const [text, setText] = useState('')
-  const [isVisible, setIsVisible] = useState(false)
   const existingNote = store.getNoteForHabitDate(habitId, date)
+  const [text, setText] = useState(() => existingNote?.text ?? '')
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    if (existingNote) {
-      setText(existingNote.text)
-    }
     // Trigger animation
     const timer = setTimeout(() => setIsVisible(true), 10)
     return () => clearTimeout(timer)
-  }, [existingNote])
+  }, [])
 
   const handleClose = () => {
     setIsVisible(false)

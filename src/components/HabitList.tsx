@@ -9,12 +9,12 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { GripVertical } from 'lucide-react'
+import { GripVertical, Notebook } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
+import { EmptyState, HabitRow } from '@/components'
 import { useHabitStore } from '@/store/habitStore'
 import type { Habit } from '@/types'
-import { HabitRow } from '@/components'
 
 export function HabitList() {
   const habits = useHabitStore((s) => s.habits)
@@ -100,57 +100,20 @@ export function HabitList() {
   if (groups.length === 0) {
     if (activeCategoryId) {
       return (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 px-8">
-          <p className="m-0 text-center font-display text-base text-ink">
-            No habits in this category
-          </p>
-          <p className="m-0 text-center font-mono text-xs text-muted">Add one with the + button</p>
-        </div>
+        <EmptyState
+          compact
+          title="No habits in this category"
+          description="Add one with the + button"
+        />
       )
     }
 
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8">
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-          <rect x="16" y="12" width="48" height="58" rx="4" stroke="#9C8E85" strokeWidth="1.5" />
-          <line
-            x1="28"
-            y1="30"
-            x2="52"
-            y2="30"
-            stroke="#C4BAB3"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-          <line
-            x1="28"
-            y1="40"
-            x2="46"
-            y2="40"
-            stroke="#C4BAB3"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-          <line
-            x1="28"
-            y1="50"
-            x2="50"
-            y2="50"
-            stroke="#C4BAB3"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-          <circle cx="24" cy="30" r="2" fill="#C4BAB3" />
-          <circle cx="24" cy="40" r="2" fill="#C4BAB3" />
-          <circle cx="24" cy="50" r="2" fill="#C4BAB3" />
-        </svg>
-        <div className="mt-2 flex flex-col gap-1">
-          <p className="m-0 text-center font-display text-lg text-ink">Your notebook is empty</p>
-          <p className="m-0 text-center font-mono text-xs leading-relaxed text-muted">
-            Tap the + button below to add your first habit
-          </p>
-        </div>
-      </div>
+      <EmptyState
+        title="Your Habitual is empty"
+        description="Tap the + button below to add your first habit"
+        icon={<Notebook size={64} strokeWidth={1} />}
+      />
     )
   }
 

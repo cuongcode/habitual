@@ -9,12 +9,7 @@ interface DayCellProps {
   colorKey?: string
 }
 
-export function DayCell({
-  state,
-  date,
-  hasNote,
-  colorKey,
-}: DayCellProps) {
+export function DayCell({ state, date, hasNote, colorKey }: DayCellProps) {
   const dayNum = format(date, 'd')
   const tokens = getThemeTokens(colorKey)
 

@@ -20,7 +20,12 @@ const FREQUENCY_OPTIONS: { value: Schedule['frequency']; label: string; descript
   { value: 'custom', label: 'Custom', description: 'Every X days' },
 ]
 
-export function ScheduleTab({ schedule, setSchedule, onFrequencyChange, errors }: ScheduleTabProps) {
+export function ScheduleTab({
+  schedule,
+  setSchedule,
+  onFrequencyChange,
+  errors,
+}: ScheduleTabProps) {
   return (
     <div>
       {/* Frequency List */}

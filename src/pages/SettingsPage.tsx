@@ -1,12 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import {
-  AboutSection,
-  AppearanceSection,
-  CategorySection,
-  DataSection,
-} from '@/components'
+import { AboutSection, AppearanceSection, CategorySection, DataSection } from '@/components'
 
 // ── Header ─────────────────────────────────────────────────────────
 
@@ -39,7 +34,7 @@ function SettingsNav() {
 
 export default function SettingsPage() {
   const location = useLocation()
-  
+
   return (
     <div
       key={location.pathname}
@@ -55,7 +50,7 @@ export default function SettingsPage() {
           <AppearanceSection />
           <DataSection />
         </div>
-        
+
         <div className="mt-8">
           <AboutSection />
         </div>

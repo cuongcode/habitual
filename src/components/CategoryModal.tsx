@@ -20,12 +20,12 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
   )
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
- 
+
   const addCategory = useHabitStore((s) => s.addCategory)
   const updateCategory = useHabitStore((s) => s.updateCategory)
   const deleteCategory = useHabitStore((s) => s.deleteCategory)
   const showToast = useUIStore((s) => s.showToast)
- 
+
   // Handle autofocus when opening
   useEffect(() => {
     if (isOpen) {

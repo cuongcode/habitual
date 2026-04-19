@@ -1,6 +1,16 @@
 const MONTH_LABELS = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ]
 
 interface YearlyPickerProps {
@@ -10,12 +20,7 @@ interface YearlyPickerProps {
   onDayChange: (d: number) => void
 }
 
-export function YearlyPicker({
-  month,
-  day,
-  onMonthChange,
-  onDayChange,
-}: YearlyPickerProps) {
+export function YearlyPicker({ month, day, onMonthChange, onDayChange }: YearlyPickerProps) {
   return (
     <div className="flex gap-4">
       {/* Month grid */}

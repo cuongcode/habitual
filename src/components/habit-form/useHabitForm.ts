@@ -50,7 +50,7 @@ export function useHabitForm({ initialValues, onSubmit }: UseHabitFormProps) {
   function validate(): Record<string, string> {
     const errs: Record<string, string> = {}
     if (!name.trim()) errs.name = 'Habit name is required'
-    
+
     const s = schedule
     if (s.frequency === 'weekly') {
       if (!s.weekdays?.length) errs.schedule = 'Pick at least one weekday'

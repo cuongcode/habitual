@@ -25,7 +25,7 @@ export function AppearanceSection() {
               className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-center font-mono text-[13px] transition-all ${
                 theme === opt.value
                   ? 'bg-rust text-cream shadow-sm'
-                  : 'text-muted hover:text-ink hover:bg-cream-dark/50'
+                  : 'text-muted hover:bg-cream-dark/50 hover:text-ink'
               }`}
             >
               {opt.icon}

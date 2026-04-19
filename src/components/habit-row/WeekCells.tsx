@@ -11,13 +11,7 @@ interface WeekCellsProps {
   colorKey?: string
 }
 
-export function WeekCells({
-  habit,
-  entries,
-  hasNote,
-  setNoteModalDate,
-  colorKey,
-}: WeekCellsProps) {
+export function WeekCells({ habit, entries, hasNote, setNoteModalDate, colorKey }: WeekCellsProps) {
   const today = startOfDay(new Date())
   const cellDates = Array.from({ length: 7 }, (_, i) => subDays(today, 6 - i))
 

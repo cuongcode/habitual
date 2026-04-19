@@ -1,15 +1,12 @@
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { GripVertical } from 'lucide-react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
 import { HeatmapCells, NoteModal } from '@/components'
 import { useHabitStore } from '@/store/habitStore'
 import { useUIStore } from '@/store/uiStore'
 import type { Habit } from '@/types'
 import { getThemeTokens } from '@/utils/theme'
-
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { useState } from 'react'
+import { HabitRowHeader } from './HabitRowHeader'
 import { WeekCells } from './WeekCells'
 
 interface HabitRowProps {
@@ -17,7 +14,6 @@ interface HabitRowProps {
 }
 
 export function HabitRow({ habit }: HabitRowProps) {
-  const navigate = useNavigate()
   const entries = useHabitStore((state) => state.entries[habit.id]) ?? []
   const notes = useHabitStore((state) => state.notes)
   const categories = useHabitStore((state) => state.categories)
@@ -49,41 +45,23 @@ export function HabitRow({ habit }: HabitRowProps) {
         {habitsDisplayMode === 'heatmap' ? (
           <div className="flex min-w-0 flex-1 flex-col gap-2">
             <div className="flex items-center gap-2">
-              <div
-                {...attributes}
-                {...listeners}
-                className="shrink-0 cursor-grab touch-none p-1 text-muted active:cursor-grabbing"
-                aria-label="Drag to reorder"
-              >
-                <GripVertical size={16} />
-              </div>
-
-              <button
-                onClick={() => navigate(`/habit/${habit.id}`)}
-                className={`flex-1 truncate text-left text-ink transition-colors ${tokens.textHover} font-body text-body`}
-              >
-                {habit.name}
-              </button>
+              <HabitRowHeader
+                habit={habit}
+                attributes={attributes}
+                listeners={listeners}
+                tokens={tokens}
+              />
             </div>
             <HeatmapCells entries={entries} colorKey={colorKey} />
           </div>
         ) : (
           <div className="flex min-w-0 flex-1 items-center gap-2">
-            <div
-              {...attributes}
-              {...listeners}
-              className="shrink-0 cursor-grab touch-none p-1 text-muted active:cursor-grabbing"
-              aria-label="Drag to reorder"
-            >
-              <GripVertical size={16} />
-            </div>
-
-            <button
-              onClick={() => navigate(`/habit/${habit.id}`)}
-              className={`flex-1 truncate text-left text-ink transition-colors ${tokens.textHover} font-body text-body`}
-            >
-              {habit.name}
-            </button>
+            <HabitRowHeader
+              habit={habit}
+              attributes={attributes}
+              listeners={listeners}
+              tokens={tokens}
+            />
 
             <WeekCells
               habit={habit}

@@ -1,0 +1,37 @@
+import type { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core'
+import { GripVertical } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+
+import type { Habit } from '@/types'
+import type { ThemeColorTokens } from '@/utils/theme'
+
+interface HabitRowHeaderProps {
+  habit: Habit
+  attributes: DraggableAttributes
+  listeners: DraggableSyntheticListeners
+  tokens: ThemeColorTokens
+}
+
+export function HabitRowHeader({ habit, attributes, listeners, tokens }: HabitRowHeaderProps) {
+  const navigate = useNavigate()
+
+  return (
+    <>
+      <div
+        {...attributes}
+        {...listeners}
+        className="shrink-0 cursor-grab touch-none p-1 text-muted active:cursor-grabbing"
+        aria-label="Drag to reorder"
+      >
+        <GripVertical size={16} />
+      </div>
+
+      <button
+        onClick={() => navigate(`/habit/${habit.id}`)}
+        className={`flex-1 truncate text-left text-ink transition-colors ${tokens.textHover} font-body text-body`}
+      >
+        {habit.name}
+      </button>
+    </>
+  )
+}

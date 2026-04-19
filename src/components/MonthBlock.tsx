@@ -2,7 +2,7 @@ import { addDays, format, getDay, getDaysInMonth, startOfMonth } from 'date-fns'
 import { memo, useMemo } from 'react'
 
 import { buildCompletedSet, getDayStateFast } from '../services/scheduleEngine'
-import type { Habit, HabitEntry } from '../types/index'
+import type { Habit, HabitDayNote, HabitEntry } from '../types/index'
 import { getThemeTokens } from '../utils/theme'
 import { CalendarDayCell } from './CalendarDayCell'
 
@@ -11,7 +11,7 @@ interface MonthBlockProps {
   month: number // 1-indexed
   habit: Habit
   entries: HabitEntry[]
-  notes: Record<string, any>
+  notes: Record<string, HabitDayNote>
   isFirst?: boolean
   onLongPress: (dateStr: string) => void
   colorKey?: string

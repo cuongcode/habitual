@@ -86,24 +86,17 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
     if (!name.trim()) errs.name = 'Habit name is required'
     // Schedule validation
     const s = schedule
-    if (s.frequency === 'weekly' && !(s as any).weekdays?.length) {
-      errs.schedule = 'Pick at least one weekday'
-    }
-    if (s.frequency === 'monthly' && !(s as any).dayOfMonth) {
-      errs.schedule = 'Pick a day of the month'
-    }
-    if (s.frequency === 'yearly') {
-      if (!(s as any).month || !(s as any).dayOfMonth) {
-        errs.schedule = 'Pick a month and day'
-      }
-    }
-    if (s.frequency === 'custom') {
-      if (!(s as any).intervalDays || (s as any).intervalDays < 2) {
+    if (s.frequency === 'weekly') {
+      if (!s.weekdays?.length) errs.schedule = 'Pick at least one weekday'
+    } else if (s.frequency === 'monthly') {
+      if (!s.dayOfMonth) errs.schedule = 'Pick a day of the month'
+    } else if (s.frequency === 'yearly') {
+      if (!s.month || !s.dayOfMonth) errs.schedule = 'Pick a month and day'
+    } else if (s.frequency === 'custom') {
+      if (!s.intervalDays || s.intervalDays < 2) {
         errs.schedule = 'Interval must be at least 2 days'
       }
-      if (!(s as any).anchorDate) {
-        errs.schedule = 'Pick a start date'
-      }
+      if (!s.anchorDate) errs.schedule = 'Pick a start date'
     }
     return errs
   }
@@ -351,33 +344,33 @@ function ScheduleTab({ schedule, setSchedule, onFrequencyChange, errors }: Sched
       <div className="mt-5">
         {schedule.frequency === 'weekly' && (
           <WeekdayPicker
-            selected={(schedule as any).weekdays ?? []}
+            selected={schedule.weekdays ?? []}
             onChange={(wds) => setSchedule({ frequency: 'weekly', weekdays: wds })}
           />
         )}
-
+ 
         {schedule.frequency === 'monthly' && (
           <MonthDayPicker
-            selected={(schedule as any).dayOfMonth}
+            selected={schedule.dayOfMonth}
             onChange={(d) => setSchedule({ frequency: 'monthly', dayOfMonth: d })}
           />
         )}
-
+ 
         {schedule.frequency === 'yearly' && (
           <YearlyPicker
-            month={(schedule as any).month}
-            day={(schedule as any).dayOfMonth}
-            onMonthChange={(m) => setSchedule({ ...schedule, month: m } as any)}
-            onDayChange={(d) => setSchedule({ ...schedule, dayOfMonth: d } as any)}
+            month={schedule.month}
+            day={schedule.dayOfMonth}
+            onMonthChange={(m) => setSchedule({ ...schedule, month: m })}
+            onDayChange={(d) => setSchedule({ ...schedule, dayOfMonth: d })}
           />
         )}
-
+ 
         {schedule.frequency === 'custom' && (
           <CustomPicker
-            interval={(schedule as any).intervalDays}
-            anchor={(schedule as any).anchorDate}
-            onIntervalChange={(n) => setSchedule({ ...schedule, intervalDays: n } as any)}
-            onAnchorChange={(d) => setSchedule({ ...schedule, anchorDate: d } as any)}
+            interval={schedule.intervalDays}
+            anchor={schedule.anchorDate}
+            onIntervalChange={(n) => setSchedule({ ...schedule, intervalDays: n })}
+            onAnchorChange={(d) => setSchedule({ ...schedule, anchorDate: d })}
           />
         )}
       </div>

@@ -109,7 +109,7 @@ export async function importData(file: File, mode: ImportMode): Promise<ImportRe
         notes: payload.notes?.length ?? 0,
       },
     }
-  } catch (e) {
+  } catch {
     return {
       success: false,
       imported: { categories: 0, habits: 0, entries: 0, notes: 0 },

@@ -21,8 +21,9 @@ import {
   getTotalCompletions,
 } from '../services/statsEngine'
 import { useHabitStore } from '../store/habitStore'
+import type { HabitEntry } from '../types/index'
 
-const EMPTY_ENTRIES: any[] = []
+const EMPTY_ENTRIES: HabitEntry[] = []
 
 export default function HabitStatsPage() {
   const location = useLocation()

@@ -87,6 +87,7 @@ function CategorySection() {
       </div>
 
       <CategoryModal
+        key={isModalOpen ? editingCategory?.id || 'new' : 'closed'}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         categoryToEdit={editingCategory}

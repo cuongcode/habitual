@@ -1,7 +1,16 @@
 import { useEffect, useState } from 'react'
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[]
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed'
+    platform: string
+  }>
+  prompt(): Promise<void>
+}
+
 export function InstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [dismissed, setDismissed] = useState(
     () => localStorage.getItem('installDismissed') === 'true',
   )
@@ -9,15 +18,16 @@ export function InstallPrompt() {
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault()
-      setDeferredPrompt(e)
+      setDeferredPrompt(e as BeforeInstallPromptEvent)
     }
-    window.addEventListener('beforeinstallprompt', handler)
-    return () => window.removeEventListener('beforeinstallprompt', handler)
+    window.addEventListener('beforeinstallprompt', handler as EventListener)
+    return () => window.removeEventListener('beforeinstallprompt', handler as EventListener)
   }, [])
 
   if (!deferredPrompt || dismissed) return null
 
   async function handleInstall() {
+    if (!deferredPrompt) return
     deferredPrompt.prompt()
     const { outcome } = await deferredPrompt.userChoice
     if (outcome === 'accepted') setDeferredPrompt(null)

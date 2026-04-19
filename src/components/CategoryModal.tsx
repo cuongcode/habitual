@@ -14,30 +14,25 @@ interface CategoryModalProps {
 }
 
 export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModalProps) {
-  const [label, setLabel] = useState('')
-  const [colorKey, setColorKey] = useState<ColorKey>('rust')
+  const [label, setLabel] = useState(() => categoryToEdit?.label ?? '')
+  const [colorKey, setColorKey] = useState<ColorKey>(
+    () => (categoryToEdit?.colorKey as ColorKey) || 'rust',
+  )
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-
+ 
   const addCategory = useHabitStore((s) => s.addCategory)
   const updateCategory = useHabitStore((s) => s.updateCategory)
   const deleteCategory = useHabitStore((s) => s.deleteCategory)
   const showToast = useUIStore((s) => s.showToast)
-
-  // Reset or initialize state when opening
+ 
+  // Handle autofocus when opening
   useEffect(() => {
     if (isOpen) {
-      if (categoryToEdit) {
-        setLabel(categoryToEdit.label)
-        setColorKey((categoryToEdit.colorKey as ColorKey) || 'rust')
-      } else {
-        setLabel('')
-        setColorKey('rust')
-      }
-      setIsConfirmingDelete(false)
-      setTimeout(() => inputRef.current?.focus(), 50)
+      const timer = setTimeout(() => inputRef.current?.focus(), 50)
+      return () => clearTimeout(timer)
     }
-  }, [isOpen, categoryToEdit])
+  }, [isOpen])
 
   if (!isOpen) return null
 

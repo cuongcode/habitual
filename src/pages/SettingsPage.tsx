@@ -38,9 +38,9 @@ export default function SettingsPage() {
   return (
     <div
       key={location.pathname}
-      className="page-enter fixed inset-0 flex flex-col overflow-hidden bg-cream"
+      className="page-enter fixed inset-0 flex h-[100dvh] flex-col overflow-hidden bg-cream"
     >
-      <header className="sticky top-0 z-10 shrink-0 border-b border-muted-light bg-cream">
+      <header className="sticky top-0 z-10 shrink-0 touch-none border-b border-muted-light bg-cream">
         <SettingsHeader />
       </header>
 
@@ -56,7 +56,7 @@ export default function SettingsPage() {
         </div>
       </main>
 
-      <footer className="sticky bottom-0 z-10 shrink-0">
+      <footer className="sticky bottom-0 z-10 shrink-0 touch-none">
         <SettingsNav />
       </footer>
     </div>

@@ -76,10 +76,10 @@ export default function HabitCalendarPage() {
   return (
     <div
       key={location.pathname}
-      className="page-enter fixed inset-0 flex flex-col overflow-hidden bg-cream"
+      className="page-enter fixed inset-0 flex h-[100dvh] flex-col overflow-hidden bg-cream"
     >
       {/* Sticky Header */}
-      <div className="sticky top-0 z-10 border-b border-muted/10 bg-cream">
+      <div className="sticky top-0 z-10 shrink-0 touch-none border-b border-muted/10 bg-cream">
         <HabitCalendarHeader
           habit={habit}
           category={category}
@@ -102,7 +102,9 @@ export default function HabitCalendarPage() {
       </button>
 
       {/* Sticky Nav */}
-      <HabitCalendarNav habitId={habit.id} />
+      <div className="shrink-0 touch-none">
+        <HabitCalendarNav habitId={habit.id} />
+      </div>
 
       {/* Edit Habit Modal */}
       {editOpen && <EditHabitModal habit={habit} onClose={() => setEditOpen(false)} />}

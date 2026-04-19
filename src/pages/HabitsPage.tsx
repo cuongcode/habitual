@@ -18,10 +18,10 @@ export default function HabitsPage() {
   return (
     <div
       key={location.pathname}
-      className="page-enter fixed inset-0 flex flex-col overflow-hidden bg-cream"
+      className="page-enter fixed inset-0 flex h-[100dvh] flex-col overflow-hidden bg-cream"
     >
       {/* Header */}
-      <div className="sticky top-0 z-10 flex shrink-0 flex-col bg-cream">
+      <div className="sticky top-0 z-10 flex shrink-0 touch-none flex-col bg-cream">
         <div className="pt-safe flex shrink-0 flex-col border-b border-muted-light bg-cream">
           <div className="flex items-center justify-between px-4 pb-2 pt-3">
             <h1 className="font-display text-xl font-bold text-ink">Habitual</h1>
@@ -58,7 +58,7 @@ export default function HabitsPage() {
       <HabitList />
 
       {/* Bottom: category filter + nav */}
-      <div className="shrink-0">
+      <div className="shrink-0 touch-none">
         <CategoryFilterBar />
         <BottomNav />
       </div>

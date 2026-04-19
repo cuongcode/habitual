@@ -72,10 +72,10 @@ export default function HabitStatsPage() {
   return (
     <div
       key={location.pathname}
-      className="page-enter fixed inset-0 flex flex-col overflow-hidden bg-cream"
+      className="page-enter fixed inset-0 flex h-[100dvh] flex-col overflow-hidden bg-cream"
     >
       {/* Sticky Header */}
-      <div className="sticky top-0 z-10 border-b border-muted/10 bg-cream">
+      <div className="sticky top-0 z-10 shrink-0 touch-none border-b border-muted/10 bg-cream">
         <HabitStatsHeader habit={habit} category={category} />
       </div>
 
@@ -97,7 +97,9 @@ export default function HabitStatsPage() {
       </div>
 
       {/* Sticky Bottom Nav */}
-      <HabitStatsNav habitId={habit.id} />
+      <div className="shrink-0 touch-none">
+        <HabitStatsNav habitId={habit.id} />
+      </div>
     </div>
   )
 }

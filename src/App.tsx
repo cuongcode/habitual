@@ -1,7 +1,7 @@
 import { StrictMode, useEffect } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import { ErrorBoundary, InstallPrompt, ToastContainer } from '@/components'
+import { ErrorBoundary, InstallPrompt, ToastContainer, UpdatePrompt } from '@/components'
 
 import HabitCalendarPage from './pages/HabitCalendarPage'
 import HabitsPage from './pages/HabitsPage'
@@ -48,6 +48,7 @@ export default function App() {
       <ErrorBoundary>
         <ToastContainer />
         <InstallPrompt />
+        <UpdatePrompt />
         <RouterProvider router={router} />
       </ErrorBoundary>
     </StrictMode>

@@ -5,8 +5,14 @@ import { useUIStore } from '../store/uiStore'
 import type { HabitEntry } from '../types/index'
 import { getThemeTokens } from '../utils/theme'
 
-export const HeatmapCells = React.memo(function HeatmapCells({ entries, colorKey }: { entries: HabitEntry[], colorKey?: string }) {
-  const year = useUIStore(state => state.heatmapYear)
+export const HeatmapCells = React.memo(function HeatmapCells({
+  entries,
+  colorKey,
+}: {
+  entries: HabitEntry[]
+  colorKey?: string
+}) {
+  const year = useUIStore((state) => state.heatmapYear)
 
   const days = useMemo(() => {
     const start = startOfYear(new Date(year, 0, 1))
@@ -15,11 +21,7 @@ export const HeatmapCells = React.memo(function HeatmapCells({ entries, colorKey
   }, [year])
 
   const completedDates = useMemo(() => {
-    return new Set(
-      entries
-        .filter(e => e.completed)
-        .map(e => e.date)
-    )
+    return new Set(entries.filter((e) => e.completed).map((e) => e.date))
   }, [entries])
 
   function isFilled(date: Date): boolean {
@@ -27,10 +29,8 @@ export const HeatmapCells = React.memo(function HeatmapCells({ entries, colorKey
   }
 
   return (
-    <div
-      className="mode-fade grid gap-[2px] w-full grid-cols-[repeat(30,1fr)]"
-    >
-      {days.map(date => (
+    <div className="mode-fade grid w-full grid-cols-[repeat(30,1fr)] gap-[2px]">
+      {days.map((date) => (
         <HeatmapCell
           key={format(date, 'yyyy-MM-dd')}
           filled={isFilled(date)}
@@ -62,15 +62,9 @@ function HeatmapCell({
 
   return (
     <div
-      className={`aspect-square rounded-sm
-        ${filled
-          ? tokens.heatmapFilled
-          : isFuture
-            ? tokens.heatmapFuture
-            : tokens.heatmapEmpty
-        }
-        ${isToday ? tokens.heatmapTodayRing : ''}
-      `}
+      className={`aspect-square rounded-sm ${
+        filled ? tokens.heatmapFilled : isFuture ? tokens.heatmapFuture : tokens.heatmapEmpty
+      } ${isToday ? tokens.heatmapTodayRing : ''} `}
     />
   )
 }

@@ -9,7 +9,7 @@ import {
   subDays,
 } from 'date-fns'
 
-import type { Habit, HabitEntry,Schedule } from '../types/index'
+import type { Habit, HabitEntry, Schedule } from '../types/index'
 
 // ── DayState ────────────────────────────────────────────────────────
 
@@ -27,11 +27,7 @@ export type DayState =
 /**
  * Returns true if `date` is a target date for the given schedule.
  */
-export function isTargetDate(
-  date: Date,
-  schedule: Schedule,
-  _habit: Habit,
-): boolean {
+export function isTargetDate(date: Date, schedule: Schedule, _habit: Habit): boolean {
   const d = startOfDay(date)
 
   switch (schedule.frequency) {
@@ -45,9 +41,7 @@ export function isTargetDate(
       return getDate(d) === schedule.dayOfMonth
 
     case 'yearly':
-      return (
-        getMonth(d) + 1 === schedule.month && getDate(d) === schedule.dayOfMonth
-      )
+      return getMonth(d) + 1 === schedule.month && getDate(d) === schedule.dayOfMonth
 
     case 'custom': {
       const anchor = startOfDay(parseISO(schedule.anchorDate))
@@ -60,11 +54,7 @@ export function isTargetDate(
 /**
  * Returns the next target date on or after `fromDate`.
  */
-export function getNextTargetDate(
-  fromDate: Date,
-  schedule: Schedule,
-  habit: Habit,
-): Date {
+export function getNextTargetDate(fromDate: Date, schedule: Schedule, habit: Habit): Date {
   let d = startOfDay(fromDate)
   // Safety limit: scan up to 400 days
   for (let i = 0; i < 400; i++) {
@@ -77,11 +67,7 @@ export function getNextTargetDate(
 /**
  * Returns the most recent target date on or before `fromDate`.
  */
-export function getPrevTargetDate(
-  fromDate: Date,
-  schedule: Schedule,
-  habit: Habit,
-): Date {
+export function getPrevTargetDate(fromDate: Date, schedule: Schedule, habit: Habit): Date {
   let d = startOfDay(fromDate)
   // Safety limit: scan up to 400 days
   for (let i = 0; i < 400; i++) {
@@ -112,11 +98,7 @@ export function buildCompletedSet(entries: HabitEntry[]): Set<string> {
 /**
  * Fast version of getDayState using a pre-built Set instead of linear scan.
  */
-export function getDayStateFast(
-  date: Date,
-  habit: Habit,
-  completedSet: Set<string>,
-): DayState {
+export function getDayStateFast(date: Date, habit: Habit, completedSet: Set<string>): DayState {
   const d = startOfDay(date)
   const today = startOfDay(new Date())
   const dateStr = toDateStr(d)
@@ -151,11 +133,7 @@ function toDateStr(d: Date): string {
 /**
  * Master function — all UI derives from this.
  */
-export function getDayState(
-  date: Date,
-  habit: Habit,
-  entries: HabitEntry[],
-): DayState {
+export function getDayState(date: Date, habit: Habit, entries: HabitEntry[]): DayState {
   const d = startOfDay(date)
   const today = startOfDay(new Date())
   const dateStr = toDateStr(d)

@@ -1,8 +1,13 @@
 import type { ReactNode } from 'react'
 import { Component } from 'react'
 
-interface Props { children: ReactNode }
-interface State { hasError: boolean; message: string }
+interface Props {
+  children: ReactNode
+}
+interface State {
+  hasError: boolean
+  message: string
+}
 
 export class ErrorBoundary extends Component<Props, State> {
   state: State = { hasError: false, message: '' }
@@ -14,16 +19,12 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center fixed inset-0 bg-cream gap-4 px-8 overflow-hidden">
-          <p className="font-display text-ink text-xl text-center m-0">
-            Something went wrong
-          </p>
-          <p className="font-mono text-muted text-xs text-center m-0">
-            {this.state.message}
-          </p>
+        <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 overflow-hidden bg-cream px-8">
+          <p className="m-0 text-center font-display text-xl text-ink">Something went wrong</p>
+          <p className="m-0 text-center font-mono text-xs text-muted">{this.state.message}</p>
           <button
             onClick={() => window.location.reload()}
-            className="bg-rust text-cream font-mono text-xs px-4 py-2 rounded-full mt-2 active:scale-95 transition-transform"
+            className="mt-2 rounded-full bg-rust px-4 py-2 font-mono text-xs text-cream transition-transform active:scale-95"
           >
             Reload app
           </button>

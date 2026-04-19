@@ -1,6 +1,6 @@
 import { format, setDay } from 'date-fns'
 
-import type { Category,Habit } from '../../types/index'
+import type { Category, Habit } from '../../types/index'
 
 interface HabitStatsHeaderProps {
   habit: Habit
@@ -19,7 +19,7 @@ const formatSchedule = (habit: Habit) => {
     case 'daily':
       return 'Every day'
     case 'weekly': {
-      const names = schedule.weekdays.map(wd => format(setDay(new Date(), wd), 'EEEE'))
+      const names = schedule.weekdays.map((wd) => format(setDay(new Date(), wd), 'EEEE'))
       if (names.length === 1) return `Every ${names[0]}`
       const last = names[names.length - 1]
       const rest = names.slice(0, -1)
@@ -40,13 +40,11 @@ const formatSchedule = (habit: Habit) => {
 
 export function HabitStatsHeader({ habit, category }: HabitStatsHeaderProps) {
   const scheduleText = formatSchedule(habit)
-  
+
   return (
-    <div className="px-5 pt-6 pb-4 bg-cream">
-      <h1 className="text-[20px] text-ink font-display leading-tight">
-        {habit.name}
-      </h1>
-      <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted font-mono uppercase tracking-wider">
+    <div className="bg-cream px-5 pb-4 pt-6">
+      <h1 className="font-display text-[20px] leading-tight text-ink">{habit.name}</h1>
+      <div className="mt-1 flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted">
         <span>{scheduleText}</span>
         {category && (
           <>

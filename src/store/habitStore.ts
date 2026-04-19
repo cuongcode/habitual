@@ -1,13 +1,10 @@
-import { parseISO,startOfDay } from 'date-fns'
+import { parseISO, startOfDay } from 'date-fns'
 import { create } from 'zustand'
 
 import * as db from '../db/index'
 import type { DayState } from '../services/scheduleEngine'
-import {
-  getDayState as computeDayState,
-  isTargetDate,
-} from '../services/scheduleEngine'
-import type { Category, Habit, HabitDayNote,HabitEntry } from '../types/index'
+import { getDayState as computeDayState, isTargetDate } from '../services/scheduleEngine'
+import type { Category, Habit, HabitDayNote, HabitEntry } from '../types/index'
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
@@ -103,7 +100,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       // ── Stale Seed Cleanup ──────────────────────────────────────────
       const seedNames = ['Morning walk', 'Drink water', 'Deep work session']
       const stableIds = ['h1', 'h2', 'f1']
-      
+
       let needsRefetch = false
       for (const h of habits) {
         if (seedNames.includes(h.name) && !stableIds.includes(h.id)) {
@@ -111,7 +108,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
           needsRefetch = true
         }
       }
-      
+
       if (needsRefetch) {
         habits = await db.getAllHabits()
       }
@@ -120,7 +117,10 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       for (const h of habits) {
         if (h.schedule.frequency === 'weekly' && 'weekday' in h.schedule) {
           const legacy = h.schedule as unknown as { frequency: 'weekly'; weekday: number }
-          h.schedule = { frequency: 'weekly', weekdays: [legacy.weekday as 0|1|2|3|4|5|6] }
+          h.schedule = {
+            frequency: 'weekly',
+            weekdays: [legacy.weekday as 0 | 1 | 2 | 3 | 4 | 5 | 6],
+          }
           await db.saveHabit(h)
         }
       }
@@ -178,7 +178,8 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   // ── Categories ──────────────────────────────────────────────────
 
   async addCategory(data) {
-    const category: Category = 'id' in data ? data as Category : { ...data, id: crypto.randomUUID() }
+    const category: Category =
+      'id' in data ? (data as Category) : { ...data, id: crypto.randomUUID() }
     const prev = get().categories
 
     set({ categories: [...prev, category] })
@@ -213,20 +214,20 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   async deleteCategory(id) {
     const prevCategories = get().categories
     const prevHabits = get().habits
-    
-    const updatedHabits = prevHabits.map((h) => 
-      h.categoryId === id ? { ...h, categoryId: 'none' } : h
+
+    const updatedHabits = prevHabits.map((h) =>
+      h.categoryId === id ? { ...h, categoryId: 'none' } : h,
     )
 
-    set({ 
+    set({
       categories: prevCategories.filter((c) => c.id !== id),
-      habits: updatedHabits
+      habits: updatedHabits,
     })
 
     try {
       await db.deleteCategory(id)
       const habitsToUpdate = updatedHabits.filter((_, i) => prevHabits[i].categoryId === id)
-      await Promise.all(habitsToUpdate.map(h => db.saveHabit(h)))
+      await Promise.all(habitsToUpdate.map((h) => db.saveHabit(h)))
     } catch (err) {
       console.error('Failed to delete category from IDB:', err)
       set({ categories: prevCategories, habits: prevHabits })

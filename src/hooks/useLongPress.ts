@@ -1,9 +1,6 @@
 import { useRef } from 'react'
 
-export function useLongPress(
-  onLongPress: () => void,
-  delay = 500
-) {
+export function useLongPress(onLongPress: () => void, delay = 500) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const isLongPress = useRef(false)
 

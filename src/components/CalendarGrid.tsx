@@ -1,7 +1,7 @@
 import { subMonths } from 'date-fns'
-import { memo,useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 
-import type { Habit, HabitDayNote,HabitEntry } from '../types/index'
+import type { Habit, HabitDayNote, HabitEntry } from '../types/index'
 import { MonthBlock } from './MonthBlock'
 import { NoteModal } from './NoteModal'
 
@@ -16,7 +16,7 @@ export const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarG
   const [months, setMonths] = useState<{ year: number; month: number }[]>(() => {
     const now = new Date()
     // 0 is current month. In flex-col-reverse, it will be at the bottom.
-    // 1 is last month, 2 is two months ago. 
+    // 1 is last month, 2 is two months ago.
     return [0, 1, 2].map((i) => {
       const d = subMonths(now, i)
       return { year: d.getFullYear(), month: d.getMonth() + 1 }
@@ -47,7 +47,7 @@ export const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarG
         }
       },
       // Pre-load before sentinel is visible to prevent visible loading gaps
-      { threshold: 0.1, rootMargin: '200px 0px' }
+      { threshold: 0.1, rootMargin: '200px 0px' },
     )
 
     if (sentinelRef.current) observer.observe(sentinelRef.current)
@@ -55,7 +55,7 @@ export const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarG
   }, [])
 
   return (
-    <div className="pb-24 flex flex-col-reverse justify-end min-h-full">
+    <div className="flex min-h-full flex-col-reverse justify-end pb-24">
       {months.map((m, i) => (
         <MonthBlock
           key={`${m.year}-${m.month}`}
@@ -69,22 +69,17 @@ export const CalendarGrid = memo(({ habit, entries, notes, colorKey }: CalendarG
           colorKey={colorKey}
         />
       ))}
-      
+
       {/* Sentinel at the bottom of the DOM so flex-col-reverse places it at the visual top */}
-      <div ref={sentinelRef} className="h-20 flex items-center justify-center shrink-0">
-        <div className="w-1 h-1 bg-muted/20 rounded-full animate-pulse" />
+      <div ref={sentinelRef} className="flex h-20 shrink-0 items-center justify-center">
+        <div className="h-1 w-1 animate-pulse rounded-full bg-muted/20" />
       </div>
 
       {noteModalDate && (
-        <NoteModal
-          habitId={habit.id}
-          date={noteModalDate}
-          onClose={() => setNoteModalDate(null)}
-        />
+        <NoteModal habitId={habit.id} date={noteModalDate} onClose={() => setNoteModalDate(null)} />
       )}
     </div>
   )
 })
 
 CalendarGrid.displayName = 'CalendarGrid'
-

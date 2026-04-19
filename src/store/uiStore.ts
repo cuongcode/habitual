@@ -31,8 +31,7 @@ function getSystemPrefersDark(): boolean {
 }
 
 function applyThemeToDOM(theme: Theme) {
-  const isDark =
-    theme === 'dark' || (theme === 'system' && getSystemPrefersDark())
+  const isDark = theme === 'dark' || (theme === 'system' && getSystemPrefersDark())
 
   document.documentElement.classList.toggle('dark', isDark)
 
@@ -84,8 +83,7 @@ export const useUIStore = create<UIStore>((set, get) => {
         set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) }))
       }, 3000)
     },
-    dismissToast: (id) =>
-      set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) })),
+    dismissToast: (id) => set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) })),
     habitsDisplayMode: (localStorage.getItem('habitsDisplayMode') as HabitsDisplayMode) ?? 'week',
     heatmapYear: parseInt(localStorage.getItem('heatmapYear') ?? '') || new Date().getFullYear(),
     setHabitsDisplayMode: (mode) => {

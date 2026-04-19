@@ -1,5 +1,5 @@
 import type { TouchEvent } from 'react'
-import { useRef,useState } from 'react'
+import { useRef, useState } from 'react'
 
 export function useSwipeToDismiss(onDismiss: () => void, threshold = 80) {
   const startY = useRef<number>(0)
@@ -16,7 +16,7 @@ export function useSwipeToDismiss(onDismiss: () => void, threshold = 80) {
       onTouchMove(e: TouchEvent) {
         if (!isDragging.current) return
         const delta = e.touches[0].clientY - startY.current
-        if (delta > 0) setDragY(delta)  // only allow downward drag
+        if (delta > 0) setDragY(delta) // only allow downward drag
       },
       onTouchEnd() {
         isDragging.current = false

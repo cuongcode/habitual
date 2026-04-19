@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react'
 import { useMemo } from 'react'
-import { Link, useLocation,useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 
 import {
   BestPeriodSection,
@@ -9,7 +9,8 @@ import {
   HabitStatsNav,
   MonthlyBarChartSection,
   StreakSection,
-  TotalCompletionsSection} from '@/components'
+  TotalCompletionsSection,
+} from '@/components'
 
 import {
   getBestPeriod,
@@ -26,12 +27,8 @@ const EMPTY_ENTRIES: any[] = []
 export default function HabitStatsPage() {
   const location = useLocation()
   const { habitId } = useParams<{ habitId: string }>()
-  const habit = useHabitStore((state) =>
-    state.habits.find((h) => h.id === habitId),
-  )
-  const entries = useHabitStore((state) =>
-    state.entries[habitId ?? ''] ?? EMPTY_ENTRIES,
-  )
+  const habit = useHabitStore((state) => state.habits.find((h) => h.id === habitId))
+  const entries = useHabitStore((state) => state.entries[habitId ?? ''] ?? EMPTY_ENTRIES)
   const categories = useHabitStore((state) => state.categories)
   const category = categories.find((c) => c.id === habit?.categoryId)
   const colorKey = category?.colorKey || 'rust'
@@ -49,10 +46,7 @@ export default function HabitStatsPage() {
     () => (habit ? getCompletionRate(habit, entries) : 0),
     [habit, entries],
   )
-  const bestPeriod = useMemo(
-    () => (habit ? getBestPeriod(habit, entries) : null),
-    [habit, entries],
-  )
+  const bestPeriod = useMemo(() => (habit ? getBestPeriod(habit, entries) : null), [habit, entries])
   const totalCompletions = useMemo(
     () => (habit ? getTotalCompletions(habit, entries) : 0),
     [habit, entries],
@@ -64,16 +58,9 @@ export default function HabitStatsPage() {
 
   if (!habit) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-10 bg-cream">
-        <h1
-          className="text-2xl text-ink font-display"
-       >
-          Habit not found
-        </h1>
-        <Link
-          to="/"
-          className="mt-6 flex items-center gap-2 text-rust font-mono uppercase text-sm"
-       >
+      <div className="flex min-h-screen flex-col items-center justify-center bg-cream p-10">
+        <h1 className="font-display text-2xl text-ink">Habit not found</h1>
+        <Link to="/" className="mt-6 flex items-center gap-2 font-mono text-sm uppercase text-rust">
           <ArrowLeft size={16} />
           Go Back
         </Link>
@@ -82,26 +69,29 @@ export default function HabitStatsPage() {
   }
 
   return (
-    <div key={location.pathname} className="page-enter flex flex-col fixed inset-0 bg-cream overflow-hidden">
+    <div
+      key={location.pathname}
+      className="page-enter fixed inset-0 flex flex-col overflow-hidden bg-cream"
+    >
       {/* Sticky Header */}
-      <div className="sticky top-0 z-10 bg-cream border-b border-muted/10">
+      <div className="sticky top-0 z-10 border-b border-muted/10 bg-cream">
         <HabitStatsHeader habit={habit} category={category} />
       </div>
 
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto px-4 py-8 space-y-12 pb-32 scroll-smooth">
+      <div className="flex-1 space-y-12 overflow-y-auto scroll-smooth px-4 py-8 pb-32">
         <StreakSection
           currentStreak={currentStreak}
           longestStreak={longestStreak}
           colorKey={colorKey}
         />
-        
+
         <CompletionRateSection rate={completionRate} colorKey={colorKey} />
-        
+
         <BestPeriodSection bestPeriod={bestPeriod} colorKey={colorKey} />
-        
+
         <MonthlyBarChartSection monthlyRates={monthlyRates} colorKey={colorKey} />
-        
+
         <TotalCompletionsSection total={totalCompletions} colorKey={colorKey} />
       </div>
 

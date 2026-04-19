@@ -1,4 +1,4 @@
-import { LayoutGrid,LayoutList } from 'lucide-react'
+import { LayoutGrid, LayoutList } from 'lucide-react'
 
 import { useUIStore } from '../store/uiStore'
 
@@ -15,15 +15,11 @@ export function BottomNav() {
   }
 
   return (
-    <nav
-      className="w-full bg-cream border-t border-muted-light flex items-center justify-between px-6 py-3 pb-safe"
-    >
-      <div className="w-12 h-12 flex-shrink-0" /> {/* Left slot, empty */}
-
+    <nav className="pb-safe flex w-full items-center justify-between border-t border-muted-light bg-cream px-6 py-3">
+      <div className="h-12 w-12 flex-shrink-0" /> {/* Left slot, empty */}
       <button
         onClick={openAddHabitDrawer}
-        className="w-12 h-12 rounded-full border-2 border-rust bg-cream flex items-center justify-center
-                   transition-colors hover:bg-rust hover:text-cream text-rust flex-shrink-0"
+        className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-2 border-rust bg-cream text-rust transition-colors hover:bg-rust hover:text-cream"
         aria-label="Add habit"
       >
         <svg
@@ -39,22 +35,21 @@ export function BottomNav() {
           <line x1="4" y1="10" x2="16" y2="10" />
         </svg>
       </button>
-
-      <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
+      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center">
         <button
           onClick={cycleMode}
-          className="flex flex-col items-center gap-1 active:opacity-60 transition-opacity"
+          className="flex flex-col items-center gap-1 transition-opacity active:opacity-60"
           aria-label="Toggle display mode"
         >
           {habitsDisplayMode === 'week' ? (
             <>
               <LayoutList size={20} className="text-muted" />
-              <span className="font-mono text-[9px] text-muted leading-none">week</span>
+              <span className="font-mono text-[9px] leading-none text-muted">week</span>
             </>
           ) : (
             <>
               <LayoutGrid size={20} className="text-rust" />
-              <span className="font-mono text-[9px] text-rust leading-none">year</span>
+              <span className="font-mono text-[9px] leading-none text-rust">year</span>
             </>
           )}
         </button>

@@ -1,7 +1,7 @@
 import type { DBSchema, IDBPDatabase } from 'idb'
 import { openDB } from 'idb'
 
-import type { Category, Habit, HabitDayNote,HabitEntry } from '../types/index'
+import type { Category, Habit, HabitDayNote, HabitEntry } from '../types/index'
 
 // ── Schema ──────────────────────────────────────────────────────────
 
@@ -114,9 +114,7 @@ export async function getAllEntries(): Promise<HabitEntry[]> {
   return db.getAll('entries')
 }
 
-export async function getEntriesForHabit(
-  habitId: string,
-): Promise<HabitEntry[]> {
+export async function getEntriesForHabit(habitId: string): Promise<HabitEntry[]> {
   const db = await getDB()
   return db.getAllFromIndex('entries', 'habitId', habitId)
 }

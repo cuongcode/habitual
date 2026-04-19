@@ -1,5 +1,5 @@
 import { FileCheck, FileJson, Loader2 } from 'lucide-react'
-import { useRef,useState } from 'react'
+import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 import { importData, type ImportMode } from '../services/exportService'
@@ -17,9 +17,9 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  
-  const initStore = useHabitStore(state => state.init)
-  const showToast = useUIStore(state => state.showToast)
+
+  const initStore = useHabitStore((state) => state.init)
+  const showToast = useUIStore((state) => state.showToast)
 
   if (!isOpen) return null
 
@@ -74,22 +74,22 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
 
   return createPortal(
     <div
-      className="page-enter-fade fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      className="page-enter-fade fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onClick={onClose}
     >
       <div
-        className="bg-cream rounded-2xl border border-muted-light p-6 w-full max-w-sm flex flex-col gap-6"
+        className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-muted-light bg-cream p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col gap-1">
-          <h2 className="font-serif text-[18px] text-ink m-0">Restore backup</h2>
-          <p className="font-mono text-[11px] text-muted m-0">
+          <h2 className="m-0 font-serif text-[18px] text-ink">Restore backup</h2>
+          <p className="m-0 font-mono text-[11px] text-muted">
             Import a .json file exported from Habitual.
           </p>
         </div>
 
         <div
-          className="border-2 border-dashed border-muted-light rounded-xl p-8 text-center cursor-pointer flex flex-col items-center justify-center gap-2"
+          className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-muted-light p-8 text-center"
           onClick={() => !file && fileInputRef.current?.click()}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
@@ -103,25 +103,19 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
           />
           {!file ? (
             <>
-              <FileJson className="w-8 h-8 text-muted mb-2" />
-              <p className="font-serif text-[14px] text-muted m-0">
-                Drop your backup file here
-              </p>
-              <p className="font-mono text-[11px] text-muted-light m-0">
-                or tap to browse
-              </p>
+              <FileJson className="mb-2 h-8 w-8 text-muted" />
+              <p className="m-0 font-serif text-[14px] text-muted">Drop your backup file here</p>
+              <p className="m-0 font-mono text-[11px] text-muted-light">or tap to browse</p>
             </>
           ) : (
             <>
-              <FileCheck className="w-8 h-8 text-rust mb-2" />
-              <span className="font-serif text-[14px] text-ink truncate w-full px-2">
+              <FileCheck className="mb-2 h-8 w-8 text-rust" />
+              <span className="w-full truncate px-2 font-serif text-[14px] text-ink">
                 {file.name}
               </span>
-              <span className="font-mono text-[11px] text-muted">
-                {formatFileSize(file.size)}
-              </span>
+              <span className="font-mono text-[11px] text-muted">{formatFileSize(file.size)}</span>
               <button
-                className="mt-2 text-[11px] font-mono text-muted py-1 hover:text-ink transition-colors"
+                className="mt-2 py-1 font-mono text-[11px] text-muted transition-colors hover:text-ink"
                 onClick={(e) => {
                   e.stopPropagation()
                   setFile(null)
@@ -134,30 +128,22 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
             </>
           )}
         </div>
-        
-        {error && (
-          <p className="font-mono text-[11px] text-rust text-center -mt-2 m-0">
-            {error}
-          </p>
-        )}
+
+        {error && <p className="m-0 -mt-2 text-center font-mono text-[11px] text-rust">{error}</p>}
 
         <div className="flex flex-col gap-2">
-          <div className="flex flex-row p-1 bg-cream-dark rounded-xl border border-muted-light gap-1">
+          <div className="flex flex-row gap-1 rounded-xl border border-muted-light bg-cream-dark p-1">
             <button
-              className={`flex-1 py-1.5 text-center text-[13px] font-mono transition-colors rounded-lg ${
-                mode === 'merge'
-                  ? 'bg-rust text-cream shadow-sm'
-                  : 'text-muted hover:text-ink'
+              className={`flex-1 rounded-lg py-1.5 text-center font-mono text-[13px] transition-colors ${
+                mode === 'merge' ? 'bg-rust text-cream shadow-sm' : 'text-muted hover:text-ink'
               }`}
               onClick={() => setMode('merge')}
             >
               Merge
             </button>
             <button
-              className={`flex-1 py-1.5 text-center text-[13px] font-mono transition-colors rounded-lg ${
-                mode === 'replace'
-                  ? 'bg-rust text-cream shadow-sm'
-                  : 'text-muted hover:text-ink'
+              className={`flex-1 rounded-lg py-1.5 text-center font-mono text-[13px] transition-colors ${
+                mode === 'replace' ? 'bg-rust text-cream shadow-sm' : 'text-muted hover:text-ink'
               }`}
               onClick={() => setMode('replace')}
             >
@@ -165,7 +151,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
             </button>
           </div>
           <p
-            className={`font-mono text-[11px] text-center mt-1 m-0 ${
+            className={`m-0 mt-1 text-center font-mono text-[11px] ${
               mode === 'replace' ? 'text-rust' : 'text-muted'
             }`}
           >
@@ -175,28 +161,28 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
           </p>
         </div>
 
-        <div className="flex flex-row items-center justify-between mt-2">
+        <div className="mt-2 flex flex-row items-center justify-between">
           <button
-            className="text-[14px] font-serif text-muted px-4 py-2 hover:text-ink transition-colors"
+            className="px-4 py-2 font-serif text-[14px] text-muted transition-colors hover:text-ink"
             onClick={onClose}
             disabled={isLoading}
           >
             Cancel
           </button>
           <button
-            className={`flex items-center justify-center font-serif text-[14px] rounded-full px-6 py-2 transition-colors min-w-[100px] ${
+            className={`flex min-w-[100px] items-center justify-center rounded-full px-6 py-2 font-serif text-[14px] transition-colors ${
               file && !isLoading
                 ? 'bg-rust text-cream hover:opacity-90'
-                : 'bg-muted-light text-muted cursor-not-allowed border border-muted-light'
+                : 'cursor-not-allowed border border-muted-light bg-muted-light text-muted'
             }`}
             onClick={handleRestore}
             disabled={!file || isLoading}
           >
-            {isLoading ? <Loader2 className="w-4 h-4 text-cream animate-spin" /> : 'Restore'}
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin text-cream" /> : 'Restore'}
           </button>
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   )
 }

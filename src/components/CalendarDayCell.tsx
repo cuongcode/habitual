@@ -17,48 +17,45 @@ interface CalendarDayCellProps {
   colorKey?: string
 }
 
-export const CalendarDayCell = memo(({ date, habit, state, hasNote, onLongPress, colorKey }: CalendarDayCellProps) => {
-  const toggleEntry = useHabitStore((s) => s.toggleEntry)
-  const dateStr = format(date, 'yyyy-MM-dd')
-  const dayNumber = format(date, 'd')
-  const isToday = format(new Date(), 'yyyy-MM-dd') === dateStr
-  const tokens = getThemeTokens(colorKey)
+export const CalendarDayCell = memo(
+  ({ date, habit, state, hasNote, onLongPress, colorKey }: CalendarDayCellProps) => {
+    const toggleEntry = useHabitStore((s) => s.toggleEntry)
+    const dateStr = format(date, 'yyyy-MM-dd')
+    const dayNumber = format(date, 'd')
+    const isToday = format(new Date(), 'yyyy-MM-dd') === dateStr
+    const tokens = getThemeTokens(colorKey)
 
-  const { handlers } = useLongPress(() => onLongPress(dateStr))
-  const [popping, setPopping] = useState(false)
+    const { handlers } = useLongPress(() => onLongPress(dateStr))
+    const [popping, setPopping] = useState(false)
 
-  const handleTap = () => {
-    setPopping(true)
-    setTimeout(() => setPopping(false), 180)
-    toggleEntry(habit.id, dateStr)
-  }
+    const handleTap = () => {
+      setPopping(true)
+      setTimeout(() => setPopping(false), 180)
+      toggleEntry(habit.id, dateStr)
+    }
 
-  return (
+    return (
       <button
-      {...handlers}
-      onClick={handleTap}
-      className={`
-        [-webkit-tap-highlight-color:transparent]
-        relative aspect-square w-full rounded-sm flex flex-col items-center justify-center transition-all active:scale-95
-        ${getDayStateStyles(state, colorKey)}
-        ${isToday ? tokens.todayBorder : ''}
-        ${popping ? 'cell-pop' : ''}
-      `}
-    >
-      <span className="absolute top-1 left-1.5 text-[10px] font-mono leading-none opacity-60">
-        {dayNumber}
-      </span>
+        {...handlers}
+        onClick={handleTap}
+        className={`relative flex aspect-square w-full flex-col items-center justify-center rounded-sm transition-all [-webkit-tap-highlight-color:transparent] active:scale-95 ${getDayStateStyles(state, colorKey)} ${isToday ? tokens.todayBorder : ''} ${popping ? 'cell-pop' : ''} `}
+      >
+        <span className="absolute left-1.5 top-1 font-mono text-[10px] leading-none opacity-60">
+          {dayNumber}
+        </span>
 
-      {(state === 'target-complete' || state === 'window-bonus') && (
-        <Check size={14} strokeWidth={3} className="text-cream" />
-      )}
+        {(state === 'target-complete' || state === 'window-bonus') && (
+          <Check size={14} strokeWidth={3} className="text-cream" />
+        )}
 
-      {hasNote && (
-        <div className={`absolute bottom-1 right-1 w-1 h-1 rounded-full ${(state === 'target-complete' || state === 'window-bonus') ? 'bg-cream' : tokens.dot}`} />
-      )}
-    </button>
-  )
-})
+        {hasNote && (
+          <div
+            className={`absolute bottom-1 right-1 h-1 w-1 rounded-full ${state === 'target-complete' || state === 'window-bonus' ? 'bg-cream' : tokens.dot}`}
+          />
+        )}
+      </button>
+    )
+  },
+)
 
 CalendarDayCell.displayName = 'CalendarDayCell'
-

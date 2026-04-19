@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns'
 import { Trash2, X } from 'lucide-react'
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
 import { useHabitStore } from '../store/habitStore'
@@ -56,24 +56,22 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
       {/* Overlay */}
-      <div 
+      <div
         className={`page-enter-fade absolute inset-0 bg-black/40 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         onClick={handleClose}
       />
-      
+
       {/* Modal Sheet */}
-      <div 
+      <div
         {...handlers}
         style={{
           transform: dragY ? `translateY(${dragY}px)` : undefined,
           transition: dragY ? 'none' : 'transform 0.3s ease',
         }}
-        className={`relative w-full max-w-lg bg-cream rounded-t-2xl border-t border-muted-light p-5 shadow-xl ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
+        className={`relative w-full max-w-lg rounded-t-2xl border-t border-muted-light bg-cream p-5 shadow-xl ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl text-ink font-display">
-            {formattedDate}
-          </h2>
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="font-display text-2xl text-ink">{formattedDate}</h2>
           <button onClick={handleClose} className="p-1 text-muted hover:text-ink">
             <X size={24} />
           </button>
@@ -84,20 +82,18 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
           value={text}
           onChange={(e) => setText(e.target.value.slice(0, 280))}
           placeholder="Add a note..."
-          className="w-full h-32 p-3 bg-cream border border-muted-light rounded-md text-ink resize-none focus:outline-none focus:ring-1 focus:ring-rust font-body"
+          className="h-32 w-full resize-none rounded-md border border-muted-light bg-cream p-3 font-body text-ink focus:outline-none focus:ring-1 focus:ring-rust"
         />
-        
-        <div className="flex justify-end mt-1 mb-6">
-          <span className="text-xs text-muted font-mono">
-            {text.length} / 280
-          </span>
+
+        <div className="mb-6 mt-1 flex justify-end">
+          <span className="font-mono text-xs text-muted">{text.length} / 280</span>
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           {existingNote ? (
             <button
               onClick={handleDelete}
-              className="flex items-center gap-1.5 text-muted hover:text-rust transition-colors"
+              className="flex items-center gap-1.5 text-muted transition-colors hover:text-rust"
             >
               <Trash2 size={18} />
               <span className="text-sm">Delete note</span>
@@ -108,7 +104,7 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
 
           <button
             onClick={handleSave}
-            className="px-6 py-2 bg-rust text-white rounded-full font-medium active:scale-95 transition-transform"
+            className="rounded-full bg-rust px-6 py-2 font-medium text-white transition-transform active:scale-95"
           >
             Save Note
           </button>

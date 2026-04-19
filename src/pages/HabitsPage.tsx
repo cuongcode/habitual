@@ -16,19 +16,18 @@ export default function HabitsPage() {
   const cellDates = Array.from({ length: 7 }, (_, i) => subDays(today, 6 - i))
 
   return (
-    <div key={location.pathname} className="page-enter flex flex-col fixed inset-0 bg-cream overflow-hidden">
+    <div
+      key={location.pathname}
+      className="page-enter fixed inset-0 flex flex-col overflow-hidden bg-cream"
+    >
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-cream shrink-0 flex flex-col">
-        <div className="border-b border-muted-light pt-safe shrink-0 flex flex-col bg-cream">
-          <div className="flex items-center justify-between px-4 pt-3 pb-2">
-            <h1
-              className="text-ink font-display text-xl font-bold"
-            >
-              Habitual
-            </h1>
+      <div className="sticky top-0 z-10 flex shrink-0 flex-col bg-cream">
+        <div className="pt-safe flex shrink-0 flex-col border-b border-muted-light bg-cream">
+          <div className="flex items-center justify-between px-4 pb-2 pt-3">
+            <h1 className="font-display text-xl font-bold text-ink">Habitual</h1>
             <button
               onClick={() => navigate('/settings')}
-              className="text-ink hover:text-rust transition-colors"
+              className="text-ink transition-colors hover:text-rust"
               aria-label="Settings"
             >
               <Settings size={20} />
@@ -38,12 +37,12 @@ export default function HabitsPage() {
           {habitsDisplayMode === 'week' && (
             <div className="flex items-center gap-2 px-4 pb-1">
               <div className="flex-1" />
-              <div className="flex gap-1 shrink-0">
+              <div className="flex shrink-0 gap-1">
                 {cellDates.map((date, i) => (
-                  <div 
-                    key={i} 
-                    className="w-7 text-center text-[10px] text-muted font-mono uppercase tracking-widest"
-                 >
+                  <div
+                    key={i}
+                    className="w-7 text-center font-mono text-[10px] uppercase tracking-widest text-muted"
+                  >
                     {format(date, 'EEEEEE')}
                   </div>
                 ))}
@@ -51,7 +50,7 @@ export default function HabitsPage() {
             </div>
           )}
         </div>
-        
+
         {habitsDisplayMode === 'heatmap' && <YearNav />}
       </div>
 

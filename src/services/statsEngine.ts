@@ -15,10 +15,7 @@ import {
 } from 'date-fns'
 
 import type { Habit, HabitEntry } from '../types'
-import {
-  getNextTargetDate,
-  getPrevTargetDate,
-} from './scheduleEngine'
+import { getNextTargetDate, getPrevTargetDate } from './scheduleEngine'
 
 export interface MonthlyRate {
   label: string // 'Jan', 'Feb' etc — IBM Plex Mono
@@ -51,14 +48,9 @@ export function getTargetDates(habit: Habit, upTo: Date): Date[] {
 /**
  * All target dates that have a completed entry.
  */
-export function getCompletedTargetDates(
-  habit: Habit,
-  entries: HabitEntry[],
-): Date[] {
+export function getCompletedTargetDates(habit: Habit, entries: HabitEntry[]): Date[] {
   const targetDates = getTargetDates(habit, new Date())
-  const completedDates = new Set(
-    entries.filter((e) => e.completed).map((e) => e.date),
-  )
+  const completedDates = new Set(entries.filter((e) => e.completed).map((e) => e.date))
 
   return targetDates.filter((d) => completedDates.has(format(d, 'yyyy-MM-dd')))
 }
@@ -71,9 +63,7 @@ export function getCurrentStreak(habit: Habit, entries: HabitEntry[]): number {
   const lastTarget = getPrevTargetDate(today, habit.schedule, habit)
   if (isAfter(lastTarget, today)) return 0 // Should not happen with getPrevTargetDate, but safety first
 
-  const completedDates = new Set(
-    entries.filter((e) => e.completed).map((e) => e.date),
-  )
+  const completedDates = new Set(entries.filter((e) => e.completed).map((e) => e.date))
 
   let streak = 0
   let current = lastTarget
@@ -102,9 +92,7 @@ export function getCurrentStreak(habit: Habit, entries: HabitEntry[]): number {
  */
 export function getLongestStreak(habit: Habit, entries: HabitEntry[]): number {
   const targets = getTargetDates(habit, new Date())
-  const completedDates = new Set(
-    entries.filter((e) => e.completed).map((e) => e.date),
-  )
+  const completedDates = new Set(entries.filter((e) => e.completed).map((e) => e.date))
 
   let maxStreak = 0
   let currentStreak = 0
@@ -128,12 +116,8 @@ export function getCompletionRate(habit: Habit, entries: HabitEntry[]): number {
   const targets = getTargetDates(habit, new Date())
   if (targets.length === 0) return 0
 
-  const completedDates = new Set(
-    entries.filter((e) => e.completed).map((e) => e.date),
-  )
-  const completedCount = targets.filter((d) =>
-    completedDates.has(format(d, 'yyyy-MM-dd')),
-  ).length
+  const completedDates = new Set(entries.filter((e) => e.completed).map((e) => e.date))
+  const completedCount = targets.filter((d) => completedDates.has(format(d, 'yyyy-MM-dd'))).length
 
   return completedCount / targets.length
 }
@@ -146,9 +130,7 @@ export function getBestPeriod(
   entries: HabitEntry[],
 ): { start: Date; end: Date } | null {
   const targets = getTargetDates(habit, new Date())
-  const completedDates = new Set(
-    entries.filter((e) => e.completed).map((e) => e.date),
-  )
+  const completedDates = new Set(entries.filter((e) => e.completed).map((e) => e.date))
 
   let maxStreak = 0
   let currentStreak = 0
@@ -178,10 +160,7 @@ export function getBestPeriod(
 /**
  * Total completed entries where isBonus = false.
  */
-export function getTotalCompletions(
-  _habit: Habit,
-  entries: HabitEntry[],
-): number {
+export function getTotalCompletions(_habit: Habit, entries: HabitEntry[]): number {
   return entries.filter((e) => e.completed && !e.isBonus).length
 }
 
@@ -195,9 +174,7 @@ export function getMonthlyRates(
 ): MonthlyRate[] {
   const result: MonthlyRate[] = []
   const today = new Date()
-  const completedDates = new Set(
-    entries.filter((e) => e.completed).map((e) => e.date),
-  )
+  const completedDates = new Set(entries.filter((e) => e.completed).map((e) => e.date))
 
   for (let i = 0; i < monthCount; i++) {
     const monthDate = subMonths(today, i)
@@ -207,9 +184,7 @@ export function getMonthlyRates(
 
     // Calculate start/end of the window to count targets
     // It should be within the month but not before habit.createdAt and not after today
-    const countStart = isAfter(monthStart, habitCreated)
-      ? monthStart
-      : habitCreated
+    const countStart = isAfter(monthStart, habitCreated) ? monthStart : habitCreated
     const countEnd = isBefore(monthEnd, today) ? monthEnd : today
 
     let totalTargets = 0

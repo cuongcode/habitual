@@ -21,16 +21,17 @@
 
     <!-- Early theme init to prevent flash of wrong theme -->
     <script>
-      (function() {
-        var theme = localStorage.getItem('theme') || 'light';
-        var isDark = theme === 'dark' ||
-          (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      ;(function () {
+        var theme = localStorage.getItem('theme') || 'light'
+        var isDark =
+          theme === 'dark' ||
+          (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
         if (isDark) {
-          document.documentElement.classList.add('dark');
-          var meta = document.getElementById('theme-color-meta');
-          if (meta) meta.setAttribute('content', '#1C1917');
+          document.documentElement.classList.add('dark')
+          var meta = document.getElementById('theme-color-meta')
+          if (meta) meta.setAttribute('content', '#1C1917')
         }
-      })();
+      })()
     </script>
   </head>
   <body>

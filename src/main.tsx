@@ -30,7 +30,7 @@ const router = createBrowserRouter([
   },
 ])
 
-import { ErrorBoundary,InstallPrompt, ToastContainer } from '@/components'
+import { ErrorBoundary, InstallPrompt, ToastContainer } from '@/components'
 
 function App() {
   useEffect(() => {

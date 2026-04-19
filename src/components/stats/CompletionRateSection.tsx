@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { getThemeTokens } from '../../utils/theme'
 import { SectionLabel } from '../SectionLabel'
@@ -11,7 +11,7 @@ interface CompletionRateSectionProps {
 export function CompletionRateSection({ rate, colorKey }: CompletionRateSectionProps) {
   const [animatedRate, setAnimatedRate] = useState(0)
   const tokens = getThemeTokens(colorKey)
-  
+
   const safeRate = isNaN(rate) ? 0 : rate
   const radius = 52
   const circumference = 2 * Math.PI * radius
@@ -30,9 +30,9 @@ export function CompletionRateSection({ rate, colorKey }: CompletionRateSectionP
       <div className="self-start">
         <SectionLabel>Consistency</SectionLabel>
       </div>
-      
+
       <div className="relative flex items-center justify-center">
-        <svg width="120" height="120" viewBox="0 0 120 120" className="transform -rotate-90">
+        <svg width="120" height="120" viewBox="0 0 120 120" className="-rotate-90 transform">
           {/* Background Ring */}
           <circle
             cx="60"
@@ -57,18 +57,16 @@ export function CompletionRateSection({ rate, colorKey }: CompletionRateSectionP
             className={`${tokens.text} transition-[stroke-dashoffset] duration-1000 ease-out`}
           />
         </svg>
-        
+
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {safeRate === 0 ? (
-            <span className="text-[16px] text-muted font-mono px-4 text-center">
-              No data yet
-            </span>
+            <span className="px-4 text-center font-mono text-[16px] text-muted">No data yet</span>
           ) : (
             <>
-              <span className="text-[28px] text-ink font-display">
+              <span className="font-display text-[28px] text-ink">
                 {Math.round(safeRate * 100)}%
               </span>
-              <span className="text-[10px] text-muted font-mono uppercase tracking-tight">
+              <span className="font-mono text-[10px] uppercase tracking-tight text-muted">
                 completion rate
               </span>
             </>

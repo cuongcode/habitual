@@ -48,7 +48,9 @@
     color: rgb(var(--color-ink));
     min-height: 100vh;
     overscroll-behavior: none;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 }
 
@@ -81,13 +83,23 @@ html.dark body::after {
 
 /* Page Transitions */
 @keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .page-enter {
@@ -100,9 +112,15 @@ html.dark body::after {
 
 /* Tactile Cell Feedback */
 @keyframes cellPop {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(0.88); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.88);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .cell-pop {
@@ -110,12 +128,15 @@ html.dark body::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-enter, .page-enter-fade, .cell-pop {
+  .page-enter,
+  .page-enter-fade,
+  .cell-pop {
     animation: none;
   }
 }
 
-button, a {
+button,
+a {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -138,8 +159,12 @@ button, a {
 }
 
 @keyframes modeFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .mode-fade {
@@ -147,5 +172,7 @@ button, a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mode-fade { animation: none; }
+  .mode-fade {
+    animation: none;
+  }
 }

@@ -32,15 +32,15 @@ export function MonthlyBarChartSection({ monthlyRates, colorKey }: MonthlyBarCha
   return (
     <div className="space-y-3">
       <SectionLabel>Monthly consistency</SectionLabel>
-      
-      <div className="w-full h-[110px]">
+
+      <div className="h-[110px] w-full">
         <svg viewBox="0 0 280 110" width="100%" className="overflow-visible">
           {data.map((m, i) => {
             const barHeight = m.rate * maxBarHeight
             const x = i * (barWidth + barGap) + 10
             const jitter = seededJitter(m.month)
             const y = baseline - barHeight + jitter
-            
+
             return (
               <g key={i}>
                 {/* Bar */}
@@ -52,25 +52,25 @@ export function MonthlyBarChartSection({ monthlyRates, colorKey }: MonthlyBarCha
                   rx="3"
                   className={`transition-all duration-700 ease-out ${getBarClass(m.rate)}`}
                 />
-                
+
                 {/* Percentage label */}
                 {barHeight > 16 && (
                   <text
                     x={x + barWidth / 2}
                     y={y - 4}
                     textAnchor="middle"
-                    className="text-[9px] fill-muted font-mono"
+                    className="fill-muted font-mono text-[9px]"
                   >
                     {Math.round(m.rate * 100)}%
                   </text>
                 )}
-                
+
                 {/* Month label */}
                 <text
                   x={x + barWidth / 2}
                   y={baseline + 12}
                   textAnchor="middle"
-                  className="text-[10px] fill-muted font-mono"
+                  className="fill-muted font-mono text-[10px]"
                 >
                   {m.total > 0 ? m.label : '—'}
                 </text>

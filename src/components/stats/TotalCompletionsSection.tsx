@@ -10,14 +10,12 @@ export function TotalCompletionsSection({ total, colorKey }: TotalCompletionsSec
   const tokens = getThemeTokens(colorKey)
 
   return (
-    <div className="py-12 flex flex-col items-center gap-2 border-y border-muted/10">
+    <div className="flex flex-col items-center gap-2 border-y border-muted/10 py-12">
       <SectionLabel>Total check-ins</SectionLabel>
       <div className={`text-[56px] ${tokens.text} font-display leading-none`}>
         {isNaN(total) ? 0 : total}
       </div>
-      <div className="text-[11px] text-muted font-mono">
-        times completed
-      </div>
+      <div className="font-mono text-[11px] text-muted">times completed</div>
     </div>
   )
 }

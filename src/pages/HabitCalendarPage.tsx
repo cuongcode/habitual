@@ -1,13 +1,14 @@
-import { ArrowDown,ArrowLeft } from 'lucide-react'
-import { useEffect, useRef,useState } from 'react'
-import { Link, useLocation,useParams } from 'react-router-dom'
+import { ArrowDown, ArrowLeft } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useParams } from 'react-router-dom'
 
 import {
   CalendarGrid,
   EditHabitModal,
   HabitCalendarHeader,
   HabitCalendarNav,
-  WeekdayHeaders} from '@/components'
+  WeekdayHeaders,
+} from '@/components'
 
 import { useHabitStore } from '../store/habitStore'
 import { getThemeTokens } from '../utils/theme'
@@ -15,15 +16,11 @@ import { getThemeTokens } from '../utils/theme'
 export default function HabitCalendarPage() {
   const location = useLocation()
   const { habitId } = useParams<{ habitId: string }>()
-  const habit = useHabitStore((state) => 
-    state.habits.find((h) => h.id === habitId)
-  )
-  const entries = useHabitStore((state) => 
-    state.entries[habitId ?? '']
-  ) ?? []
+  const habit = useHabitStore((state) => state.habits.find((h) => h.id === habitId))
+  const entries = useHabitStore((state) => state.entries[habitId ?? '']) ?? []
   const categories = useHabitStore((state) => state.categories)
   const notes = useHabitStore((state) => state.notes)
-  
+
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showScrollBottom, setShowScrollBottom] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
@@ -35,7 +32,7 @@ export default function HabitCalendarPage() {
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
-    
+
     // Scroll to bottom to ensure today is visible
     requestAnimationFrame(() => {
       el.scrollTo({ top: el.scrollHeight })
@@ -66,14 +63,9 @@ export default function HabitCalendarPage() {
 
   if (!habit) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-10 bg-cream">
-        <h1 className="text-2xl text-ink font-display">
-          Habit not found
-        </h1>
-        <Link 
-          to="/" 
-          className="mt-6 flex items-center gap-2 text-rust font-mono uppercase text-sm"
-       >
+      <div className="flex min-h-screen flex-col items-center justify-center bg-cream p-10">
+        <h1 className="font-display text-2xl text-ink">Habit not found</h1>
+        <Link to="/" className="mt-6 flex items-center gap-2 font-mono text-sm uppercase text-rust">
           <ArrowLeft size={16} />
           Go Back
         </Link>
@@ -82,35 +74,29 @@ export default function HabitCalendarPage() {
   }
 
   return (
-    <div key={location.pathname} className="page-enter flex flex-col fixed inset-0 bg-cream overflow-hidden">
+    <div
+      key={location.pathname}
+      className="page-enter fixed inset-0 flex flex-col overflow-hidden bg-cream"
+    >
       {/* Sticky Header */}
-      <div className="sticky top-0 z-10 bg-cream border-b border-muted/10">
-        <HabitCalendarHeader habit={habit} category={category} onEditPress={() => setEditOpen(true)} />
+      <div className="sticky top-0 z-10 border-b border-muted/10 bg-cream">
+        <HabitCalendarHeader
+          habit={habit}
+          category={category}
+          onEditPress={() => setEditOpen(true)}
+        />
         <WeekdayHeaders />
       </div>
 
       {/* Scrollable Grid */}
-      <div 
-        ref={scrollRef} 
-        className="flex-1 overflow-y-auto -[webkit-overflow-scrolling:touch]"
-      >
-        <CalendarGrid 
-          habit={habit} 
-          entries={entries} 
-          notes={notes}
-          colorKey={colorKey} 
-        />
+      <div ref={scrollRef} className="-[webkit-overflow-scrolling:touch] flex-1 overflow-y-auto">
+        <CalendarGrid habit={habit} entries={entries} notes={notes} colorKey={colorKey} />
       </div>
 
       {/* Scroll to Today */}
       <button
         onClick={scrollToBottom}
-        className={`
-          fixed bottom-[84px] right-4 w-10 h-10 ${tokens.bg} text-cream rounded-full 
-          flex items-center justify-center shadow-lg transition-all duration-300 z-30
-          active:scale-90
-          ${showScrollBottom ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}
-        `}
+        className={`fixed bottom-[84px] right-4 h-10 w-10 ${tokens.bg} z-30 flex items-center justify-center rounded-full text-cream shadow-lg transition-all duration-300 active:scale-90 ${showScrollBottom ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'} `}
       >
         <ArrowDown size={20} />
       </button>
@@ -119,9 +105,7 @@ export default function HabitCalendarPage() {
       <HabitCalendarNav habitId={habit.id} />
 
       {/* Edit Habit Modal */}
-      {editOpen && (
-        <EditHabitModal habit={habit} onClose={() => setEditOpen(false)} />
-      )}
+      {editOpen && <EditHabitModal habit={habit} onClose={() => setEditOpen(false)} />}
     </div>
   )
 }

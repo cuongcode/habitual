@@ -1,5 +1,5 @@
 import { Check, X } from 'lucide-react'
-import { useEffect,useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 import { useHabitStore } from '../store/habitStore'
@@ -18,18 +18,18 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
   const [colorKey, setColorKey] = useState<ColorKey>('rust')
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  
-  const addCategory = useHabitStore(s => s.addCategory)
-  const updateCategory = useHabitStore(s => s.updateCategory)
-  const deleteCategory = useHabitStore(s => s.deleteCategory)
-  const showToast = useUIStore(s => s.showToast)
+
+  const addCategory = useHabitStore((s) => s.addCategory)
+  const updateCategory = useHabitStore((s) => s.updateCategory)
+  const deleteCategory = useHabitStore((s) => s.deleteCategory)
+  const showToast = useUIStore((s) => s.showToast)
 
   // Reset or initialize state when opening
   useEffect(() => {
     if (isOpen) {
       if (categoryToEdit) {
         setLabel(categoryToEdit.label)
-        setColorKey(categoryToEdit.colorKey as ColorKey || 'rust')
+        setColorKey((categoryToEdit.colorKey as ColorKey) || 'rust')
       } else {
         setLabel('')
         setColorKey('rust')
@@ -69,21 +69,21 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
 
   return createPortal(
     <div
-      className="page-enter-fade fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      className="page-enter-fade fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onClick={onClose}
     >
       <div
-        className="bg-cream rounded-2xl border border-muted-light p-6 w-full max-w-sm flex flex-col gap-6 shadow-xl"
+        className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-muted-light bg-cream p-6 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex flex-col gap-1 relative">
-          <button 
-            onClick={onClose} 
-            className="absolute -right-2 -top-2 p-2 text-muted hover:text-ink transition-colors"
+        <div className="relative flex flex-col gap-1">
+          <button
+            onClick={onClose}
+            className="absolute -right-2 -top-2 p-2 text-muted transition-colors hover:text-ink"
           >
             <X size={20} />
           </button>
-          <h2 className="font-serif text-[18px] text-ink m-0 pr-8">
+          <h2 className="m-0 pr-8 font-serif text-[18px] text-ink">
             {categoryToEdit ? 'Edit Category' : 'New Category'}
           </h2>
         </div>
@@ -93,34 +93,34 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
             ref={inputRef}
             type="text"
             value={label}
-            onChange={e => setLabel(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter') handleSave() }}
+            onChange={(e) => setLabel(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSave()
+            }}
             placeholder="Category name"
-            className="w-full bg-cream-dark border border-muted-light rounded-xl text-ink focus:outline-none focus:border-rust placeholder:text-muted font-body text-body py-3 px-4"
+            className="w-full rounded-xl border border-muted-light bg-cream-dark px-4 py-3 font-body text-body text-ink placeholder:text-muted focus:border-rust focus:outline-none"
           />
 
           <div className="flex items-center justify-between px-1">
-            <span className="font-mono text-[11px] text-muted uppercase tracking-wider">Color</span>
+            <span className="font-mono text-[11px] uppercase tracking-wider text-muted">Color</span>
             <div className="flex items-center gap-3">
-              {COLOR_OPTIONS.map(c => (
+              {COLOR_OPTIONS.map((c) => (
                 <button
                   key={c}
                   onClick={() => setColorKey(c)}
-                  className={`relative w-6 h-6 rounded-full transition-transform hover:scale-110 flex items-center justify-center bg-${c}`}
+                  className={`relative flex h-6 w-6 items-center justify-center rounded-full transition-transform hover:scale-110 bg-${c}`}
                 >
-                  {colorKey === c && (
-                    <Check size={14} color="#F5F0E8" strokeWidth={3} />
-                  )}
+                  {colorKey === c && <Check size={14} color="#F5F0E8" strokeWidth={3} />}
                 </button>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-row items-center justify-between mt-2">
+        <div className="mt-2 flex flex-row items-center justify-between">
           {categoryToEdit ? (
             <button
-              className="text-[14px] font-serif transition-colors px-4 py-2 hover:text-rust text-muted"
+              className="px-4 py-2 font-serif text-[14px] text-muted transition-colors hover:text-rust"
               onClick={() => setIsConfirmingDelete(!isConfirmingDelete)}
             >
               {isConfirmingDelete ? 'Keep' : 'Delete'}
@@ -129,10 +129,10 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
             <div />
           )}
           <button
-            className={`flex items-center justify-center font-serif text-[14px] rounded-full px-6 py-2 transition-colors min-w-[100px] ${
+            className={`flex min-w-[100px] items-center justify-center rounded-full px-6 py-2 font-serif text-[14px] transition-colors ${
               isConfirmingDelete || label.trim()
-                ? 'bg-rust text-cream hover:opacity-90 shadow-sm'
-                : 'bg-muted-light text-muted cursor-not-allowed border border-muted-light'
+                ? 'bg-rust text-cream shadow-sm hover:opacity-90'
+                : 'cursor-not-allowed border border-muted-light bg-muted-light text-muted'
             }`}
             onClick={handleSave}
             disabled={!isConfirmingDelete && !label.trim()}
@@ -142,6 +142,6 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   )
 }

@@ -14,8 +14,8 @@ const activeTimeouts = new Map<string, number>()
 // Schedule a daily check — call once on app init
 // For each habit with reminderTime, fire a notification at that time
 export function scheduleReminders(habits: Habit[]): void {
-  const habitsWithReminders = habits.filter(h => h.reminderTime)
-  habitsWithReminders.forEach(habit => {
+  const habitsWithReminders = habits.filter((h) => h.reminderTime)
+  habitsWithReminders.forEach((habit) => {
     // Clear any existing timeout for this habit
     const existingTimeout = activeTimeouts.get(habit.id)
     if (existingTimeout) {

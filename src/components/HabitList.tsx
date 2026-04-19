@@ -8,11 +8,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { GripVertical } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
@@ -51,23 +47,21 @@ export function HabitList() {
     const allGroups = categories
       .map((cat) => ({
         category: cat,
-        habits: habits
-          .filter((h) => h.categoryId === cat.id)
-          .sort((a, b) => a.order - b.order),
+        habits: habits.filter((h) => h.categoryId === cat.id).sort((a, b) => a.order - b.order),
       }))
       .filter((g) => g.habits.length > 0)
-      
+
     const noneHabits = habits
       .filter((h) => !h.categoryId || h.categoryId === 'none')
       .sort((a, b) => a.order - b.order)
-      
+
     if (noneHabits.length > 0) {
       allGroups.push({
         category: { id: 'none', label: 'None', colorKey: 'muted' },
         habits: noneHabits,
       })
     }
-    
+
     return allGroups
   }, [habits, categories, activeCategoryId])
 
@@ -106,29 +100,53 @@ export function HabitList() {
   if (groups.length === 0) {
     if (activeCategoryId) {
       return (
-        <div className="flex flex-col items-center justify-center flex-1 gap-2 px-8">
-          <p className="font-display text-ink text-base text-center m-0">No habits in this category</p>
-          <p className="font-mono text-muted text-xs text-center m-0">Add one with the + button</p>
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 px-8">
+          <p className="m-0 text-center font-display text-base text-ink">
+            No habits in this category
+          </p>
+          <p className="m-0 text-center font-mono text-xs text-muted">Add one with the + button</p>
         </div>
       )
     }
 
     return (
-      <div className="flex flex-col items-center justify-center flex-1 gap-4 px-8">
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8">
         <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-          <rect x="16" y="12" width="48" height="58" rx="4" stroke="#9C8E85" strokeWidth="1.5"/>
-          <line x1="28" y1="30" x2="52" y2="30" stroke="#C4BAB3" strokeWidth="1.5" strokeLinecap="round"/>
-          <line x1="28" y1="40" x2="46" y2="40" stroke="#C4BAB3" strokeWidth="1.5" strokeLinecap="round"/>
-          <line x1="28" y1="50" x2="50" y2="50" stroke="#C4BAB3" strokeWidth="1.5" strokeLinecap="round"/>
-          <circle cx="24" cy="30" r="2" fill="#C4BAB3"/>
-          <circle cx="24" cy="40" r="2" fill="#C4BAB3"/>
-          <circle cx="24" cy="50" r="2" fill="#C4BAB3"/>
+          <rect x="16" y="12" width="48" height="58" rx="4" stroke="#9C8E85" strokeWidth="1.5" />
+          <line
+            x1="28"
+            y1="30"
+            x2="52"
+            y2="30"
+            stroke="#C4BAB3"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <line
+            x1="28"
+            y1="40"
+            x2="46"
+            y2="40"
+            stroke="#C4BAB3"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <line
+            x1="28"
+            y1="50"
+            x2="50"
+            y2="50"
+            stroke="#C4BAB3"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <circle cx="24" cy="30" r="2" fill="#C4BAB3" />
+          <circle cx="24" cy="40" r="2" fill="#C4BAB3" />
+          <circle cx="24" cy="50" r="2" fill="#C4BAB3" />
         </svg>
-        <div className="flex flex-col gap-1 mt-2">
-          <p className="font-display text-ink text-lg text-center m-0">
-            Your notebook is empty
-          </p>
-          <p className="font-mono text-muted text-xs text-center leading-relaxed m-0">
+        <div className="mt-2 flex flex-col gap-1">
+          <p className="m-0 text-center font-display text-lg text-ink">Your notebook is empty</p>
+          <p className="m-0 text-center font-mono text-xs leading-relaxed text-muted">
             Tap the + button below to add your first habit
           </p>
         </div>
@@ -169,11 +187,7 @@ export function HabitList() {
         ))}
       </div>
 
-      <DragOverlay>
-        {activeHabit ? (
-          <DragOverlayRow habit={activeHabit} />
-        ) : null}
-      </DragOverlay>
+      <DragOverlay>{activeHabit ? <DragOverlayRow habit={activeHabit} /> : null}</DragOverlay>
     </DndContext>
   )
 }
@@ -182,17 +196,10 @@ export function HabitList() {
 
 function DragOverlayRow({ habit }: { habit: Habit }) {
   return (
-    <div
-      className="flex items-center gap-2 px-4 py-3 bg-cream border-2 border-rust rounded-md shadow-lg opacity-85"
-    >
+    <div className="flex items-center gap-2 rounded-md border-2 border-rust bg-cream px-4 py-3 opacity-85 shadow-lg">
       <GripVertical size={16} />
-      <span
-        className="flex-1 truncate text-ink font-body text-body"
-      >
-        {habit.name}
-      </span>
-      <div className="flex gap-1 shrink-0">
-      </div>
+      <span className="flex-1 truncate font-body text-body text-ink">{habit.name}</span>
+      <div className="flex shrink-0 gap-1"></div>
     </div>
   )
 }

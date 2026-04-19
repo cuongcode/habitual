@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
 import { requestNotificationPermission, scheduleReminders } from '../services/notificationService'
@@ -63,27 +63,21 @@ export function AddHabitDrawer() {
           transform: dragY ? `translateY(${dragY}px)` : undefined,
           transition: dragY ? 'none' : 'transform 0.3s ease',
         }}
-        className={`relative w-full max-w-lg bg-cream rounded-t-2xl border-t border-muted-light shadow-xl max-h-[90vh] overflow-y-auto ${
+        className={`relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-t-2xl border-t border-muted-light bg-cream shadow-xl ${
           isVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
         {/* Drag handle */}
-        <div className="flex justify-center pt-3 pb-1">
-          <div className="w-8 h-1 rounded-full bg-muted-light" />
+        <div className="flex justify-center pb-1 pt-3">
+          <div className="h-1 w-8 rounded-full bg-muted-light" />
         </div>
 
         {/* Title */}
-        <h2 className="px-4 pt-2 pb-3 text-[18px] font-display text-ink">
-          New habit
-        </h2>
+        <h2 className="px-4 pb-3 pt-2 font-display text-[18px] text-ink">New habit</h2>
 
         {/* Form */}
         <div className="pb-6">
-          <HabitForm
-            submitLabel="Create"
-            onSubmit={handleCreate}
-            onCancel={handleClose}
-          />
+          <HabitForm submitLabel="Create" onSubmit={handleCreate} onCancel={handleClose} />
         </div>
       </div>
     </div>

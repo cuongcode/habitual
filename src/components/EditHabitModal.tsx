@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
@@ -49,7 +49,7 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
     // Schedule reminder if enabled
     if (values.reminderEnabled && values.reminderTime) {
       await requestNotificationPermission()
-      const updatedHabit = store.habits.find(h => h.id === habit.id)
+      const updatedHabit = store.habits.find((h) => h.id === habit.id)
       if (updatedHabit) scheduleReminders([updatedHabit])
     }
 
@@ -78,21 +78,17 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
           transform: dragY ? `translateY(${dragY}px)` : undefined,
           transition: dragY ? 'none' : 'transform 0.3s ease',
         }}
-        className={`relative w-full max-w-lg bg-cream rounded-t-2xl border-t border-muted-light shadow-xl max-h-[90vh] overflow-y-auto ${
+        className={`relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-t-2xl border-t border-muted-light bg-cream shadow-xl ${
           isVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
         {/* Drag handle */}
-        <div className="flex justify-center pt-3 pb-1">
-          <div className="w-8 h-1 rounded-full bg-muted-light" />
+        <div className="flex justify-center pb-1 pt-3">
+          <div className="h-1 w-8 rounded-full bg-muted-light" />
         </div>
 
         {/* Title */}
-        <h2
-          className="px-4 pt-2 pb-3 text-ink font-display text-lg"
-        >
-          Edit habit
-        </h2>
+        <h2 className="px-4 pb-3 pt-2 font-display text-lg text-ink">Edit habit</h2>
 
         {/* Form */}
         <div className="pb-4">
@@ -105,11 +101,11 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
         </div>
 
         {/* Danger Zone */}
-        <div className="px-4 pb-6 pt-2 border-t border-muted-light">
+        <div className="border-t border-muted-light px-4 pb-6 pt-2">
           {!showDeleteConfirm ? (
             <button
               onClick={() => setShowDeleteConfirm(true)}
-              className="w-full py-2.5 px-4 rounded-full text-center transition-colors font-body text-sm text-rust"
+              className="w-full rounded-full px-4 py-2.5 text-center font-body text-sm text-rust transition-colors"
               style={{
                 border: '1px solid rgba(181, 69, 27, 0.3)',
               }}
@@ -118,20 +114,17 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
             </button>
           ) : (
             <div className="flex items-center justify-between gap-3">
-              <span
-               className="font-body text-sm text-ink">
-                Are you sure?
-              </span>
+              <span className="font-body text-sm text-ink">Are you sure?</span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="px-4 py-2 text-muted transition-colors hover:text-ink font-body text-sm"
+                  className="px-4 py-2 font-body text-sm text-muted transition-colors hover:text-ink"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleDelete}
-                  className="px-4 py-2 bg-rust text-cream rounded-full transition-all active:scale-95 font-body text-sm"
+                  className="rounded-full bg-rust px-4 py-2 font-body text-sm text-cream transition-all active:scale-95"
                 >
                   Delete
                 </button>

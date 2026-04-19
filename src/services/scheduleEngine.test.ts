@@ -1,7 +1,7 @@
-import { afterEach,beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { Habit, HabitEntry, Schedule } from '../types/index'
-import { getDayState,isTargetDate } from './scheduleEngine'
+import { getDayState, isTargetDate } from './scheduleEngine'
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
@@ -16,11 +16,7 @@ function makeHabit(schedule: Schedule, id = 'h-1'): Habit {
   }
 }
 
-function makeEntry(
-  habitId: string,
-  date: string,
-  completed = true,
-): HabitEntry {
+function makeEntry(habitId: string, date: string, completed = true): HabitEntry {
   return {
     id: `entry-${date}`,
     habitId,
@@ -174,33 +170,23 @@ describe('getDayState', () => {
     const entries = [makeEntry(habit.id, '2026-03-19')]
 
     it('target date with entry → target-complete', () => {
-      expect(getDayState(new Date('2026-03-19'), habit, entries)).toBe(
-        'target-complete',
-      )
+      expect(getDayState(new Date('2026-03-19'), habit, entries)).toBe('target-complete')
     })
 
     it('Friday after completed Thursday → window-on', () => {
-      expect(getDayState(new Date('2026-03-20'), habit, entries)).toBe(
-        'window-on',
-      )
+      expect(getDayState(new Date('2026-03-20'), habit, entries)).toBe('window-on')
     })
 
     it('Tuesday in window → window-on', () => {
-      expect(getDayState(new Date('2026-03-24'), habit, entries)).toBe(
-        'window-on',
-      )
+      expect(getDayState(new Date('2026-03-24'), habit, entries)).toBe('window-on')
     })
 
     it('today Wednesday in window → window-on', () => {
-      expect(getDayState(new Date('2026-03-25'), habit, entries)).toBe(
-        'window-on',
-      )
+      expect(getDayState(new Date('2026-03-25'), habit, entries)).toBe('window-on')
     })
 
     it('next Thursday → future', () => {
-      expect(getDayState(new Date('2026-03-26'), habit, entries)).toBe(
-        'future',
-      )
+      expect(getDayState(new Date('2026-03-26'), habit, entries)).toBe('future')
     })
   })
 
@@ -209,21 +195,15 @@ describe('getDayState', () => {
     const entries: HabitEntry[] = []
 
     it('past Thursday with no check → target-missed', () => {
-      expect(getDayState(new Date('2026-03-19'), habit, entries)).toBe(
-        'target-missed',
-      )
+      expect(getDayState(new Date('2026-03-19'), habit, entries)).toBe('target-missed')
     })
 
     it('today Wednesday in missed window → window-empty', () => {
-      expect(getDayState(new Date('2026-03-25'), habit, entries)).toBe(
-        'window-empty',
-      )
+      expect(getDayState(new Date('2026-03-25'), habit, entries)).toBe('window-empty')
     })
 
     it('next Thursday → future', () => {
-      expect(getDayState(new Date('2026-03-26'), habit, entries)).toBe(
-        'future',
-      )
+      expect(getDayState(new Date('2026-03-26'), habit, entries)).toBe('future')
     })
   })
 
@@ -258,21 +238,15 @@ describe('getDayState', () => {
     const entries = [makeEntry(habit.id, '2026-03-24')]
 
     it('yesterday with entry → target-complete', () => {
-      expect(getDayState(new Date('2026-03-24'), habit, entries)).toBe(
-        'target-complete',
-      )
+      expect(getDayState(new Date('2026-03-24'), habit, entries)).toBe('target-complete')
     })
 
     it('today with no entry → target-open', () => {
-      expect(getDayState(new Date('2026-03-25'), habit, entries)).toBe(
-        'target-open',
-      )
+      expect(getDayState(new Date('2026-03-25'), habit, entries)).toBe('target-open')
     })
 
     it('tomorrow → future', () => {
-      expect(getDayState(new Date('2026-03-26'), habit, entries)).toBe(
-        'future',
-      )
+      expect(getDayState(new Date('2026-03-26'), habit, entries)).toBe('future')
     })
   })
 })

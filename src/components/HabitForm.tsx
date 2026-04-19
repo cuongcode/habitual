@@ -26,9 +26,21 @@ interface HabitFormProps {
 const TABS = ['Basics', 'Schedule', 'Reminder'] as const
 type Tab = (typeof TABS)[number]
 
-
 const WEEKDAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
-const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const MONTH_LABELS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -52,7 +64,9 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
   const [activeTab, setActiveTab] = useState<Tab>('Basics')
   const [name, setName] = useState(initialValues?.name ?? '')
   const [categoryId, setCategoryId] = useState(initialValues?.categoryId ?? '')
-  const [schedule, setSchedule] = useState<Schedule>(initialValues?.schedule ?? getDefaultSchedule())
+  const [schedule, setSchedule] = useState<Schedule>(
+    initialValues?.schedule ?? getDefaultSchedule(),
+  )
   const [reminderEnabled, setReminderEnabled] = useState(initialValues?.reminderEnabled ?? false)
   const [reminderTime, setReminderTime] = useState(initialValues?.reminderTime ?? '08:00')
   const [submitting, setSubmitting] = useState(false)
@@ -72,7 +86,7 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
     if (!name.trim()) errs.name = 'Habit name is required'
     // Schedule validation
     const s = schedule
-    if (s.frequency === 'weekly' && (!(s as any).weekdays?.length)) {
+    if (s.frequency === 'weekly' && !(s as any).weekdays?.length) {
       errs.schedule = 'Pick at least one weekday'
     }
     if (s.frequency === 'monthly' && !(s as any).dayOfMonth) {
@@ -143,8 +157,6 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
     }
   }
 
-
-
   // ── Render ─────────────────────────────────────────────────────
 
   return (
@@ -155,7 +167,7 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`font-mono flex-1 py-3 text-center transition-colors text-xs uppercase tracking-wide ${activeTab === tab ? 'text-ink border-b-2 border-rust' : 'text-muted border-b-2 border-transparent'}`}
+            className={`flex-1 py-3 text-center font-mono text-xs uppercase tracking-wide transition-colors ${activeTab === tab ? 'border-b-2 border-rust text-ink' : 'border-b-2 border-transparent text-muted'}`}
           >
             {tab}
           </button>
@@ -163,7 +175,7 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
       </div>
 
       {/* Tab Content */}
-      <div className="px-4 py-5 min-h-[320px]">
+      <div className="min-h-[320px] px-4 py-5">
         {activeTab === 'Basics' && (
           <BasicsTab
             name={name}
@@ -196,24 +208,20 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-between items-center px-4 pt-4 border-t border-muted-light">
+      <div className="flex items-center justify-between border-t border-muted-light px-4 pt-4">
         <button
           onClick={onCancel}
           disabled={submitting}
-          className="text-muted transition-colors hover:text-ink disabled:opacity-50 font-body text-sm"
+          className="font-body text-sm text-muted transition-colors hover:text-ink disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           onClick={handleSubmit}
           disabled={submitting}
-          className="flex items-center justify-center gap-2 bg-rust text-cream rounded-full px-6 py-3 transition-all active:scale-95 disabled:opacity-70 font-body text-body"
+          className="flex items-center justify-center gap-2 rounded-full bg-rust px-6 py-3 font-body text-body text-cream transition-all active:scale-95 disabled:opacity-70"
         >
-          {submitting ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            submitLabel
-          )}
+          {submitting ? <Loader2 size={16} className="animate-spin" /> : submitLabel}
         </button>
       </div>
     </div>
@@ -235,8 +243,11 @@ interface BasicsTabProps {
 }
 
 function BasicsTab({
-  name, setName, nameRef,
-  categoryId, setCategoryId,
+  name,
+  setName,
+  nameRef,
+  categoryId,
+  setCategoryId,
   categories,
   errors,
 }: BasicsTabProps) {
@@ -244,9 +255,7 @@ function BasicsTab({
     <div className="space-y-6">
       {/* Habit Name */}
       <div>
-        <label
-          className="block mb-2 uppercase tracking-wider font-mono text-label text-muted"
-        >
+        <label className="mb-2 block font-mono text-label uppercase tracking-wider text-muted">
           Habit Name
         </label>
         <input
@@ -255,42 +264,33 @@ function BasicsTab({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Morning walk"
-          className="font-body w-full bg-cream border border-muted-light rounded-md text-ink focus:outline-none focus:ring-1 focus:ring-rust placeholder:text-muted py-2.5 px-3"
+          className="w-full rounded-md border border-muted-light bg-cream px-3 py-2.5 font-body text-ink placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-rust"
         />
-        {errors.name && (
-          <p className="mt-1 font-mono text-label text-rust">
-            {errors.name}
-          </p>
-        )}
+        {errors.name && <p className="mt-1 font-mono text-label text-rust">{errors.name}</p>}
       </div>
 
       {/* Category */}
       <div>
-        <label
-          className="block mb-2 uppercase tracking-wider font-mono text-label text-muted"
-        >
+        <label className="mb-2 block font-mono text-label uppercase tracking-wider text-muted">
           Category
         </label>
 
         {categories.length === 0 ? (
-          <p
-           className="font-mono text-xs text-muted">
-            No categories yet — add one in Settings.
-          </p>
+          <p className="font-mono text-xs text-muted">No categories yet — add one in Settings.</p>
         ) : (
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setCategoryId(categoryId === cat.id ? 'none' : cat.id)}
-                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-colors border font-mono ${
+                className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-xs uppercase tracking-wide transition-colors ${
                   categoryId === cat.id
                     ? `text-cream bg-${cat.colorKey} border-${cat.colorKey}`
-                    : 'bg-cream text-ink border-muted-light'
+                    : 'border-muted-light bg-cream text-ink'
                 }`}
               >
                 <span
-                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${categoryId === cat.id ? 'bg-cream' : `bg-${cat.colorKey}`}`}
+                  className={`h-1.5 w-1.5 shrink-0 rounded-full ${categoryId === cat.id ? 'bg-cream' : `bg-${cat.colorKey}`}`}
                 />
                 {cat.label}
               </button>
@@ -299,9 +299,7 @@ function BasicsTab({
         )}
 
         {errors.category && (
-          <p className="mt-1 font-mono text-label text-rust">
-            {errors.category}
-          </p>
+          <p className="mt-1 font-mono text-label text-rust">{errors.category}</p>
         )}
       </div>
     </div>
@@ -335,22 +333,16 @@ function ScheduleTab({ schedule, setSchedule, onFrequencyChange, errors }: Sched
         <button
           key={opt.value}
           onClick={() => onFrequencyChange(opt.value)}
-          className="w-full flex justify-between items-center py-3 border-b border-muted-light text-left"
+          className="flex w-full items-center justify-between border-b border-muted-light py-3 text-left"
         >
           <div>
-            <div className="font-body text-body text-ink">
-              {opt.label}
-            </div>
-            <div className="font-mono text-label text-muted">
-              {opt.description}
-            </div>
+            <div className="font-body text-body text-ink">{opt.label}</div>
+            <div className="font-mono text-label text-muted">{opt.description}</div>
           </div>
           <div
-            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${schedule.frequency === opt.value ? 'border-rust bg-rust' : 'border-muted-light bg-transparent'}`}
+            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 ${schedule.frequency === opt.value ? 'border-rust bg-rust' : 'border-muted-light bg-transparent'}`}
           >
-            {schedule.frequency === opt.value && (
-              <div className="w-2 h-2 rounded-full bg-cream" />
-            )}
+            {schedule.frequency === opt.value && <div className="h-2 w-2 rounded-full bg-cream" />}
           </div>
         </button>
       ))}
@@ -390,11 +382,7 @@ function ScheduleTab({ schedule, setSchedule, onFrequencyChange, errors }: Sched
         )}
       </div>
 
-      {errors.schedule && (
-        <p className="mt-2 font-mono text-label text-rust">
-          {errors.schedule}
-        </p>
-      )}
+      {errors.schedule && <p className="mt-2 font-mono text-label text-rust">{errors.schedule}</p>}
     </div>
   )
 }
@@ -428,7 +416,7 @@ function WeekdayPicker({
 
   return (
     <div>
-      <div className="flex gap-2 justify-between">
+      <div className="flex justify-between gap-2">
         {WEEKDAY_LABELS.map((label, i) => {
           const jsDay = displayToJS[i]
           const isSelected = selected.includes(jsDay)
@@ -437,7 +425,7 @@ function WeekdayPicker({
             <button
               key={label}
               onClick={() => toggle(jsDay)}
-              className={`font-mono flex items-center justify-center rounded-full transition-all active:scale-90 text-xs w-9 h-9 ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'} ${isDisabled ? 'opacity-35 cursor-not-allowed' : 'cursor-pointer'}`}
+              className={`flex h-9 w-9 items-center justify-center rounded-full font-mono text-xs transition-all active:scale-90 ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'} ${isDisabled ? 'cursor-not-allowed opacity-35' : 'cursor-pointer'}`}
             >
               {label}
             </button>
@@ -445,11 +433,7 @@ function WeekdayPicker({
         })}
       </div>
       {atMax && (
-        <p
-          className="mt-2 text-center font-mono text-label text-muted"
-        >
-          Maximum 6 days selected
-        </p>
+        <p className="mt-2 text-center font-mono text-label text-muted">Maximum 6 days selected</p>
       )}
     </div>
   )
@@ -457,7 +441,13 @@ function WeekdayPicker({
 
 // ── Month Day Picker ───────────────────────────────────────────────
 
-function MonthDayPicker({ selected, onChange }: { selected: number; onChange: (d: number) => void }) {
+function MonthDayPicker({
+  selected,
+  onChange,
+}: {
+  selected: number
+  onChange: (d: number) => void
+}) {
   const days = Array.from({ length: 31 }, (_, i) => i + 1)
   return (
     <div className="grid grid-cols-7 gap-1.5">
@@ -467,7 +457,7 @@ function MonthDayPicker({ selected, onChange }: { selected: number; onChange: (d
           <button
             key={d}
             onClick={() => onChange(d)}
-            className={`font-mono flex items-center justify-center rounded-full transition-colors text-xs w-9 h-9 ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'}`}
+            className={`flex h-9 w-9 items-center justify-center rounded-full font-mono text-xs transition-colors ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'}`}
           >
             {d}
           </button>
@@ -480,15 +470,20 @@ function MonthDayPicker({ selected, onChange }: { selected: number; onChange: (d
 // ── Yearly Picker ──────────────────────────────────────────────────
 
 function YearlyPicker({
-  month, day, onMonthChange, onDayChange,
+  month,
+  day,
+  onMonthChange,
+  onDayChange,
 }: {
-  month: number; day: number
-  onMonthChange: (m: number) => void; onDayChange: (d: number) => void
+  month: number
+  day: number
+  onMonthChange: (m: number) => void
+  onDayChange: (d: number) => void
 }) {
   return (
     <div className="flex gap-4">
       {/* Month grid */}
-      <div className="grid grid-cols-3 gap-1.5 flex-1">
+      <div className="grid flex-1 grid-cols-3 gap-1.5">
         {MONTH_LABELS.map((label, i) => {
           const m = i + 1
           const isSelected = month === m
@@ -496,7 +491,7 @@ function YearlyPicker({
             <button
               key={label}
               onClick={() => onMonthChange(m)}
-              className={`font-mono flex items-center justify-center rounded-full transition-colors py-2 text-label ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'}`}
+              className={`flex items-center justify-center rounded-full py-2 font-mono text-label transition-colors ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'}`}
             >
               {label}
             </button>
@@ -505,14 +500,14 @@ function YearlyPicker({
       </div>
 
       {/* Day grid */}
-      <div className="grid grid-cols-4 gap-1 flex-1 max-h-[200px] overflow-y-auto scrollbar-hide">
+      <div className="grid max-h-[200px] flex-1 grid-cols-4 gap-1 overflow-y-auto scrollbar-hide">
         {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => {
           const isSelected = day === d
           return (
             <button
               key={d}
               onClick={() => onDayChange(d)}
-              className={`font-mono flex items-center justify-center rounded-full transition-colors text-label w-8 h-8 ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'}`}
+              className={`flex h-8 w-8 items-center justify-center rounded-full font-mono text-label transition-colors ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'}`}
             >
               {d}
             </button>
@@ -526,17 +521,20 @@ function YearlyPicker({
 // ── Custom Picker ──────────────────────────────────────────────────
 
 function CustomPicker({
-  interval, anchor, onIntervalChange, onAnchorChange,
+  interval,
+  anchor,
+  onIntervalChange,
+  onAnchorChange,
 }: {
-  interval: number; anchor: string
-  onIntervalChange: (n: number) => void; onAnchorChange: (d: string) => void
+  interval: number
+  anchor: string
+  onIntervalChange: (n: number) => void
+  onAnchorChange: (d: string) => void
 }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <span className="font-body text-body text-ink">
-          Every
-        </span>
+        <span className="font-body text-body text-ink">Every</span>
         <input
           type="number"
           min={2}
@@ -545,22 +543,18 @@ function CustomPicker({
             const v = parseInt(e.target.value, 10)
             if (!isNaN(v)) onIntervalChange(Math.max(2, v))
           }}
-          className="font-mono w-[60px] text-center bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-ink p-2"
+          className="w-[60px] rounded-md border border-muted-light bg-cream p-2 text-center font-mono text-ink focus:outline-none focus:ring-1 focus:ring-rust"
         />
-        <span className="font-body text-body text-ink">
-          days
-        </span>
+        <span className="font-body text-body text-ink">days</span>
       </div>
 
       <div className="flex items-center gap-3">
-        <span className="font-body text-body text-ink">
-          Starting from
-        </span>
+        <span className="font-body text-body text-ink">Starting from</span>
         <input
           type="date"
           value={anchor}
           onChange={(e) => onAnchorChange(e.target.value)}
-          className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-sm text-ink py-2 px-3"
+          className="rounded-md border border-muted-light bg-cream px-3 py-2 font-mono text-sm text-ink focus:outline-none focus:ring-1 focus:ring-rust"
         />
       </div>
     </div>
@@ -578,20 +572,23 @@ interface ReminderTabProps {
   setReminderTime: (v: string) => void
 }
 
-function ReminderTab({ reminderEnabled, setReminderEnabled, reminderTime, setReminderTime }: ReminderTabProps) {
+function ReminderTab({
+  reminderEnabled,
+  setReminderEnabled,
+  reminderTime,
+  setReminderTime,
+}: ReminderTabProps) {
   return (
     <div className="space-y-5">
       {/* Toggle Row */}
       <div className="flex items-center justify-between">
-        <span className="font-body text-body text-ink">
-          Daily reminder
-        </span>
+        <span className="font-body text-body text-ink">Daily reminder</span>
         <button
           onClick={() => setReminderEnabled(!reminderEnabled)}
-          className={`relative rounded-full transition-colors duration-200 w-[44px] h-[24px] ${reminderEnabled ? 'bg-rust' : 'bg-muted-light'}`}
+          className={`relative h-[24px] w-[44px] rounded-full transition-colors duration-200 ${reminderEnabled ? 'bg-rust' : 'bg-muted-light'}`}
         >
           <span
-            className={`absolute top-[2px] rounded-full bg-white transition-all duration-200 w-[20px] h-[20px] ${reminderEnabled ? 'left-[22px]' : 'left-[2px]'}`}
+            className={`absolute top-[2px] h-[20px] w-[20px] rounded-full bg-white transition-all duration-200 ${reminderEnabled ? 'left-[22px]' : 'left-[2px]'}`}
           />
         </button>
       </div>
@@ -599,14 +596,12 @@ function ReminderTab({ reminderEnabled, setReminderEnabled, reminderTime, setRem
       {/* Time Picker */}
       {reminderEnabled && (
         <div className="flex items-center gap-3">
-          <span className="font-body text-body text-ink">
-            Remind me at
-          </span>
+          <span className="font-body text-body text-ink">Remind me at</span>
           <input
             type="time"
             value={reminderTime}
             onChange={(e) => setReminderTime(e.target.value)}
-            className="font-mono bg-cream border border-muted-light rounded-md focus:outline-none focus:ring-1 focus:ring-rust text-sm text-ink py-2 px-3"
+            className="rounded-md border border-muted-light bg-cream px-3 py-2 font-mono text-sm text-ink focus:outline-none focus:ring-1 focus:ring-rust"
           />
         </div>
       )}

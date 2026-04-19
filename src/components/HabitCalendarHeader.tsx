@@ -1,7 +1,7 @@
 import { format, setDay } from 'date-fns'
 import { SlidersHorizontal } from 'lucide-react'
 
-import type { Category,Habit } from '../types/index'
+import type { Category, Habit } from '../types/index'
 
 interface HabitCalendarHeaderProps {
   habit: Habit
@@ -21,7 +21,7 @@ const formatSchedule = (habit: Habit) => {
     case 'daily':
       return 'Every day'
     case 'weekly': {
-      const names = schedule.weekdays.map(wd => format(setDay(new Date(), wd), 'EEEE'))
+      const names = schedule.weekdays.map((wd) => format(setDay(new Date(), wd), 'EEEE'))
       if (names.length === 1) return `Every ${names[0]}`
       const last = names[names.length - 1]
       const rest = names.slice(0, -1)
@@ -42,21 +42,16 @@ const formatSchedule = (habit: Habit) => {
 
 export function HabitCalendarHeader({ habit, category, onEditPress }: HabitCalendarHeaderProps) {
   const scheduleText = formatSchedule(habit)
-  
+
   return (
-    <div className="px-5 pt-6 pb-4 bg-cream">
-      <div className="flex justify-between items-start">
-        <h1 className="text-[20px] text-ink font-display leading-tight">
-          {habit.name}
-        </h1>
-        <button 
-          className="p-1 text-muted hover:text-ink transition-colors"
-          onClick={onEditPress}
-        >
+    <div className="bg-cream px-5 pb-4 pt-6">
+      <div className="flex items-start justify-between">
+        <h1 className="font-display text-[20px] leading-tight text-ink">{habit.name}</h1>
+        <button className="p-1 text-muted transition-colors hover:text-ink" onClick={onEditPress}>
           <SlidersHorizontal size={20} />
         </button>
       </div>
-      <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted font-mono uppercase tracking-wider">
+      <div className="mt-1 flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted">
         <span>{scheduleText}</span>
         {category && (
           <>

@@ -7,14 +7,12 @@ interface HabitStatsNavProps {
 
 export function HabitStatsNav({ habitId }: HabitStatsNavProps) {
   return (
-    <nav 
-      className="fixed bottom-0 left-0 right-0 bg-cream/95 backdrop-blur-sm border-t border-muted/10 z-20 pb-safe"
-    >
-      <div className="flex justify-between items-center px-6 py-4">
-        <Link 
-          to={`/habit/${habitId}`} 
-          className="flex items-center gap-1.5 text-[12px] text-ink font-mono uppercase tracking-wider"
-       >
+    <nav className="pb-safe fixed bottom-0 left-0 right-0 z-20 border-t border-muted/10 bg-cream/95 backdrop-blur-sm">
+      <div className="flex items-center justify-between px-6 py-4">
+        <Link
+          to={`/habit/${habitId}`}
+          className="flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider text-ink"
+        >
           <ArrowLeft size={16} />
           <span>Calendar</span>
         </Link>

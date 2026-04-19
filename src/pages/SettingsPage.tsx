@@ -13,8 +13,8 @@ import type { Category } from '../types/index'
 // ── Category Section ───────────────────────────────────────────────
 
 function CategorySection() {
-  const categories = useHabitStore(s => s.categories)
-  const habits     = useHabitStore(s => s.habits)
+  const categories = useHabitStore((s) => s.categories)
+  const habits = useHabitStore((s) => s.habits)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | undefined>(undefined)
@@ -32,13 +32,13 @@ function CategorySection() {
   return (
     <div className="flex flex-col">
       {/* Section header */}
-      <div className="flex items-center justify-between mb-3 px-2">
-        <h2 className="font-mono text-[11px] text-muted uppercase tracking-wider m-0">
+      <div className="mb-3 flex items-center justify-between px-2">
+        <h2 className="m-0 font-mono text-[11px] uppercase tracking-wider text-muted">
           Categories
         </h2>
         <button
           onClick={handleAddClick}
-          className="flex items-center gap-1 font-mono text-[11px] text-rust uppercase tracking-wide"
+          className="flex items-center gap-1 font-mono text-[11px] uppercase tracking-wide text-rust"
         >
           <Plus size={12} />
           Add
@@ -46,16 +46,13 @@ function CategorySection() {
       </div>
 
       {/* Category list */}
-      <div className="bg-cream-dark rounded-xl border border-muted-light overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-muted-light bg-cream-dark">
         {categories.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 py-8 px-4">
+          <div className="flex flex-col items-center gap-2 px-4 py-8">
             <Tag size={28} className="text-muted opacity-40" />
-            <p className="font-mono text-[12px] text-muted text-center m-0">
+            <p className="m-0 text-center font-mono text-[12px] text-muted">
               No categories yet.{' '}
-              <button
-                onClick={handleAddClick}
-                className="text-rust underline"
-              >
+              <button onClick={handleAddClick} className="text-rust underline">
                 Add one
               </button>
             </p>
@@ -63,26 +60,26 @@ function CategorySection() {
         ) : (
           categories.map((cat, idx) => {
             const isLast = idx === categories.length - 1
-            const habitCount = habits.filter(h => h.categoryId === cat.id).length
+            const habitCount = habits.filter((h) => h.categoryId === cat.id).length
 
             return (
               <div key={cat.id}>
                 <div className="flex items-center justify-between gap-3 px-4 py-3">
                   {/* Category row */}
                   <button
-                    className="flex items-center gap-3 w-full min-w-0 text-left hover:opacity-80 transition-opacity"
+                    className="flex w-full min-w-0 items-center gap-3 text-left transition-opacity hover:opacity-80"
                     onClick={() => handleEditClick(cat)}
                   >
-                    <span
-                      className={`w-3 h-3 rounded-full shrink-0 bg-${cat.colorKey}`}
-                    />
-                    <span className="font-serif text-[15px] text-ink truncate flex-1">{cat.label}</span>
-                    <span className="font-mono text-[11px] text-muted shrink-0 mt-0.5">
+                    <span className={`h-3 w-3 shrink-0 rounded-full bg-${cat.colorKey}`} />
+                    <span className="flex-1 truncate font-serif text-[15px] text-ink">
+                      {cat.label}
+                    </span>
+                    <span className="mt-0.5 shrink-0 font-mono text-[11px] text-muted">
                       {habitCount} {habitCount === 1 ? 'habit' : 'habits'}
                     </span>
                   </button>
                 </div>
-                {!isLast && <div className="border-t border-muted-light mx-4" />}
+                {!isLast && <div className="mx-4 border-t border-muted-light" />}
               </div>
             )
           })
@@ -101,8 +98,8 @@ function CategorySection() {
 // ── Appearance Section ─────────────────────────────────────────────
 
 function AppearanceSection() {
-  const theme = useUIStore(s => s.theme)
-  const setTheme = useUIStore(s => s.setTheme)
+  const theme = useUIStore((s) => s.theme)
+  const setTheme = useUIStore((s) => s.setTheme)
 
   const options = [
     { value: 'light' as const, label: 'Light', icon: <Sun size={14} /> },
@@ -112,19 +109,17 @@ function AppearanceSection() {
 
   return (
     <div className="flex flex-col">
-      <h2 className="font-mono text-[11px] text-muted uppercase tracking-wider mb-3 px-2 m-0">
+      <h2 className="m-0 mb-3 px-2 font-mono text-[11px] uppercase tracking-wider text-muted">
         Appearance
       </h2>
-      <div className="bg-cream-dark rounded-xl border border-muted-light overflow-hidden p-4">
-        <div className="flex p-1 bg-cream rounded-xl border border-muted-light gap-1">
-          {options.map(opt => (
+      <div className="overflow-hidden rounded-xl border border-muted-light bg-cream-dark p-4">
+        <div className="flex gap-1 rounded-xl border border-muted-light bg-cream p-1">
+          {options.map((opt) => (
             <button
               key={opt.value}
               onClick={() => setTheme(opt.value)}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-center text-[13px] font-mono transition-colors rounded-lg ${
-                theme === opt.value
-                  ? 'bg-rust text-cream shadow-sm'
-                  : 'text-muted hover:text-ink'
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-center font-mono text-[13px] transition-colors ${
+                theme === opt.value ? 'bg-rust text-cream shadow-sm' : 'text-muted hover:text-ink'
               }`}
             >
               {opt.icon}
@@ -141,8 +136,8 @@ function AppearanceSection() {
 
 function SettingsHeader() {
   return (
-    <div className="px-4 py-4 flex items-center justify-between">
-      <h1 className="font-serif text-[22px] text-ink m-0">Settings</h1>
+    <div className="flex items-center justify-between px-4 py-4">
+      <h1 className="m-0 font-serif text-[22px] text-ink">Settings</h1>
     </div>
   )
 }
@@ -152,12 +147,12 @@ function SettingsHeader() {
 function SettingsNav() {
   const navigate = useNavigate()
   return (
-    <nav className="bg-cream border-t border-muted-light px-6 py-3 pb-safe flex items-center">
+    <nav className="pb-safe flex items-center border-t border-muted-light bg-cream px-6 py-3">
       <button
         onClick={() => navigate('/')}
-        className="flex items-center gap-2 text-ink hover:text-ink-dark transition-colors"
+        className="hover:text-ink-dark flex items-center gap-2 text-ink transition-colors"
       >
-        <ArrowLeft className="w-5 h-5" />
+        <ArrowLeft className="h-5 w-5" />
         <span className="font-serif text-[15px]">Habits</span>
       </button>
     </nav>
@@ -171,7 +166,7 @@ function DataSection() {
   const [exporting, setExporting] = useState(false)
   const [showExported, setShowExported] = useState(false)
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
-  const showToast = useUIStore(state => state.showToast)
+  const showToast = useUIStore((state) => state.showToast)
 
   useEffect(() => {
     const stored = localStorage.getItem('lastExport')
@@ -205,26 +200,27 @@ function DataSection() {
 
   return (
     <div className="flex flex-col">
-      <h2 className="font-mono text-[11px] text-muted uppercase tracking-wider mb-3 px-2 m-0">
+      <h2 className="m-0 mb-3 px-2 font-mono text-[11px] uppercase tracking-wider text-muted">
         Data
       </h2>
-      <div className="bg-cream-dark rounded-xl border border-muted-light overflow-hidden">
-
+      <div className="overflow-hidden rounded-xl border border-muted-light bg-cream-dark">
         {/* Export row */}
         <div className="flex items-center justify-between gap-3 p-4">
           <div className="flex items-center gap-4">
-            <Download className="w-[18px] h-[18px] text-rust shrink-0" />
+            <Download className="h-[18px] w-[18px] shrink-0 text-rust" />
             <div className="flex flex-col">
-              <span className="font-serif text-[15px] text-ink leading-tight mb-1">Export backup</span>
+              <span className="mb-1 font-serif text-[15px] leading-tight text-ink">
+                Export backup
+              </span>
               <span className="font-mono text-[11px] text-muted">Last export: {lastExport}</span>
             </div>
           </div>
           <button
             onClick={handleExport}
             disabled={exporting || showExported}
-            className={`font-mono text-[12px] border rounded-full px-3 py-1 transition-colors min-w-[76px] ${
+            className={`min-w-[76px] rounded-full border px-3 py-1 font-mono text-[12px] transition-colors ${
               showExported
-                ? 'border-rust/40 text-rust bg-cream-dark'
+                ? 'border-rust/40 bg-cream-dark text-rust'
                 : 'border-rust border-opacity-40 text-rust hover:bg-rust hover:text-cream'
             }`}
           >
@@ -232,31 +228,29 @@ function DataSection() {
           </button>
         </div>
 
-        <div className="border-t border-muted-light mx-4" />
+        <div className="mx-4 border-t border-muted-light" />
 
         {/* Import row */}
         <div className="flex items-center justify-between gap-3 p-4">
           <div className="flex items-center gap-4">
-            <Upload className="w-[18px] h-[18px] text-brown shrink-0" />
+            <Upload className="h-[18px] w-[18px] shrink-0 text-brown" />
             <div className="flex flex-col">
-              <span className="font-serif text-[15px] text-ink leading-tight mb-1">Restore backup</span>
+              <span className="mb-1 font-serif text-[15px] leading-tight text-ink">
+                Restore backup
+              </span>
               <span className="font-mono text-[11px] text-muted">Merge or replace your data</span>
             </div>
           </div>
           <button
             onClick={() => setIsImportModalOpen(true)}
-            className="font-mono text-[12px] border border-brown border-opacity-40 text-brown rounded-full px-3 py-1 hover:bg-brown hover:text-cream transition-colors min-w-[76px]"
+            className="min-w-[76px] rounded-full border border-brown border-opacity-40 px-3 py-1 font-mono text-[12px] text-brown transition-colors hover:bg-brown hover:text-cream"
           >
             Import
           </button>
         </div>
-
       </div>
 
-      <ImportModal
-        isOpen={isImportModalOpen}
-        onClose={() => setIsImportModalOpen(false)}
-      />
+      <ImportModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
     </div>
   )
 }
@@ -265,10 +259,10 @@ function DataSection() {
 
 function AboutSection() {
   return (
-    <div className="flex flex-col items-center justify-center py-10 border-t border-muted-light">
-      <h3 className="font-serif text-[18px] text-ink mb-1 mt-0">Habitual</h3>
-      <p className="font-mono text-[11px] text-muted mb-3 m-0">Version 1.1.0</p>
-      <p className="font-serif italic text-[13px] text-muted text-center max-w-[200px] m-0">
+    <div className="flex flex-col items-center justify-center border-t border-muted-light py-10">
+      <h3 className="mb-1 mt-0 font-serif text-[18px] text-ink">Habitual</h3>
+      <p className="m-0 mb-3 font-mono text-[11px] text-muted">Version 1.1.0</p>
+      <p className="m-0 max-w-[200px] text-center font-serif text-[13px] italic text-muted">
         A quiet place to build better habits.
       </p>
     </div>
@@ -280,11 +274,14 @@ function AboutSection() {
 export default function SettingsPage() {
   const location = useLocation()
   return (
-    <div key={location.pathname} className="page-enter flex flex-col fixed inset-0 bg-cream overflow-hidden">
-      <div className="sticky top-0 z-10 bg-cream border-b border-muted-light shrink-0">
+    <div
+      key={location.pathname}
+      className="page-enter fixed inset-0 flex flex-col overflow-hidden bg-cream"
+    >
+      <div className="sticky top-0 z-10 shrink-0 border-b border-muted-light bg-cream">
         <SettingsHeader />
       </div>
-      <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col justify-between">
+      <div className="flex flex-1 flex-col justify-between overflow-y-auto px-4 py-6">
         <div className="space-y-8">
           <CategorySection />
           <AppearanceSection />
@@ -294,7 +291,7 @@ export default function SettingsPage() {
           <AboutSection />
         </div>
       </div>
-      <div className="shrink-0 sticky bottom-0 z-10">
+      <div className="sticky bottom-0 z-10 shrink-0">
         <SettingsNav />
       </div>
     </div>

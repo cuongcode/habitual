@@ -1,4 +1,4 @@
-import { addDays, format,startOfWeek, subWeeks } from 'date-fns'
+import { addDays, format, startOfWeek, subWeeks } from 'date-fns'
 
 import { getDayState } from '../../services/scheduleEngine'
 import type { Habit, HabitEntry } from '../../types/index'
@@ -40,7 +40,7 @@ export function HeatmapSection({ habit, entries, colorKey }: HeatmapSectionProps
 
   const getCellStyles = (date: Date) => {
     const state = getDayState(date, habit, entries)
-    
+
     switch (state) {
       case 'target-complete':
         return tokens.heatmapFilled
@@ -65,12 +65,12 @@ export function HeatmapSection({ habit, entries, colorKey }: HeatmapSectionProps
       <div className="overflow-x-auto pb-2 scrollbar-hide">
         <div className="min-w-fit">
           {/* Month labels */}
-          <div className="relative h-4 mb-1">
+          <div className="relative mb-1 h-4">
             {monthLabels.map((m, i) => (
-              <div 
-                key={i} 
-                className="absolute text-[9px] text-muted font-mono uppercase"
-                style={{ left: `${m.index * 12}px`, }}
+              <div
+                key={i}
+                className="absolute font-mono text-[9px] uppercase text-muted"
+                style={{ left: `${m.index * 12}px` }}
               >
                 {m.label}
               </div>
@@ -78,17 +78,17 @@ export function HeatmapSection({ habit, entries, colorKey }: HeatmapSectionProps
           </div>
 
           {/* Grid */}
-          <div 
+          <div
             className="grid grid-flow-col gap-[2px]"
-            style={{ 
-              gridTemplateColumns: 'repeat(52, 10px)', 
-              gridTemplateRows: 'repeat(7, 10px)' 
+            style={{
+              gridTemplateColumns: 'repeat(52, 10px)',
+              gridTemplateRows: 'repeat(7, 10px)',
             }}
           >
             {allDates.map((date, i) => (
               <div
                 key={i}
-                className={`w-[10px] h-[10px] rounded-[1px] ${getCellStyles(date)}`}
+                className={`h-[10px] w-[10px] rounded-[1px] ${getCellStyles(date)}`}
                 title={format(date, 'MMM d, yyyy')}
               />
             ))}

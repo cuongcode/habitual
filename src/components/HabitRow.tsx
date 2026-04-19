@@ -1,6 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { format,startOfDay, subDays } from 'date-fns'
+import { format, startOfDay, subDays } from 'date-fns'
 import { GripVertical } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -37,15 +37,12 @@ function DayCell({
   return (
     <div className="relative flex flex-col items-center">
       <div
-        className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getDayStateStyles(state, colorKey)}`}
+        className={`flex h-7 w-7 items-center justify-center rounded-md transition-colors ${getDayStateStyles(state, colorKey)}`}
       >
-        <span
-         className="font-mono text-2xs leading-none">
-          {dayNum}
-        </span>
+        <span className="font-mono text-2xs leading-none">{dayNum}</span>
       </div>
       {hasNote && (
-        <div className={`absolute -bottom-2 w-[3px] h-[3px] rounded-full ${tokens.dot}`} />
+        <div className={`absolute -bottom-2 h-[3px] w-[3px] rounded-full ${tokens.dot}`} />
       )}
     </div>
   )
@@ -62,14 +59,9 @@ export function HabitRow({ habit }: HabitRowProps) {
   const [noteModalDate, setNoteModalDate] = useState<string | null>(null)
   const habitsDisplayMode = useUIStore((state) => state.habitsDisplayMode)
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: habit.id })
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: habit.id,
+  })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -84,15 +76,15 @@ export function HabitRow({ habit }: HabitRowProps) {
       <div
         ref={setNodeRef}
         style={style}
-        className={`bg-cream border-b border-muted-light px-4 ${habitsDisplayMode === 'heatmap' ? 'py-4' : 'py-3'}`}
+        className={`border-b border-muted-light bg-cream px-4 ${habitsDisplayMode === 'heatmap' ? 'py-4' : 'py-3'}`}
       >
         {habitsDisplayMode === 'heatmap' ? (
-          <div className="flex flex-col gap-2 flex-1 min-w-0">
+          <div className="flex min-w-0 flex-1 flex-col gap-2">
             <div className="flex items-center gap-2">
               <div
                 {...attributes}
                 {...listeners}
-                className="shrink-0 text-muted cursor-grab active:cursor-grabbing p-1 touch-none"
+                className="shrink-0 cursor-grab touch-none p-1 text-muted active:cursor-grabbing"
                 aria-label="Drag to reorder"
               >
                 <GripVertical size={16} />
@@ -108,11 +100,11 @@ export function HabitRow({ habit }: HabitRowProps) {
             <HeatmapCells entries={entries} colorKey={colorKey} />
           </div>
         ) : (
-          <div className="flex items-center gap-2 flex-1 min-w-0">
+          <div className="flex min-w-0 flex-1 items-center gap-2">
             <div
               {...attributes}
               {...listeners}
-              className="shrink-0 text-muted cursor-grab active:cursor-grabbing p-1 touch-none"
+              className="shrink-0 cursor-grab touch-none p-1 text-muted active:cursor-grabbing"
               aria-label="Drag to reorder"
             >
               <GripVertical size={16} />
@@ -125,17 +117,19 @@ export function HabitRow({ habit }: HabitRowProps) {
               {habit.name}
             </button>
 
-            <WeekCells habit={habit} entries={entries} hasNote={hasNote} setNoteModalDate={setNoteModalDate} colorKey={colorKey} />
+            <WeekCells
+              habit={habit}
+              entries={entries}
+              hasNote={hasNote}
+              setNoteModalDate={setNoteModalDate}
+              colorKey={colorKey}
+            />
           </div>
         )}
       </div>
 
       {noteModalDate && (
-        <NoteModal
-          habitId={habit.id}
-          date={noteModalDate}
-          onClose={() => setNoteModalDate(null)}
-        />
+        <NoteModal habitId={habit.id} date={noteModalDate} onClose={() => setNoteModalDate(null)} />
       )}
     </>
   )
@@ -177,7 +171,7 @@ function InteractiveDayCell({
         e.preventDefault()
         setNoteModalDate(dateStr)
       }}
-      className={`[-webkit-tap-highlight-color:transparent] relative flex-shrink-0 focus:outline-none ${popping ? 'cell-pop' : ''}`}
+      className={`relative flex-shrink-0 [-webkit-tap-highlight-color:transparent] focus:outline-none ${popping ? 'cell-pop' : ''}`}
     >
       <DayCell state={state} date={date} hasNote={hasNote} colorKey={colorKey} />
     </button>
@@ -201,11 +195,11 @@ function WeekCells({
   const cellDates = Array.from({ length: 7 }, (_, i) => subDays(today, 6 - i))
 
   return (
-    <div className="flex gap-1 shrink-0 mode-fade">
+    <div className="mode-fade flex shrink-0 gap-1">
       {cellDates.map((date) => {
         const dateStr = format(date, 'yyyy-MM-dd')
         const state = getDayState(date, habit, entries)
-        
+
         return (
           <InteractiveDayCell
             key={dateStr}

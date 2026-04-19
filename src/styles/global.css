@@ -57,6 +57,18 @@
     transition:
       background-color 0.3s ease,
       color 0.3s ease;
+
+    /* Native feel: Disable text selection and callouts */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Allow selection in inputs and textareas */
+  input,
+  textarea {
+    -webkit-user-select: text;
+    user-select: text;
   }
 }
 

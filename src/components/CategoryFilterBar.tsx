@@ -27,7 +27,7 @@ export function CategoryFilterBar() {
             className={`shrink-0 rounded-full border px-3 py-1 font-mono text-xs uppercase tracking-wide transition-colors ${
               activeCategoryId === cat.id
                 ? `text-cream bg-${cat.colorKey} border-${cat.colorKey}`
-                : 'border-ink bg-cream text-ink'
+                : `border-${cat.colorKey} bg-cream text-${cat.colorKey}`
             }`}
           >
             {cat.label}

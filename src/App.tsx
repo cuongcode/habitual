@@ -6,10 +6,12 @@ import { ErrorBoundary, InstallPrompt, SplashScreen, ToastContainer, UpdatePromp
 import HabitCalendarPage from './pages/HabitCalendarPage'
 import HabitsPage from './pages/HabitsPage'
 import HabitStatsPage from './pages/HabitStatsPage'
+import LandingPage from './pages/LandingPage'
 import SettingsPage from './pages/SettingsPage'
 import TrashPage from './pages/TrashPage'
 import { scheduleReminders } from './services/notificationService'
 import { useHabitStore } from './store/habitStore'
+import { isStandalone } from './utils/pwa'
 
 const router = createBrowserRouter([
   {
@@ -37,6 +39,14 @@ const router = createBrowserRouter([
 export default function App() {
   const isReady = useHabitStore((s) => s.isReady)
   const [showSplash, setShowSplash] = useState(true)
+  const [showLanding, setShowLanding] = useState(false)
+
+  useEffect(() => {
+    const hasVisited = localStorage.getItem('habitual_has_visited') === 'true'
+    if (!hasVisited && !isStandalone()) {
+      setShowLanding(true)
+    }
+  }, [])
 
   useEffect(() => {
     console.log('🚀 App mounting, initializing store...')
@@ -58,11 +68,16 @@ export default function App() {
     return () => clearTimeout(timer)
   }, [isReady])
 
+  const handleGetStarted = () => {
+    localStorage.setItem('habitual_has_visited', 'true')
+    setShowLanding(false)
+  }
+
   return (
     <StrictMode>
       <ErrorBoundary>
         {showSplash && <SplashScreen fadeOut={isReady} />}
-        {isReady && (
+        {isReady && !showLanding && (
           <>
             <ToastContainer />
             <InstallPrompt />
@@ -70,6 +85,7 @@ export default function App() {
             <RouterProvider router={router} />
           </>
         )}
+        {isReady && showLanding && <LandingPage onGetStarted={handleGetStarted} />}
       </ErrorBoundary>
     </StrictMode>
   )

@@ -234,3 +234,27 @@ a {
     animation: none;
   }
 }
+
+/* ── Desktop Constraints ────────────────────────────────────────── */
+@media (min-width: 768px) {
+  body {
+    background-color: rgb(var(--color-surface));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #root {
+    width: 100%;
+    max-width: 448px; /* Tailwind max-w-md */
+    height: 100dvh;
+    position: relative;
+    overflow: hidden;
+    background-color: rgb(var(--color-cream));
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-left: 1px solid rgba(var(--color-muted-light), 0.2);
+    border-right: 1px solid rgba(var(--color-muted-light), 0.2);
+    /* Contain fixed positioned children inside this element */
+    transform: translateZ(0);
+  }
+}

@@ -9,20 +9,7 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>
 }
 
-const isIOS = () => {
-  if (typeof window === 'undefined') return false
-  return (
-    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
-  )
-}
-
-const isStandalone = () => {
-  if (typeof window === 'undefined') return false
-  return (
-    (window.navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches
-  )
-}
+import { isIOS, isStandalone } from '@/utils/pwa'
 
 export function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)

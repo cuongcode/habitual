@@ -79,12 +79,13 @@ export async function importData(file: File, mode: ImportMode): Promise<ImportRe
 
     if (mode === 'replace') {
       // Clear all existing data first
-      const tx = db.transaction(['categories', 'habits', 'entries', 'notes'], 'readwrite')
+      const tx = db.transaction(['categories', 'habits', 'entries', 'notes', 'trash'], 'readwrite')
       await Promise.all([
         tx.objectStore('categories').clear(),
         tx.objectStore('habits').clear(),
         tx.objectStore('entries').clear(),
         tx.objectStore('notes').clear(),
+        tx.objectStore('trash').clear(),
       ])
       await tx.done
     }

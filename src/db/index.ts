@@ -1,7 +1,7 @@
 import type { DBSchema, IDBPDatabase } from 'idb'
 import { openDB } from 'idb'
 
-import type { Category, Habit, HabitDayNote, HabitEntry } from '../types/index'
+import type { Category, Habit, HabitDayNote, HabitEntry, TrashItem } from '../types/index'
 
 // ── Schema ──────────────────────────────────────────────────────────
 
@@ -29,6 +29,11 @@ interface HabitualDB extends DBSchema {
     value: HabitDayNote
     indexes: { habitId_date: [string, string] }
   }
+  trash: {
+    key: string
+    value: TrashItem
+    indexes: { deletedAt: string }
+  }
 }
 
 // ── Database singleton ──────────────────────────────────────────────
@@ -37,7 +42,7 @@ let dbPromise: Promise<IDBPDatabase<HabitualDB>> | null = null
 
 export function getDB(): Promise<IDBPDatabase<HabitualDB>> {
   if (!dbPromise) {
-    dbPromise = openDB<HabitualDB>('habitual-db', 2, {
+    dbPromise = openDB<HabitualDB>('habitual-db', 3, {
       upgrade(db) {
         // Categories
         if (!db.objectStoreNames.contains('categories')) {
@@ -66,6 +71,12 @@ export function getDB(): Promise<IDBPDatabase<HabitualDB>> {
           noteStore.createIndex('habitId_date', ['habitId', 'date'], {
             unique: true,
           })
+        }
+
+        // Trash
+        if (!db.objectStoreNames.contains('trash')) {
+          const trashStore = db.createObjectStore('trash', { keyPath: 'id' })
+          trashStore.createIndex('deletedAt', 'deletedAt')
         }
       },
     })
@@ -174,4 +185,50 @@ export async function saveNote(note: HabitDayNote): Promise<void> {
 export async function deleteNote(id: string): Promise<void> {
   const db = await getDB()
   await db.delete('notes', id)
+}
+
+// ── Trash ───────────────────────────────────────────────────────────
+
+export async function saveTrashItem(item: TrashItem): Promise<void> {
+  const db = await getDB()
+  await db.put('trash', item)
+}
+
+export async function getAllTrashItems(): Promise<TrashItem[]> {
+  const db = await getDB()
+  return db.getAll('trash')
+}
+
+export async function getTrashItem(id: string): Promise<TrashItem | undefined> {
+  const db = await getDB()
+  return db.get('trash', id)
+}
+
+export async function deleteTrashItem(id: string): Promise<void> {
+  const db = await getDB()
+  await db.delete('trash', id)
+}
+
+export async function purgeExpiredTrash(maxAgeDays: number): Promise<number> {
+  const db = await getDB()
+  const all = await db.getAll('trash')
+  const cutoff = Date.now() - maxAgeDays * 24 * 60 * 60 * 1000
+  const expired = all.filter((item) => new Date(item.deletedAt).getTime() < cutoff)
+
+  if (expired.length > 0) {
+    const tx = db.transaction('trash', 'readwrite')
+    for (const item of expired) {
+      tx.objectStore('trash').delete(item.id)
+    }
+    await tx.done
+  }
+
+  return expired.length
+}
+
+export async function clearAllTrash(): Promise<void> {
+  const db = await getDB()
+  const tx = db.transaction('trash', 'readwrite')
+  await tx.objectStore('trash').clear()
+  await tx.done
 }

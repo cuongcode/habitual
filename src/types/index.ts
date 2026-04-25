@@ -37,3 +37,11 @@ export interface HabitDayNote {
   date: string // ISO date string 'YYYY-MM-DD'
   text: string // max 280 characters
 }
+
+export interface TrashItem {
+  id: string // same as the original habit ID
+  deletedAt: string // ISO datetime — used to calculate 30-day expiry
+  habit: Habit
+  entries: HabitEntry[]
+  notes: HabitDayNote[]
+}

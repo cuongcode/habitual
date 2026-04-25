@@ -7,6 +7,7 @@ import HabitCalendarPage from './pages/HabitCalendarPage'
 import HabitsPage from './pages/HabitsPage'
 import HabitStatsPage from './pages/HabitStatsPage'
 import SettingsPage from './pages/SettingsPage'
+import TrashPage from './pages/TrashPage'
 import { scheduleReminders } from './services/notificationService'
 import { useHabitStore } from './store/habitStore'
 
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: '/settings',
     element: <SettingsPage />,
+  },
+  {
+    path: '/settings/trash',
+    element: <TrashPage />,
   },
 ])
 

@@ -4,13 +4,15 @@ import { create } from 'zustand'
 import * as db from '../db/index'
 import type { DayState } from '../services/scheduleEngine'
 import { getDayState as computeDayState, isTargetDate } from '../services/scheduleEngine'
-import type { Category, Habit, HabitDayNote, HabitEntry } from '../types/index'
+import type { Category, Habit, HabitDayNote, HabitEntry, TrashItem } from '../types/index'
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
 function noteKey(habitId: string, date: string): string {
   return `${habitId}_${date}`
 }
+
+const TRASH_MAX_AGE_DAYS = 30
 
 // ── Store interface ─────────────────────────────────────────────────
 
@@ -19,6 +21,7 @@ interface HabitStore {
   categories: Category[]
   entries: Record<string, HabitEntry[]>
   notes: Record<string, HabitDayNote>
+  trashedItems: TrashItem[]
   activeCategoryId: string | null
   setActiveCategoryId(id: string | null): void
 
@@ -32,6 +35,10 @@ interface HabitStore {
   updateHabit(id: string, updates: Partial<Habit>): Promise<void>
   deleteHabit(id: string): Promise<void>
   reorderHabits(categoryId: string, orderedIds: string[]): Promise<void>
+
+  restoreHabit(id: string): Promise<void>
+  permanentlyDeleteFromTrash(id: string): Promise<void>
+  emptyTrash(): Promise<void>
 
   toggleEntry(habitId: string, date: string): Promise<void>
 
@@ -50,6 +57,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   categories: [],
   entries: {},
   notes: {},
+  trashedItems: [],
   activeCategoryId: null,
   setActiveCategoryId: (id) => set({ activeCategoryId: id }),
 
@@ -84,17 +92,25 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
         notes[noteKey(note.habitId, note.date)] = note
       }
 
+      // ── Load Trash & Auto-Purge ─────────────────────────────────────
+      const purgedCount = await db.purgeExpiredTrash(TRASH_MAX_AGE_DAYS)
+      if (purgedCount > 0) {
+        console.log(`🗑️ Auto-purged ${purgedCount} expired trash item(s)`)
+      }
+      const trashedItems = await db.getAllTrashItems()
+
       set({
         categories,
         habits,
         entries,
         notes,
+        trashedItems,
       })
       console.log('✅ Habit store initialized')
     } catch (err) {
       console.error('❌ Failed to initialize habit store:', err)
       // Set some state so the app can at least render
-      set({ categories: [], habits: [] })
+      set({ categories: [], habits: [], trashedItems: [] })
     }
   },
 
@@ -200,7 +216,29 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
     const prevHabits = get().habits
     const prevEntries = { ...get().entries }
     const prevNotes = { ...get().notes }
+    const prevTrashed = get().trashedItems
 
+    // Gather habit data for trash
+    const habit = prevHabits.find((h) => h.id === id)
+    if (!habit) return
+
+    const habitEntries = prevEntries[id] ?? []
+    const habitNotes: HabitDayNote[] = []
+    for (const key in prevNotes) {
+      if (prevNotes[key].habitId === id) {
+        habitNotes.push(prevNotes[key])
+      }
+    }
+
+    const trashItem: TrashItem = {
+      id: habit.id,
+      deletedAt: new Date().toISOString(),
+      habit,
+      entries: habitEntries,
+      notes: habitNotes,
+    }
+
+    // Remove from active state
     const newEntries = { ...prevEntries }
     delete newEntries[id]
 
@@ -215,13 +253,16 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       habits: prevHabits.filter((h) => h.id !== id),
       entries: newEntries,
       notes: newNotes,
+      trashedItems: [...prevTrashed, trashItem],
     })
 
     try {
+      // Save to trash first, then remove from active stores
+      await db.saveTrashItem(trashItem)
       await db.deleteHabit(id)
     } catch (err) {
-      console.error('Failed to delete habit from IDB:', err)
-      set({ habits: prevHabits, entries: prevEntries, notes: prevNotes })
+      console.error('Failed to soft-delete habit:', err)
+      set({ habits: prevHabits, entries: prevEntries, notes: prevNotes, trashedItems: prevTrashed })
     }
   },
 
@@ -244,6 +285,79 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       console.error('Failed to reorder habits in IDB:', err)
       set({ habits: prevHabits })
       console.log('--- STORE REVERTED DUE TO ERROR ---')
+    }
+  },
+
+  // ── Trash ───────────────────────────────────────────────────────
+
+  async restoreHabit(id) {
+    const prevTrashed = get().trashedItems
+    const trashItem = prevTrashed.find((t) => t.id === id)
+    if (!trashItem) return
+
+    const prevHabits = get().habits
+    const prevEntries = { ...get().entries }
+    const prevNotes = { ...get().notes }
+
+    // Restore into active state
+    const restoredEntries = { ...prevEntries, [trashItem.habit.id]: trashItem.entries }
+    const restoredNotes = { ...prevNotes }
+    for (const note of trashItem.notes) {
+      restoredNotes[noteKey(note.habitId, note.date)] = note
+    }
+
+    set({
+      habits: [...prevHabits, trashItem.habit],
+      entries: restoredEntries,
+      notes: restoredNotes,
+      trashedItems: prevTrashed.filter((t) => t.id !== id),
+    })
+
+    try {
+      // Re-insert habit, entries, notes into DB
+      await db.saveHabit(trashItem.habit)
+      for (const entry of trashItem.entries) {
+        await db.saveEntry(entry)
+      }
+      for (const note of trashItem.notes) {
+        await db.saveNote(note)
+      }
+      // Remove from trash
+      await db.deleteTrashItem(id)
+    } catch (err) {
+      console.error('Failed to restore habit from trash:', err)
+      set({
+        habits: prevHabits,
+        entries: prevEntries,
+        notes: prevNotes,
+        trashedItems: prevTrashed,
+      })
+    }
+  },
+
+  async permanentlyDeleteFromTrash(id) {
+    const prevTrashed = get().trashedItems
+
+    set({ trashedItems: prevTrashed.filter((t) => t.id !== id) })
+
+    try {
+      await db.deleteTrashItem(id)
+    } catch (err) {
+      console.error('Failed to permanently delete from trash:', err)
+      set({ trashedItems: prevTrashed })
+    }
+  },
+
+  async emptyTrash() {
+    const prevTrashed = get().trashedItems
+
+    set({ trashedItems: [] })
+
+    try {
+      await db.clearAllTrash()
+    } catch (err) {
+      console.error('Failed to empty trash:', err)
+      set({ trashedItems: prevTrashed })
     }
   },
 

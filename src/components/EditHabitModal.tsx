@@ -114,7 +114,7 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
             </button>
           ) : (
             <div className="flex items-center justify-between gap-3">
-              <span className="font-body text-sm text-ink">Are you sure?</span>
+              <span className="font-body text-sm text-ink">Move to Trash?</span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}

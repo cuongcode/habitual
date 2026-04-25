@@ -198,13 +198,30 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
 
   async deleteHabit(id) {
     const prevHabits = get().habits
-    set({ habits: prevHabits.filter((h) => h.id !== id) })
+    const prevEntries = { ...get().entries }
+    const prevNotes = { ...get().notes }
+
+    const newEntries = { ...prevEntries }
+    delete newEntries[id]
+
+    const newNotes = { ...prevNotes }
+    for (const key in newNotes) {
+      if (newNotes[key].habitId === id) {
+        delete newNotes[key]
+      }
+    }
+
+    set({
+      habits: prevHabits.filter((h) => h.id !== id),
+      entries: newEntries,
+      notes: newNotes,
+    })
 
     try {
       await db.deleteHabit(id)
     } catch (err) {
       console.error('Failed to delete habit from IDB:', err)
-      set({ habits: prevHabits })
+      set({ habits: prevHabits, entries: prevEntries, notes: prevNotes })
     }
   },
 

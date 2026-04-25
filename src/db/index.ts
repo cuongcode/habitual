@@ -104,7 +104,21 @@ export async function saveHabit(habit: Habit): Promise<void> {
 
 export async function deleteHabit(id: string): Promise<void> {
   const db = await getDB()
-  await db.delete('habits', id)
+  const entries = await db.getAllFromIndex('entries', 'habitId', id)
+  const notes = await db.getAll('notes')
+  const notesToDelete = notes.filter((n) => n.habitId === id)
+
+  const tx = db.transaction(['habits', 'entries', 'notes'], 'readwrite')
+  tx.objectStore('habits').delete(id)
+  
+  for (const e of entries) {
+    tx.objectStore('entries').delete(e.id)
+  }
+  for (const n of notesToDelete) {
+    tx.objectStore('notes').delete(n.id)
+  }
+  
+  await tx.done
 }
 
 // ── Entries ─────────────────────────────────────────────────────────

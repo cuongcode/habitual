@@ -100,6 +100,27 @@ export async function importData(file: File, mode: ImportMode): Promise<ImportRe
     ])
     await writeTx.done
 
+    // Clean up ghost entries and notes
+    const allHabits = await db.getAll('habits')
+    const validHabitIds = new Set(allHabits.map((h) => h.id))
+
+    const allEntries = await db.getAll('entries')
+    const allNotes = await db.getAll('notes')
+
+    const entriesToDelete = allEntries.filter((e) => !validHabitIds.has(e.habitId))
+    const notesToDelete = allNotes.filter((n) => !validHabitIds.has(n.habitId))
+
+    if (entriesToDelete.length > 0 || notesToDelete.length > 0) {
+      const deleteTx = db.transaction(['entries', 'notes'], 'readwrite')
+      for (const e of entriesToDelete) {
+        deleteTx.objectStore('entries').delete(e.id)
+      }
+      for (const n of notesToDelete) {
+        deleteTx.objectStore('notes').delete(n.id)
+      }
+      await deleteTx.done
+    }
+
     return {
       success: true,
       imported: {

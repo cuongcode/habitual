@@ -10,6 +10,7 @@ import { useUIStore } from '../store/uiStore'
 export function AddHabitDrawer() {
   const [isVisible, setIsVisible] = useState(false)
   const closeDrawer = useUIStore((s) => s.closeAddHabitDrawer)
+  const activeCategoryId = useHabitStore((s) => s.activeCategoryId)
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 10)
@@ -77,7 +78,12 @@ export function AddHabitDrawer() {
 
         {/* Form */}
         <div className="pb-6">
-          <HabitForm submitLabel="Create" onSubmit={handleCreate} onCancel={handleClose} />
+          <HabitForm
+            submitLabel="Create"
+            onSubmit={handleCreate}
+            onCancel={handleClose}
+            initialValues={{ categoryId: activeCategoryId || undefined }}
+          />
         </div>
       </div>
     </div>

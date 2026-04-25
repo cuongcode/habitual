@@ -12,43 +12,6 @@ function noteKey(habitId: string, date: string): string {
   return `${habitId}_${date}`
 }
 
-// ── Seed data ───────────────────────────────────────────────────────
-
-const SEED_CATEGORIES: Category[] = [
-  { id: 'cat-1', label: 'Health', colorKey: 'rust' },
-  { id: 'cat-2', label: 'Focus', colorKey: 'brown' },
-]
-
-function makeSeedHabits(): Habit[] {
-  const now = new Date().toISOString()
-  return [
-    {
-      id: 'h1',
-      name: 'Morning walk',
-      categoryId: 'cat-1',
-      schedule: { frequency: 'daily' },
-      order: 0,
-      createdAt: now,
-    },
-    {
-      id: 'h2',
-      name: 'Drink water',
-      categoryId: 'cat-1',
-      schedule: { frequency: 'daily' },
-      order: 1,
-      createdAt: now,
-    },
-    {
-      id: 'f1',
-      name: 'Deep work session',
-      categoryId: 'cat-2',
-      schedule: { frequency: 'weekly', weekdays: [4] },
-      order: 0,
-      createdAt: now,
-    },
-  ]
-}
-
 // ── Store interface ─────────────────────────────────────────────────
 
 interface HabitStore {
@@ -95,23 +58,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   async init() {
     try {
       const categories = await db.getAllCategories()
-      let habits = await db.getAllHabits()
-
-      // ── Stale Seed Cleanup ──────────────────────────────────────────
-      const seedNames = ['Morning walk', 'Drink water', 'Deep work session']
-      const stableIds = ['h1', 'h2', 'f1']
-
-      let needsRefetch = false
-      for (const h of habits) {
-        if (seedNames.includes(h.name) && !stableIds.includes(h.id)) {
-          await db.deleteHabit(h.id)
-          needsRefetch = true
-        }
-      }
-
-      if (needsRefetch) {
-        habits = await db.getAllHabits()
-      }
+      const habits = await db.getAllHabits()
 
       // ── Data Migration: weekday → weekdays[] ────────────────────────
       for (const h of habits) {
@@ -125,33 +72,9 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
         }
       }
 
-      // ── Seeding ─────────────────────────────────────────────────────
-      let finalCategories = [...categories]
-      const finalHabits = [...habits]
-
-      const hasSeeded = localStorage.getItem('habitual_has_seeded')
-      if (!hasSeeded && categories.length === 0) {
-        finalCategories = SEED_CATEGORIES
-        for (const cat of finalCategories) {
-          await db.saveCategory(cat)
-        }
-        localStorage.setItem('habitual_has_seeded', 'true')
-      }
-
-      // Only seed habits in development environment
-      if (import.meta.env.DEV && !habits.some((h) => h.id === 'h1')) {
-        const seedHabits = makeSeedHabits()
-        for (const habit of seedHabits) {
-          if (!habits.some((prev) => prev.id === habit.id)) {
-            await db.saveHabit(habit)
-            finalHabits.push(habit)
-          }
-        }
-      }
-
       // ── Load Related Data ───────────────────────────────────────────
       const entries: Record<string, HabitEntry[]> = {}
-      for (const habit of finalHabits) {
+      for (const habit of habits) {
         entries[habit.id] = await db.getEntriesForHabit(habit.id)
       }
 
@@ -162,8 +85,8 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       }
 
       set({
-        categories: finalCategories,
-        habits: finalHabits,
+        categories,
+        habits,
         entries,
         notes,
       })

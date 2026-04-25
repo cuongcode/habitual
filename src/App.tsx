@@ -1,7 +1,7 @@
-import { StrictMode, useEffect } from 'react'
+import { StrictMode, useEffect, useState } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import { ErrorBoundary, InstallPrompt, ToastContainer, UpdatePrompt } from '@/components'
+import { ErrorBoundary, InstallPrompt, SplashScreen, ToastContainer, UpdatePrompt } from '@/components'
 
 import HabitCalendarPage from './pages/HabitCalendarPage'
 import HabitsPage from './pages/HabitsPage'
@@ -35,6 +35,9 @@ const router = createBrowserRouter([
 ])
 
 export default function App() {
+  const isReady = useHabitStore((s) => s.isReady)
+  const [showSplash, setShowSplash] = useState(true)
+
   useEffect(() => {
     console.log('🚀 App mounting, initializing store...')
     useHabitStore
@@ -48,13 +51,25 @@ export default function App() {
       .catch((err) => console.error('❌ Store init failed:', err))
   }, [])
 
+  // Remove splash from DOM after fade-out animation completes
+  useEffect(() => {
+    if (!isReady) return
+    const timer = setTimeout(() => setShowSplash(false), 300)
+    return () => clearTimeout(timer)
+  }, [isReady])
+
   return (
     <StrictMode>
       <ErrorBoundary>
-        <ToastContainer />
-        <InstallPrompt />
-        <UpdatePrompt />
-        <RouterProvider router={router} />
+        {showSplash && <SplashScreen fadeOut={isReady} />}
+        {isReady && (
+          <>
+            <ToastContainer />
+            <InstallPrompt />
+            <UpdatePrompt />
+            <RouterProvider router={router} />
+          </>
+        )}
       </ErrorBoundary>
     </StrictMode>
   )

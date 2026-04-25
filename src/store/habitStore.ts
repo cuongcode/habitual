@@ -14,9 +14,19 @@ function noteKey(habitId: string, date: string): string {
 
 const TRASH_MAX_AGE_DAYS = 30
 
+/** Persist a lightweight snapshot for instant cold-start rendering. */
+function writeSnapshot(habits: Habit[], categories: Category[]) {
+  try {
+    localStorage.setItem('habitSnapshot', JSON.stringify({ habits, categories }))
+  } catch {
+    /* quota errors are non-critical */
+  }
+}
+
 // ── Store interface ─────────────────────────────────────────────────
 
 interface HabitStore {
+  isReady: boolean
   habits: Habit[]
   categories: Category[]
   entries: Record<string, HabitEntry[]>
@@ -53,6 +63,7 @@ interface HabitStore {
 // ── Store implementation ────────────────────────────────────────────
 
 export const useHabitStore = create<HabitStore>((set, get) => ({
+  isReady: false,
   habits: [],
   categories: [],
   entries: {},
@@ -64,6 +75,18 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   // ── Init ────────────────────────────────────────────────────────
 
   async init() {
+    // ── Phase 2: Instant render from localStorage snapshot ──────────
+    try {
+      const raw = localStorage.getItem('habitSnapshot')
+      if (raw) {
+        const snap = JSON.parse(raw) as { habits: Habit[]; categories: Category[] }
+        set({ habits: snap.habits, categories: snap.categories, isReady: true })
+        console.log('⚡ Rendered from snapshot')
+      }
+    } catch {
+      /* corrupted snapshot — ignore, full load will fix it */
+    }
+
     try {
       const categories = await db.getAllCategories()
       const habits = await db.getAllHabits()
@@ -105,12 +128,16 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
         entries,
         notes,
         trashedItems,
+        isReady: true,
       })
+
+      // Persist snapshot for next cold start
+      writeSnapshot(habits, categories)
       console.log('✅ Habit store initialized')
     } catch (err) {
       console.error('❌ Failed to initialize habit store:', err)
       // Set some state so the app can at least render
-      set({ categories: [], habits: [], trashedItems: [] })
+      set({ categories: [], habits: [], trashedItems: [], isReady: true })
     }
   },
 
@@ -121,10 +148,12 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       'id' in data ? (data as Category) : { ...data, id: crypto.randomUUID() }
     const prev = get().categories
 
-    set({ categories: [...prev, category] })
+    const next = [...prev, category]
+    set({ categories: next })
 
     try {
       await db.saveCategory(category)
+      writeSnapshot(get().habits, next)
     } catch (err) {
       console.error('Failed to save category to IDB:', err)
       set({ categories: prev })
@@ -144,6 +173,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
 
     try {
       await db.saveCategory(updated)
+      writeSnapshot(get().habits, newCategories)
     } catch (err) {
       console.error('Failed to update category in IDB:', err)
       set({ categories: prevCategories })
@@ -158,8 +188,9 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       h.categoryId === id ? { ...h, categoryId: 'none' } : h,
     )
 
+    const newCategories = prevCategories.filter((c) => c.id !== id)
     set({
-      categories: prevCategories.filter((c) => c.id !== id),
+      categories: newCategories,
       habits: updatedHabits,
     })
 
@@ -167,6 +198,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       await db.deleteCategory(id)
       const habitsToUpdate = updatedHabits.filter((_, i) => prevHabits[i].categoryId === id)
       await Promise.all(habitsToUpdate.map((h) => db.saveHabit(h)))
+      writeSnapshot(updatedHabits, newCategories)
     } catch (err) {
       console.error('Failed to delete category from IDB:', err)
       set({ categories: prevCategories, habits: prevHabits })
@@ -183,10 +215,12 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
     }
     const prev = get().habits
 
-    set({ habits: [...prev, habit] })
+    const next = [...prev, habit]
+    set({ habits: next })
 
     try {
       await db.saveHabit(habit)
+      writeSnapshot(next, get().categories)
     } catch (err) {
       console.error('Failed to save habit to IDB:', err)
       set({ habits: prev })
@@ -206,6 +240,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
 
     try {
       await db.saveHabit(updated)
+      writeSnapshot(newHabits, get().categories)
     } catch (err) {
       console.error('Failed to update habit in IDB:', err)
       set({ habits: prevHabits })
@@ -260,6 +295,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       // Save to trash first, then remove from active stores
       await db.saveTrashItem(trashItem)
       await db.deleteHabit(id)
+      writeSnapshot(get().habits, get().categories)
     } catch (err) {
       console.error('Failed to soft-delete habit:', err)
       set({ habits: prevHabits, entries: prevEntries, notes: prevNotes, trashedItems: prevTrashed })
@@ -324,6 +360,7 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       }
       // Remove from trash
       await db.deleteTrashItem(id)
+      writeSnapshot(get().habits, get().categories)
     } catch (err) {
       console.error('Failed to restore habit from trash:', err)
       set({

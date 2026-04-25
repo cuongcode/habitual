@@ -22,6 +22,8 @@ interface UIStore {
   setHeatmapYear(year: number): void
   theme: Theme
   setTheme(theme: Theme): void
+  openSwipeRowId: string | null
+  setOpenSwipeRowId(id: string | null): void
 }
 
 // ── Theme helpers ──────────────────────────────────────────────────
@@ -100,5 +102,7 @@ export const useUIStore = create<UIStore>((set, get) => {
       applyThemeToDOM(theme)
       set({ theme })
     },
+    openSwipeRowId: null,
+    setOpenSwipeRowId: (id) => set({ openSwipeRowId: id }),
   }
 })

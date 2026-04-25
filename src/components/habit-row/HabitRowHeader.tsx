@@ -10,17 +10,33 @@ interface HabitRowHeaderProps {
   attributes: DraggableAttributes
   listeners: DraggableSyntheticListeners
   tokens: ThemeColorTokens
+  isOpen: boolean
+  isDragActive: React.MutableRefObject<boolean>
 }
 
-export function HabitRowHeader({ habit, attributes, listeners, tokens }: HabitRowHeaderProps) {
+export function HabitRowHeader({
+  habit,
+  attributes,
+  listeners,
+  tokens,
+  isOpen,
+  isDragActive,
+}: HabitRowHeaderProps) {
   const navigate = useNavigate()
 
   return (
     <>
       <div
         {...attributes}
-        {...listeners}
-        className="shrink-0 cursor-grab touch-none p-1 text-muted active:cursor-grabbing"
+        {...(isOpen ? {} : listeners)}
+        onTouchStart={() => {
+          isDragActive.current = true
+        }}
+        onTouchEnd={() => {
+          isDragActive.current = false
+        }}
+        className="shrink-0 cursor-grab p-1 text-muted active:cursor-grabbing"
+        style={{ touchAction: isOpen ? 'auto' : 'none' }}
         aria-label="Drag to reorder"
       >
         <GripVertical size={16} />

@@ -10,10 +10,11 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { GripVertical, Notebook } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { EmptyState, HabitRow } from '@/components'
 import { useHabitStore } from '@/store/habitStore'
+import { useUIStore } from '@/store/uiStore'
 import type { Habit } from '@/types'
 
 export function HabitList() {
@@ -21,6 +22,23 @@ export function HabitList() {
   const categories = useHabitStore((s) => s.categories)
   const activeCategoryId = useHabitStore((s) => s.activeCategoryId)
   const reorderHabits = useHabitStore((s) => s.reorderHabits)
+  const openSwipeRowId = useUIStore((state) => state.openSwipeRowId)
+  const setOpenSwipeRowId = useUIStore((state) => state.setOpenSwipeRowId)
+
+  // Close any open swipe row when tapping outside of action buttons
+  useEffect(() => {
+    if (!openSwipeRowId) return
+
+    function handleOutsideTap(e: Event) {
+      if ((e.target as HTMLElement).closest('[data-swipe-action]')) return
+      setOpenSwipeRowId(null)
+    }
+
+    document.addEventListener('click', handleOutsideTap)
+    return () => {
+      document.removeEventListener('click', handleOutsideTap)
+    }
+  }, [openSwipeRowId, setOpenSwipeRowId])
 
   const [activeId, setActiveId] = useState<string | null>(null)
 
@@ -124,7 +142,12 @@ export function HabitList() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex-1 overflow-y-auto">
+      <div
+        className="flex-1 overflow-y-auto"
+        onScroll={() => {
+          if (openSwipeRowId) setOpenSwipeRowId(null)
+        }}
+      >
         {groups.map((group) => (
           <div key={group.category.id} className="mb-0 last:mb-0">
             {/* Category Header (only show in 'All' view) */}

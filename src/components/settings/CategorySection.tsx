@@ -25,7 +25,7 @@ export function CategorySection() {
   return (
     <div className="flex flex-col">
       {/* Section header */}
-      <div className="mb-3 flex items-center justify-between px-2">
+      <div className="mb-3 flex items-center justify-between">
         <SectionLabel>Categories</SectionLabel>
         <button
           onClick={handleAddClick}

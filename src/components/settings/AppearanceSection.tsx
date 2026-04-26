@@ -15,7 +15,9 @@ export function AppearanceSection() {
 
   return (
     <div className="flex flex-col">
-      <SectionLabel>Appearance</SectionLabel>
+      <div className="mb-3">
+        <SectionLabel>Appearance</SectionLabel>
+      </div>
       <div className="overflow-hidden rounded-xl border border-muted-light bg-cream-dark p-4">
         <div className="flex gap-1 rounded-xl border border-muted-light bg-cream p-1">
           {options.map((opt) => (

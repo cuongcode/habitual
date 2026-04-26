@@ -14,7 +14,9 @@ export function DataSection() {
 
   return (
     <div className="flex flex-col">
-      <SectionLabel>Data</SectionLabel>
+      <div className="mb-3">
+        <SectionLabel>Data</SectionLabel>
+      </div>
       <div className="overflow-hidden rounded-xl border border-muted-light bg-cream-dark">
         {/* Export row */}
         <div className="flex items-center justify-between gap-3 p-4">

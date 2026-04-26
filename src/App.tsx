@@ -39,6 +39,7 @@ const router = createBrowserRouter([
 export default function App() {
   const isReady = useHabitStore((s) => s.isReady)
   const [showSplash, setShowSplash] = useState(true)
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false)
   const [showLanding, setShowLanding] = useState(false)
 
   useEffect(() => {
@@ -50,6 +51,10 @@ export default function App() {
 
   useEffect(() => {
     console.log('🚀 App mounting, initializing store...')
+    
+    // Set a minimum time for the splash screen to show
+    const timer = setTimeout(() => setMinTimeElapsed(true), 1000)
+
     useHabitStore
       .getState()
       .init()
@@ -59,14 +64,18 @@ export default function App() {
         scheduleReminders(useHabitStore.getState().habits)
       })
       .catch((err) => console.error('❌ Store init failed:', err))
+
+    return () => clearTimeout(timer)
   }, [])
 
-  // Remove splash from DOM after fade-out animation completes
+  const shouldFade = isReady && minTimeElapsed
+
+  // Remove splash from DOM after fade-out animation completes (0.2s)
   useEffect(() => {
-    if (!isReady) return
-    const timer = setTimeout(() => setShowSplash(false), 300)
+    if (!shouldFade) return
+    const timer = setTimeout(() => setShowSplash(false), 200)
     return () => clearTimeout(timer)
-  }, [isReady])
+  }, [shouldFade])
 
   const handleGetStarted = () => {
     localStorage.setItem('habitual_has_visited', 'true')
@@ -76,7 +85,7 @@ export default function App() {
   return (
     <StrictMode>
       <ErrorBoundary>
-        {showSplash && <SplashScreen fadeOut={isReady} />}
+        {showSplash && <SplashScreen fadeOut={shouldFade} />}
         {isReady && !showLanding && (
           <>
             <ToastContainer />

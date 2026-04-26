@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import { HabitualLogo } from '../components/HabitualLogo'
 
 interface LandingPageProps {
   onGetStarted: () => void
@@ -10,20 +11,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
       <div className="flex flex-1 flex-col justify-center max-w-sm mx-auto w-full">
         {/* Decorative elements */}
         <div className="mb-8 flex justify-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-[1rem] bg-rust text-cream shadow-xl shadow-rust/20">
-            <svg
-              width="40"
-              height="40"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </div>
+          <HabitualLogo size={80} />
         </div>
 
         <div className="space-y-6 text-center">

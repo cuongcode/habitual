@@ -53,7 +53,7 @@ export default function App() {
     console.log('🚀 App mounting, initializing store...')
     
     // Set a minimum time for the splash screen to show
-    const timer = setTimeout(() => setMinTimeElapsed(true), 1000)
+    const timer = setTimeout(() => setMinTimeElapsed(true), 1500)
 
     useHabitStore
       .getState()

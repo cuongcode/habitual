@@ -11,7 +11,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
       <div className="flex flex-1 flex-col justify-center max-w-sm mx-auto w-full">
         {/* Decorative elements */}
         <div className="mb-8 flex justify-center">
-          <HabitualLogo size={80} />
+          <HabitualLogo size={80} intervalMs={4000}/>
         </div>
 
         <div className="space-y-6 text-center">

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 
 const GRID_SIZE = 16       // 4×4
 const FILLED_COUNT = 3     // always exactly 3 filled
-const INTERVAL_MS = 5000   // swap every 1 second
 
 function pickRandom3(): Set<number> {
   const indices = Array.from({ length: GRID_SIZE }, (_, i) => i)
@@ -14,10 +13,11 @@ function pickRandom3(): Set<number> {
 }
 
 interface HabitualLogoProps {
-  size?: number   // overall size in px, default 80
+  size?: number       // overall size in px, default 80
+  intervalMs?: number // swap frequency in ms, default 1000
 }
 
-export function HabitualLogo({ size = 80 }: HabitualLogoProps) {
+export function HabitualLogo({ size = 80, intervalMs = 1000 }: HabitualLogoProps) {
   const [filledIndices, setFilledIndices] = useState<Set<number>>(
     () => pickRandom3()
   )
@@ -40,14 +40,14 @@ export function HabitualLogo({ size = 80 }: HabitualLogoProps) {
         }
         return next
       })
-    }, INTERVAL_MS)
+    }, intervalMs)
 
     return () => {
       if (intervalRef.current !== undefined) {
         window.clearInterval(intervalRef.current)
       }
     }
-  }, [prefersReducedMotion])
+  }, [prefersReducedMotion, intervalMs])
 
   const cellSize = (size - 3 * 4) / 4   // 4 cells, 3 gaps of 4px
   const gap = 4

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import type { HabitFormValues } from '@/components'
 import { HabitForm } from '@/components'
@@ -15,8 +14,8 @@ interface EditHabitModalProps {
 
 export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
   const [isVisible, setIsVisible] = useState(false)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const navigate = useNavigate()
+  // const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  // const navigate = useNavigate()
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 10)
@@ -56,10 +55,10 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
     handleClose()
   }
 
-  async function handleDelete() {
-    await useHabitStore.getState().deleteHabit(habit.id)
-    navigate('/')
-  }
+  // async function handleDelete() {
+  //   await useHabitStore.getState().deleteHabit(habit.id)
+  //   navigate('/')
+  // }
 
   const { dragY, handlers } = useSwipeToDismiss(handleClose)
 

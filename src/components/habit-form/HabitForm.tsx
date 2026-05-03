@@ -34,7 +34,7 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
       </div>
 
       {/* Tab Content */}
-      <div className="min-h-[320px] px-4 py-5">
+      <div className="min-h-[360px] px-4 py-5">
         {state.activeTab === 'Basics' && (
           <BasicsTab
             name={state.name}

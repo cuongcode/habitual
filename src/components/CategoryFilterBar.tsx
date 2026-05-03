@@ -33,6 +33,18 @@ export function CategoryFilterBar() {
             {cat.label}
           </button>
         ))}
+
+        {/* "None" pill — always last */}
+        <button
+          onClick={() => setActiveCategoryId('none')}
+          className={`shrink-0 rounded-full border px-3 py-1 font-mono text-xs uppercase tracking-wide transition-colors ${
+            activeCategoryId === 'none'
+              ? 'border-muted bg-muted text-cream'
+              : 'border-muted bg-cream text-muted'
+          }`}
+        >
+          None
+        </button>
       </div>
     </div>
   )

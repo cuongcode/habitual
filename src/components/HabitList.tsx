@@ -54,6 +54,15 @@ export function HabitList() {
   // Group habits by category
   const groups = useMemo(() => {
     if (activeCategoryId) {
+      if (activeCategoryId === 'none') {
+        const noneHabits = habits
+          .filter((h) => !h.categoryId || h.categoryId === 'none')
+          .sort((a, b) => a.order - b.order)
+        return noneHabits.length > 0
+          ? [{ category: { id: 'none', label: 'None', colorKey: 'muted' as any }, habits: noneHabits }]
+          : []
+      }
+
       const filtered = habits
         .filter((h) => h.categoryId === activeCategoryId)
         .sort((a, b) => a.order - b.order)
@@ -75,7 +84,7 @@ export function HabitList() {
 
     if (noneHabits.length > 0) {
       allGroups.push({
-        category: { id: 'none', label: 'None', colorKey: 'muted' },
+        category: { id: 'none', label: 'None', colorKey: 'muted' as any },
         habits: noneHabits,
       })
     }

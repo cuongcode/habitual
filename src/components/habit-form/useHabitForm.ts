@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { startOfWeek } from 'date-fns'
 
 import { useHabitStore } from '@/store/habitStore'
 import type { Schedule } from '@/types'
@@ -63,6 +64,16 @@ export function useHabitForm({ initialValues, onSubmit }: UseHabitFormProps) {
         errs.schedule = 'Interval must be at least 2 days'
       }
       if (!s.anchorDate) errs.schedule = 'Pick a start date'
+    } else if (s.frequency === 'every-x-weeks') {
+      if (!s.intervalWeeks || s.intervalWeeks < 2) {
+        errs.schedule = 'Interval must be at least 2 weeks'
+      }
+      if (!s.weekdays?.length) errs.schedule = 'Select at least one day'
+    } else if (s.frequency === 'every-x-months') {
+      if (!s.intervalMonths || s.intervalMonths < 2) {
+        errs.schedule = 'Interval must be at least 2 months'
+      }
+      if (!s.dayOfMonth) errs.schedule = 'Pick a day of the month'
     }
     return errs
   }
@@ -108,6 +119,27 @@ export function useHabitForm({ initialValues, onSubmit }: UseHabitFormProps) {
       case 'custom':
         setSchedule({ frequency: 'custom', intervalDays: 14, anchorDate: todayISO() })
         break
+      case 'every-x-weeks': {
+        const jsDay = now.getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6
+        const monday = startOfWeek(now, { weekStartsOn: 1 })
+        setSchedule({
+          frequency: 'every-x-weeks',
+          intervalWeeks: 2,
+          weekdays: [jsDay],
+          anchorDate: monday.toISOString().split('T')[0],
+        })
+        break
+      }
+      case 'every-x-months': {
+        const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+        setSchedule({
+          frequency: 'every-x-months',
+          intervalMonths: 2,
+          dayOfMonth: now.getDate(),
+          anchorDate: firstOfMonth.toISOString().split('T')[0],
+        })
+        break
+      }
     }
   }
 

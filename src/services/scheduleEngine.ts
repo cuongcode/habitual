@@ -1,11 +1,13 @@
 import {
   addDays,
   differenceInCalendarDays,
+  differenceInWeeks,
   getDate,
   getDay,
   getMonth,
   parseISO,
   startOfDay,
+  startOfWeek,
   subDays,
 } from 'date-fns'
 
@@ -48,6 +50,29 @@ export function isTargetDate(date: Date, schedule: Schedule, _habit: Habit): boo
       const diff = differenceInCalendarDays(d, anchor)
       return diff >= 0 && diff % schedule.intervalDays === 0
     }
+
+    case 'every-x-weeks': {
+      const dayOfWeek = getDay(d)
+      if (!schedule.weekdays.includes(dayOfWeek)) return false
+
+      const anchor = startOfWeek(parseISO(schedule.anchorDate), { weekStartsOn: 1 })
+      const thisMonday = startOfWeek(d, { weekStartsOn: 1 })
+      const weeksDiff = differenceInWeeks(thisMonday, anchor)
+      return Math.abs(weeksDiff) % schedule.intervalWeeks === 0
+    }
+
+    case 'every-x-months': {
+      if (getDate(d) !== schedule.dayOfMonth) return false
+
+      const anchor = parseISO(schedule.anchorDate)
+      const anchorYear = anchor.getFullYear()
+      const anchorMonth = anchor.getMonth()
+      const dateYear = d.getFullYear()
+      const dateMonth = d.getMonth()
+
+      const totalMonthsDiff = (dateYear - anchorYear) * 12 + (dateMonth - anchorMonth)
+      return Math.abs(totalMonthsDiff) % schedule.intervalMonths === 0
+    }
   }
 }
 
@@ -55,6 +80,26 @@ export function isTargetDate(date: Date, schedule: Schedule, _habit: Habit): boo
  * Returns the next target date on or after `fromDate`.
  */
 export function getNextTargetDate(fromDate: Date, schedule: Schedule, habit: Habit): Date {
+  if (schedule.frequency === 'every-x-weeks') {
+    let candidate = startOfDay(fromDate)
+    const maxDays = schedule.intervalWeeks * 7 + 7
+    for (let i = 0; i < maxDays; i++) {
+      if (isTargetDate(candidate, schedule, habit)) return candidate
+      candidate = addDays(candidate, 1)
+    }
+    return candidate
+  }
+
+  if (schedule.frequency === 'every-x-months') {
+    let candidate = startOfDay(fromDate)
+    const maxMonths = schedule.intervalMonths + 1
+    for (let i = 0; i < maxMonths * 31; i++) {
+      if (isTargetDate(candidate, schedule, habit)) return candidate
+      candidate = addDays(candidate, 1)
+    }
+    return candidate
+  }
+
   let d = startOfDay(fromDate)
   // Safety limit: scan up to 400 days
   for (let i = 0; i < 400; i++) {
@@ -68,6 +113,26 @@ export function getNextTargetDate(fromDate: Date, schedule: Schedule, habit: Hab
  * Returns the most recent target date on or before `fromDate`.
  */
 export function getPrevTargetDate(fromDate: Date, schedule: Schedule, habit: Habit): Date {
+  if (schedule.frequency === 'every-x-weeks') {
+    let candidate = startOfDay(fromDate)
+    const maxDays = schedule.intervalWeeks * 7 + 7
+    for (let i = 0; i < maxDays; i++) {
+      if (isTargetDate(candidate, schedule, habit)) return candidate
+      candidate = subDays(candidate, 1)
+    }
+    return candidate
+  }
+
+  if (schedule.frequency === 'every-x-months') {
+    let candidate = startOfDay(fromDate)
+    const maxMonths = schedule.intervalMonths + 1
+    for (let i = 0; i < maxMonths * 31; i++) {
+      if (isTargetDate(candidate, schedule, habit)) return candidate
+      candidate = subDays(candidate, 1)
+    }
+    return candidate
+  }
+
   let d = startOfDay(fromDate)
   // Safety limit: scan up to 400 days
   for (let i = 0; i < 400; i++) {

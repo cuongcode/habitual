@@ -148,6 +148,72 @@ describe('isTargetDate', () => {
       expect(isTargetDate(new Date('2026-03-19'), schedule, habit)).toBe(false)
     })
   })
+
+  describe('every-x-weeks', () => {
+    // every 2 weeks on Monday and Thursday
+    // anchorDate: '2026-03-16' (a Monday)
+    const schedule: Schedule = {
+      frequency: 'every-x-weeks',
+      intervalWeeks: 2,
+      weekdays: [1, 4],
+      anchorDate: '2026-03-16',
+    }
+
+    it('returns true for target days in cycle 1', () => {
+      expect(isTargetDate(new Date('2026-03-16'), schedule, habit)).toBe(true) // Mon
+      expect(isTargetDate(new Date('2026-03-19'), schedule, habit)).toBe(true) // Thu
+    })
+
+    it('returns false for target days in non-target week', () => {
+      expect(isTargetDate(new Date('2026-03-23'), schedule, habit)).toBe(false) // Mon
+      expect(isTargetDate(new Date('2026-03-26'), schedule, habit)).toBe(false) // Thu
+    })
+
+    it('returns true for target days in cycle 2', () => {
+      expect(isTargetDate(new Date('2026-03-30'), schedule, habit)).toBe(true) // Mon
+      expect(isTargetDate(new Date('2026-04-02'), schedule, habit)).toBe(true) // Thu
+    })
+
+    it('returns true before anchor (extrapolates into past)', () => {
+      // 2 weeks before anchor (Cycle -1)
+      expect(isTargetDate(new Date('2026-03-02'), schedule, habit)).toBe(true) // Mon
+      // 1 week before anchor (Cycle -0.5, non-target week)
+      expect(isTargetDate(new Date('2026-03-09'), schedule, habit)).toBe(false)
+    })
+  })
+
+  describe('every-x-months', () => {
+    // every 3 months on the 15th
+    // anchorDate: '2026-01-01'
+    const schedule: Schedule = {
+      frequency: 'every-x-months',
+      intervalMonths: 3,
+      dayOfMonth: 15,
+      anchorDate: '2026-01-01',
+    }
+
+    it('returns true in cycle 1, 2, 3', () => {
+      expect(isTargetDate(new Date('2026-01-15'), schedule, habit)).toBe(true) // Jan
+      expect(isTargetDate(new Date('2026-04-15'), schedule, habit)).toBe(true) // Apr
+      expect(isTargetDate(new Date('2026-07-15'), schedule, habit)).toBe(true) // Jul
+    })
+
+    it('returns false in non-target months', () => {
+      expect(isTargetDate(new Date('2026-02-15'), schedule, habit)).toBe(false) // Feb
+      expect(isTargetDate(new Date('2026-03-15'), schedule, habit)).toBe(false) // Mar
+    })
+
+    it('returns false for wrong day', () => {
+      expect(isTargetDate(new Date('2026-01-14'), schedule, habit)).toBe(false)
+    })
+
+    it('returns true before anchor (extrapolates into past)', () => {
+      // 3 months before anchor (Cycle -1) -> Oct 2025
+      expect(isTargetDate(new Date('2025-10-15'), schedule, habit)).toBe(true)
+      // 2 months before anchor (Cycle -0.66) -> Nov 2025
+      expect(isTargetDate(new Date('2025-11-15'), schedule, habit)).toBe(false)
+    })
+  })
 })
 
 // ── getDayState ──────────────────────────────────────────────────────

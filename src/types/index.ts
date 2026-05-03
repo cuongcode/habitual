@@ -1,4 +1,4 @@
-export type Frequency = 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom'
+export type Frequency = 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom' | 'every-x-weeks' | 'every-x-months'
 
 export type Schedule =
   | { frequency: 'daily' }
@@ -6,6 +6,18 @@ export type Schedule =
   | { frequency: 'monthly'; dayOfMonth: number }
   | { frequency: 'yearly'; month: number; dayOfMonth: number }
   | { frequency: 'custom'; intervalDays: number; anchorDate: string }
+  | {
+      frequency: 'every-x-weeks'
+      intervalWeeks: number
+      weekdays: number[]
+      anchorDate: string
+    }
+  | {
+      frequency: 'every-x-months'
+      intervalMonths: number
+      dayOfMonth: number
+      anchorDate: string
+    }
 
 export interface Category {
   id: string

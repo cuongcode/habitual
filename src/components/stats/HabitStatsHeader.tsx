@@ -1,17 +1,14 @@
 import { format, setDay } from 'date-fns'
 
 import type { Category, Habit } from '../../types/index'
+import { getOrdinalSuffix } from '../../utils/format'
 
 interface HabitStatsHeaderProps {
   habit: Habit
   category?: Category
 }
 
-const getOrdinal = (n: number) => {
-  const s = ['th', 'st', 'nd', 'rd']
-  const v = n % 100
-  return n + (s[(v - 20) % 10] || s[v] || s[0])
-}
+
 
 const formatSchedule = (habit: Habit) => {
   const { schedule } = habit
@@ -26,13 +23,25 @@ const formatSchedule = (habit: Habit) => {
       return `Every ${rest.join(', ')} & ${last}`
     }
     case 'monthly':
-      return `Every month on the ${getOrdinal(schedule.dayOfMonth)}`
+      return `Every month on the ${schedule.dayOfMonth}${getOrdinalSuffix(schedule.dayOfMonth)}`
     case 'yearly': {
       const date = new Date(2000, schedule.month - 1, schedule.dayOfMonth)
       return `Every ${format(date, 'MMMM do')}`
     }
     case 'custom':
       return `Every ${schedule.intervalDays} days`
+    case 'every-x-weeks': {
+      const dayNames = schedule.weekdays
+        .slice()
+        .sort((a, b) => a - b)
+        .map((d) => format(setDay(new Date(), d), 'EEE'))
+        .join(', ')
+      return `Every ${schedule.intervalWeeks} weeks on ${dayNames}`
+    }
+    case 'every-x-months': {
+      const suffix = getOrdinalSuffix(schedule.dayOfMonth)
+      return `Every ${schedule.intervalMonths} months on the ${schedule.dayOfMonth}${suffix}`
+    }
     default:
       return ''
   }

@@ -1,6 +1,8 @@
 import type { Schedule } from '@/types'
 
 import { CustomPicker } from './CustomPicker'
+import { EveryXMonthsPicker } from './EveryXMonthsPicker'
+import { EveryXWeeksPicker } from './EveryXWeeksPicker'
 import { MonthDayPicker } from './MonthDayPicker'
 import { WeekdayPicker } from './WeekdayPicker'
 import { YearlyPicker } from './YearlyPicker'
@@ -17,6 +19,8 @@ const FREQUENCY_OPTIONS: { value: Schedule['frequency']; label: string; descript
   { value: 'weekly', label: 'Weekly', description: 'Pick 1–6 weekdays' },
   { value: 'monthly', label: 'Monthly', description: 'Pick a day of the month' },
   { value: 'yearly', label: 'Yearly', description: 'Pick a date each year' },
+  { value: 'every-x-weeks', label: 'Every X weeks', description: 'Every few weeks' },
+  { value: 'every-x-months', label: 'Every X months', description: 'Every few months' },
   { value: 'custom', label: 'Custom', description: 'Every X days' },
 ]
 
@@ -78,6 +82,28 @@ export function ScheduleTab({
             interval={schedule.intervalDays}
             anchor={schedule.anchorDate}
             onIntervalChange={(n) => setSchedule({ ...schedule, intervalDays: n } as Schedule)}
+            onAnchorChange={(d) => setSchedule({ ...schedule, anchorDate: d } as Schedule)}
+          />
+        )}
+
+        {schedule.frequency === 'every-x-weeks' && (
+          <EveryXWeeksPicker
+            interval={schedule.intervalWeeks}
+            weekdays={schedule.weekdays}
+            anchor={schedule.anchorDate}
+            onIntervalChange={(n) => setSchedule({ ...schedule, intervalWeeks: n } as Schedule)}
+            onWeekdaysChange={(wds) => setSchedule({ ...schedule, weekdays: wds } as Schedule)}
+            onAnchorChange={(d) => setSchedule({ ...schedule, anchorDate: d } as Schedule)}
+          />
+        )}
+
+        {schedule.frequency === 'every-x-months' && (
+          <EveryXMonthsPicker
+            interval={schedule.intervalMonths}
+            day={schedule.dayOfMonth}
+            anchor={schedule.anchorDate}
+            onIntervalChange={(n) => setSchedule({ ...schedule, intervalMonths: n } as Schedule)}
+            onDayChange={(d) => setSchedule({ ...schedule, dayOfMonth: d } as Schedule)}
             onAnchorChange={(d) => setSchedule({ ...schedule, anchorDate: d } as Schedule)}
           />
         )}

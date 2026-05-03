@@ -1,7 +1,7 @@
 import { Loader2 } from 'lucide-react'
 
 import { BasicsTab } from './BasicsTab'
-import { ReminderTab } from './ReminderTab'
+// import { ReminderTab } from './ReminderTab'
 import { ScheduleTab } from './ScheduleTab'
 import { useHabitForm, type HabitFormValues } from './useHabitForm'
 
@@ -12,7 +12,7 @@ interface HabitFormProps {
   submitLabel: 'Create' | 'Save'
 }
 
-const TABS = ['Basics', 'Schedule', 'Reminder'] as const
+const TABS = ['Basics', 'Schedule'] as const
 
 export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: HabitFormProps) {
   const { state, actions } = useHabitForm({ initialValues, onSubmit })
@@ -25,7 +25,7 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
           <button
             key={tab}
             type="button"
-            onClick={() => actions.setActiveTab(tab)}
+            onClick={() => actions.setActiveTab(tab as any)}
             className={`flex-1 py-3 text-center font-mono text-xs uppercase tracking-wide transition-colors ${state.activeTab === tab ? 'border-b-2 border-rust text-ink' : 'border-b-2 border-transparent text-muted'}`}
           >
             {tab}
@@ -56,14 +56,15 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
           />
         )}
 
-        {state.activeTab === 'Reminder' && (
+        {/* Reminder Tab hidden for now */}
+        {/* {state.activeTab === 'Reminder' && (
           <ReminderTab
             reminderEnabled={state.reminderEnabled}
             setReminderEnabled={actions.setReminderEnabled}
             reminderTime={state.reminderTime}
             setReminderTime={actions.setReminderTime}
           />
-        )}
+        )} */}
       </div>
 
       {/* Action Buttons */}

@@ -74,17 +74,17 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
           </button>
         </div>
 
+        <div className="mb-2 flex justify-end">
+          <span className="font-mono text-xs text-muted">{text.length} / 280</span>
+        </div>
+
         <textarea
           autoFocus
           value={text}
           onChange={(e) => setText(e.target.value.slice(0, 280))}
           placeholder="Add a note..."
-          className="h-32 w-full resize-none rounded-md border border-muted-light bg-cream p-3 font-body text-ink focus:outline-none focus:ring-1 focus:ring-rust"
+          className="mb-6 h-32 w-full resize-none rounded-md border border-muted-light bg-cream p-3 font-body text-ink focus:outline-none focus:ring-1 focus:ring-rust"
         />
-
-        <div className="mb-6 mt-1 flex justify-end">
-          <span className="font-mono text-xs text-muted">{text.length} / 280</span>
-        </div>
 
         <div className="flex items-center justify-between">
           {existingNote ? (

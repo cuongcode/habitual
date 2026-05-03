@@ -101,7 +101,7 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
         </div>
 
         {/* Danger Zone */}
-        <div className="border-t border-muted-light px-4 pb-6 pt-2">
+        {/* <div className="border-t border-muted-light px-4 pb-6 pt-2">
           {!showDeleteConfirm ? (
             <button
               onClick={() => setShowDeleteConfirm(true)}
@@ -131,7 +131,7 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   )

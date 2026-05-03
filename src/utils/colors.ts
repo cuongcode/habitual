@@ -1,3 +1,3 @@
-export const COLOR_OPTIONS = ['rust', 'brown', 'muted', 'amber', 'sage', 'slate'] as const
+export const COLOR_OPTIONS = ['rust', 'brown', 'amber', 'sage', 'slate', 'rose'] as const
 
-export type ColorKey = (typeof COLOR_OPTIONS)[number]
+export type ColorKey = (typeof COLOR_OPTIONS)[number] | 'muted'

@@ -20,7 +20,7 @@ export function HabitRow({ habit }: HabitRowProps) {
   const notes = useHabitStore((state) => state.notes)
   const categories = useHabitStore((state) => state.categories)
   const category = categories.find((c) => c.id === habit.categoryId)
-  const colorKey = category?.colorKey || 'rust'
+  const colorKey = category?.colorKey || 'muted'
   const tokens = getThemeTokens(colorKey)
   const [noteModalDate, setNoteModalDate] = useState<string | null>(null)
   const habitsDisplayMode = useUIStore((state) => state.habitsDisplayMode)

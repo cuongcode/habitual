@@ -13,8 +13,8 @@ export function CategoryFilterBar() {
           onClick={() => setActiveCategoryId(null)}
           className={`shrink-0 rounded-full border px-3 py-1 font-mono text-xs uppercase tracking-wide transition-colors ${
             activeCategoryId === null
-              ? 'border-rust bg-rust text-cream'
-              : 'border-ink bg-cream text-ink'
+              ? 'border-muted bg-muted text-cream'
+              : 'border-muted bg-cream text-muted'
           }`}
         >
           All

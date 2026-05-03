@@ -2,7 +2,7 @@
 export default {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  safelist: [{ pattern: /^(bg|border|text)-(rust|brown|muted|amber|sage|slate|cream|ink)$/ }],
+  safelist: [{ pattern: /^(bg|border|text)-(rust|brown|muted|amber|sage|slate|cream|ink|rose)$/ }],
   theme: {
     extend: {
       fontSize: {
@@ -24,6 +24,7 @@ export default {
         amber: 'rgb(var(--color-amber))',
         sage: 'rgb(var(--color-sage))',
         slate: 'rgb(var(--color-slate))',
+        rose: 'rgb(var(--color-rose))',
         ink: 'rgb(var(--color-ink))',
         muted: 'rgb(var(--color-muted))',
         'muted-light': 'rgb(var(--color-muted-light))',

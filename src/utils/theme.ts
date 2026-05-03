@@ -107,10 +107,25 @@ export const THEME_COLORS: Record<string, ThemeColorTokens> = {
     heatmapEmpty: 'bg-cream-dark border border-muted-light',
     heatmapTodayRing: 'ring-1 ring-slate ring-offset-1 ring-offset-cream',
   },
+  rose: {
+    text: 'text-rose',
+    bg: 'bg-rose',
+    targetOpen: 'bg-cream-dark border-2 border-rose text-ink',
+    targetComplete: 'bg-rose border border-rose text-cream',
+    windowOn: 'bg-rose/40 border border-rose/60 text-rose',
+    todayBorder: 'border-2 border-rose',
+    textHover: 'hover:text-rose',
+    ring: 'ring-rose',
+    dot: 'bg-rose',
+    heatmapFilled: 'bg-rose',
+    heatmapFuture: 'bg-cream border border-muted-light opacity-40',
+    heatmapEmpty: 'bg-cream-dark border border-muted-light',
+    heatmapTodayRing: 'ring-1 ring-rose ring-offset-1 ring-offset-cream',
+  },
 }
 
 export function getThemeTokens(colorKey?: string): ThemeColorTokens {
-  return THEME_COLORS[colorKey || 'rust'] || THEME_COLORS['rust']
+  return THEME_COLORS[colorKey || 'muted'] || THEME_COLORS['muted']
 }
 
 export function getDayStateStyles(state: DayState, colorKey?: string): string {

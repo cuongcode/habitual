@@ -26,7 +26,7 @@ export default function HabitCalendarPage() {
   const [editOpen, setEditOpen] = useState(false)
 
   const category = categories.find((c) => c.id === habit?.categoryId)
-  const colorKey = category?.colorKey || 'rust'
+  const colorKey = category?.colorKey || 'muted'
   const tokens = getThemeTokens(colorKey)
 
   useEffect(() => {

@@ -32,7 +32,7 @@ export default function HabitStatsPage() {
   const entries = useHabitStore((state) => state.entries[habitId ?? ''] ?? EMPTY_ENTRIES)
   const categories = useHabitStore((state) => state.categories)
   const category = categories.find((c) => c.id === habit?.categoryId)
-  const colorKey = category?.colorKey || 'rust'
+  const colorKey = category?.colorKey || 'muted'
 
   // Compute all stats once
   const currentStreak = useMemo(

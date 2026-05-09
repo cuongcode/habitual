@@ -87,7 +87,7 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
           onPointerDown={(e) => e.stopPropagation()}
           onPointerMove={(e) => e.stopPropagation()}
           placeholder="Add a note..."
-          className="mb-6 h-32 w-full resize-none rounded-md border border-muted-light bg-cream p-3 font-body text-ink focus:outline-none focus:ring-1 focus:ring-rust"
+          className="mb-6 h-52 w-full resize-none rounded-md border border-muted-light bg-cream p-3 font-body text-ink focus:outline-none focus:ring-1 focus:ring-rust"
         />
 
         <div className="flex items-center justify-between">

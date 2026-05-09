@@ -82,6 +82,10 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
           autoFocus
           value={text}
           onChange={(e) => setText(e.target.value.slice(0, 280))}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
+          onPointerMove={(e) => e.stopPropagation()}
           placeholder="Add a note..."
           className="mb-6 h-32 w-full resize-none rounded-md border border-muted-light bg-cream p-3 font-body text-ink focus:outline-none focus:ring-1 focus:ring-rust"
         />

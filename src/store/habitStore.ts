@@ -69,8 +69,15 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
   entries: {},
   notes: {},
   trashedItems: [],
-  activeCategoryId: null,
-  setActiveCategoryId: (id) => set({ activeCategoryId: id }),
+  activeCategoryId: localStorage.getItem('activeCategoryId'),
+  setActiveCategoryId: (id) => {
+    if (id) {
+      localStorage.setItem('activeCategoryId', id)
+    } else {
+      localStorage.removeItem('activeCategoryId')
+    }
+    set({ activeCategoryId: id })
+  },
 
   // ── Init ────────────────────────────────────────────────────────
 

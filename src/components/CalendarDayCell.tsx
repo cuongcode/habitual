@@ -28,7 +28,9 @@ export const CalendarDayCell = memo(
     const { handlers } = useLongPress(() => onLongPress(dateStr))
     const [popping, setPopping] = useState(false)
 
+    const isFuture = state === 'future'
     const handleTap = () => {
+      if (isFuture) return
       setPopping(true)
       setTimeout(() => setPopping(false), 180)
       toggleEntry(habit.id, dateStr)
@@ -38,7 +40,8 @@ export const CalendarDayCell = memo(
       <button
         {...handlers}
         onClick={handleTap}
-        className={`relative flex aspect-square w-full flex-col items-center justify-center rounded-sm transition-all [-webkit-tap-highlight-color:transparent] active:scale-95 ${getDayStateStyles(state, colorKey)} ${isToday ? tokens.todayBorder : ''} ${popping ? 'cell-pop' : ''} `}
+        disabled={isFuture}
+        className={`relative flex aspect-square w-full flex-col items-center justify-center rounded-sm transition-all [-webkit-tap-highlight-color:transparent] ${isFuture ? 'pointer-events-none cursor-default' : 'active:scale-95'} ${getDayStateStyles(state, colorKey)} ${isToday ? tokens.todayBorder : ''} ${popping ? 'cell-pop' : ''} `}
       >
         <span className="absolute left-1.5 top-1 font-mono text-[10px] leading-none opacity-60">
           {dayNumber}

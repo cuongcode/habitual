@@ -34,8 +34,10 @@ export function MonthCell({
   const longPress = useLongPress(() => setNoteModalDate(dateStr))
   const tokens = getThemeTokens(colorKey)
 
+  const isFuture = dayState === 'future'
+
   function handleTap() {
-    if (longPress.isLongPress.current) return
+    if (isFuture || longPress.isLongPress.current) return
     setPopping(true)
     setTimeout(() => setPopping(false), 180)
     toggleEntry(habitId, dateStr)
@@ -47,11 +49,12 @@ export function MonthCell({
     <button
       {...longPress.handlers}
       onClick={handleTap}
+      disabled={isFuture}
       onContextMenu={(e) => {
         e.preventDefault()
-        setNoteModalDate(dateStr)
+        if (!isFuture) setNoteModalDate(dateStr)
       }}
-      className={`relative flex-shrink-0 [-webkit-tap-highlight-color:transparent] focus:outline-none ${popping ? 'cell-pop' : ''}`}
+      className={`relative flex-shrink-0 [-webkit-tap-highlight-color:transparent] focus:outline-none ${isFuture ? 'pointer-events-none cursor-default' : ''} ${popping ? 'cell-pop' : ''}`}
       style={{ width: CELL_SIZE, height: CELL_SIZE }}
     >
       <div

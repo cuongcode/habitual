@@ -22,7 +22,7 @@ export type DayState =
   | 'window-empty' // non-target, previous target missed, no entry
   | 'window-on' // non-target, previous target completed, no entry
   | 'window-bonus' // non-target, has completed entry
-  | 'future' // date is after today (still fully interactive)
+  | 'future' // date is after today (not interactive)
 
 // ── Schedule helpers ────────────────────────────────────────────────
 

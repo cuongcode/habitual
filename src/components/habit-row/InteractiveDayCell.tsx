@@ -27,8 +27,9 @@ export function InteractiveDayCell({
   const longPress = useLongPress(() => setNoteModalDate(dateStr))
   const [popping, setPopping] = useState(false)
 
+  const isFuture = state === 'future'
   const handleTap = () => {
-    if (longPress.isLongPress.current) return
+    if (isFuture || longPress.isLongPress.current) return
     setPopping(true)
     setTimeout(() => setPopping(false), 180)
     store.toggleEntry(habitId, dateStr)
@@ -38,11 +39,12 @@ export function InteractiveDayCell({
     <button
       {...longPress.handlers}
       onClick={handleTap}
+      disabled={isFuture}
       onContextMenu={(e) => {
         e.preventDefault()
-        setNoteModalDate(dateStr)
+        if (!isFuture) setNoteModalDate(dateStr)
       }}
-      className={`relative flex-shrink-0 [-webkit-tap-highlight-color:transparent] focus:outline-none ${popping ? 'cell-pop' : ''}`}
+      className={`relative flex-shrink-0 [-webkit-tap-highlight-color:transparent] focus:outline-none ${isFuture ? 'pointer-events-none cursor-default' : ''} ${popping ? 'cell-pop' : ''}`}
     >
       <DayCell state={state} date={date} hasNote={hasNote} colorKey={colorKey} />
     </button>

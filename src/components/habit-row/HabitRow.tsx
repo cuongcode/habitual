@@ -1,4 +1,4 @@
-import { DeleteHabitModal, EditHabitModal, HeatmapCells, NoteModal } from '@/components'
+import { DeleteHabitModal, EditHabitModal, HeatmapCells, MonthHeatmapCells, NoteModal } from '@/components'
 import { useSwipeReveal } from '@/hooks/useSwipeReveal'
 import { useHabitStore } from '@/store/habitStore'
 import { useUIStore } from '@/store/uiStore'
@@ -85,13 +85,13 @@ export function HabitRow({ habit }: HabitRowProps) {
     touchAction: 'pan-y' as const,
   }
 
-  const isHeatmap = habitsDisplayMode === 'heatmap'
+  const isStacked = habitsDisplayMode === 'year' || habitsDisplayMode === 'month'
 
   return (
     <>
       <div ref={setNodeRef} style={style} className="overflow-hidden border-b border-muted-light">
-        {isHeatmap ? (
-          /* ── Heatmap mode: only the header slides, heatmap stays static ── */
+      {isStacked ? (
+          /* ── Stacked mode (year / month): only the header slides, grid stays static ── */
           <div className="flex flex-col">
             {/* Sliding track: header + action drawer */}
             <div className="overflow-hidden">
@@ -126,9 +126,19 @@ export function HabitRow({ habit }: HabitRowProps) {
               </div>
             </div>
 
-            {/* Heatmap grid — static, NOT inside the swipe track */}
-            <div className="bg-cream px-4 pb-4">
-              <HeatmapCells entries={entries} colorKey={colorKey} />
+            {/* Grid — static, NOT inside the swipe track */}
+            <div className="flex justify-center bg-cream px-4 pb-4">
+              {habitsDisplayMode === 'month' ? (
+                <MonthHeatmapCells
+                  habit={habit}
+                  entries={entries}
+                  hasNote={hasNote}
+                  setNoteModalDate={setNoteModalDate}
+                  colorKey={colorKey}
+                />
+              ) : (
+                <HeatmapCells entries={entries} colorKey={colorKey} />
+              )}
             </div>
           </div>
         ) : (

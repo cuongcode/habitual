@@ -2,7 +2,7 @@ import { format, startOfDay, subDays } from 'date-fns'
 import { Settings } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { AddHabitDrawer, BottomNav, CategoryFilterBar, HabitList, YearNav } from '@/components'
+import { AddHabitDrawer, BottomNav, CategoryFilterBar, HabitList, PeriodNav } from '@/components'
 
 import { useUIStore } from '../store/uiStore'
 
@@ -51,7 +51,7 @@ export default function HabitsPage() {
           )}
         </div>
 
-        {habitsDisplayMode === 'heatmap' && <YearNav />}
+        {habitsDisplayMode !== 'week' && <PeriodNav />}
       </div>
 
       {/* Main habit list — scrollable */}

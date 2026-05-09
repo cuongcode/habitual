@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-type HabitsDisplayMode = 'week' | 'heatmap'
+type HabitsDisplayMode = 'week' | 'year' | 'month'
 type Theme = 'light' | 'dark' | 'system'
 
 export interface Toast {
@@ -20,6 +20,8 @@ interface UIStore {
   setHabitsDisplayMode(mode: HabitsDisplayMode): void
   heatmapYear: number
   setHeatmapYear(year: number): void
+  heatmapMonth: number
+  setHeatmapMonth(year: number, month: number): void
   theme: Theme
   setTheme(theme: Theme): void
   openSwipeRowId: string | null
@@ -68,6 +70,12 @@ function setupSystemThemeListener(getTheme: () => Theme) {
 
 const storedTheme = (localStorage.getItem('theme') as Theme) || 'light'
 
+// Migrate legacy 'heatmap' → 'year'
+const rawMode = localStorage.getItem('habitsDisplayMode')
+if (rawMode === 'heatmap') {
+  localStorage.setItem('habitsDisplayMode', 'year')
+}
+
 export const useUIStore = create<UIStore>((set, get) => {
   // Apply theme on store creation & set up system listener
   applyThemeToDOM(storedTheme)
@@ -88,13 +96,26 @@ export const useUIStore = create<UIStore>((set, get) => {
     dismissToast: (id) => set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) })),
     habitsDisplayMode: (localStorage.getItem('habitsDisplayMode') as HabitsDisplayMode) ?? 'week',
     heatmapYear: parseInt(localStorage.getItem('heatmapYear') ?? '') || new Date().getFullYear(),
+    heatmapMonth: parseInt(localStorage.getItem('heatmapMonth') ?? '') || new Date().getMonth() + 1,
     setHabitsDisplayMode: (mode) => {
       localStorage.setItem('habitsDisplayMode', mode)
+      if (mode === 'month') {
+        const year = get().heatmapYear
+        const currentYear = new Date().getFullYear()
+        const currentMonth = new Date().getMonth() + 1
+        const month = year === currentYear ? currentMonth : 12
+        get().setHeatmapMonth(year, month)
+      }
       set({ habitsDisplayMode: mode })
     },
     setHeatmapYear: (year) => {
       localStorage.setItem('heatmapYear', String(year))
       set({ heatmapYear: year })
+    },
+    setHeatmapMonth: (year, month) => {
+      localStorage.setItem('heatmapYear', String(year))
+      localStorage.setItem('heatmapMonth', String(month))
+      set({ heatmapYear: year, heatmapMonth: month })
     },
     theme: storedTheme,
     setTheme: (theme) => {

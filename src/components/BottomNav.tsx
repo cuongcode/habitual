@@ -1,6 +1,16 @@
-import { LayoutGrid, LayoutList } from 'lucide-react'
+import { CalendarDays, LayoutGrid, LayoutList, type LucideIcon } from 'lucide-react'
 
 import { useUIStore } from '../store/uiStore'
+
+type HabitsDisplayMode = 'week' | 'year' | 'month'
+
+const modeConfig: Record<HabitsDisplayMode, { icon: LucideIcon; label: string }> = {
+  week: { icon: LayoutList, label: 'week' },
+  month: { icon: CalendarDays, label: 'month' },
+  year: { icon: LayoutGrid, label: 'year' },
+}
+
+const modes: HabitsDisplayMode[] = ['week', 'month', 'year']
 
 export function BottomNav() {
   const openAddHabitDrawer = useUIStore((s) => s.openAddHabitDrawer)
@@ -8,11 +18,12 @@ export function BottomNav() {
   const setHabitsDisplayMode = useUIStore((s) => s.setHabitsDisplayMode)
 
   function cycleMode() {
-    const modes = ['week', 'heatmap'] as const
     const current = modes.indexOf(habitsDisplayMode)
     const next = modes[(current + 1) % modes.length]
     setHabitsDisplayMode(next)
   }
+
+  const { icon: Icon, label } = modeConfig[habitsDisplayMode]
 
   return (
     <nav className="pb-safe flex w-full items-center justify-between border-t border-muted-light bg-cream px-6 py-3">
@@ -41,17 +52,8 @@ export function BottomNav() {
           className="flex flex-col items-center gap-1 transition-opacity active:opacity-60"
           aria-label="Toggle display mode"
         >
-          {habitsDisplayMode === 'week' ? (
-            <>
-              <LayoutList size={20} className="text-muted" />
-              <span className="font-mono text-[9px] leading-none text-muted">week</span>
-            </>
-          ) : (
-            <>
-              <LayoutGrid size={20} className="text-rust" />
-              <span className="font-mono text-[9px] leading-none text-rust">year</span>
-            </>
-          )}
+          <Icon size={20} className={habitsDisplayMode === 'week' ? 'text-muted' : 'text-rust'} />
+          <span className="font-mono text-[9px] leading-none text-muted">{label}</span>
         </button>
       </div>
     </nav>

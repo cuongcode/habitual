@@ -24,6 +24,8 @@ export function HabitRow({ habit }: HabitRowProps) {
   const tokens = getThemeTokens(colorKey)
   const [noteModalDate, setNoteModalDate] = useState<string | null>(null)
   const habitsDisplayMode = useUIStore((state) => state.habitsDisplayMode)
+  const heatmapYear = useUIStore((state) => state.heatmapYear)
+  const heatmapMonth = useUIStore((state) => state.heatmapMonth)
   const openSwipeRowId = useUIStore((state) => state.openSwipeRowId)
   const setOpenSwipeRowId = useUIStore((state) => state.setOpenSwipeRowId)
 
@@ -87,6 +89,18 @@ export function HabitRow({ habit }: HabitRowProps) {
 
   const isStacked = habitsDisplayMode === 'year' || habitsDisplayMode === 'month'
 
+  const completedCount = entries.filter((e) => {
+    if (!e.completed) return false
+    if (habitsDisplayMode === 'year') {
+      return e.date.startsWith(String(heatmapYear))
+    }
+    if (habitsDisplayMode === 'month') {
+      const monthStr = String(heatmapMonth).padStart(2, '0')
+      return e.date.startsWith(`${heatmapYear}-${monthStr}`)
+    }
+    return false
+  }).length
+
   return (
     <>
       <div ref={setNodeRef} style={style} className="overflow-hidden border-b border-muted-light">
@@ -115,6 +129,10 @@ export function HabitRow({ habit }: HabitRowProps) {
                       isOpen={isOpen}
                       isDragActive={isDragActive}
                     />
+
+                    <span className="shrink-0 font-mono text-[10px] uppercase text-muted">
+                      COMPLETED: {completedCount}
+                    </span>
                   </div>
                 </div>
 

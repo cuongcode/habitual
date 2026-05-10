@@ -1,3 +1,5 @@
+import { useTranslation } from '@/i18n/useTranslation'
+
 interface CustomPickerProps {
   interval?: number
   anchor?: string
@@ -11,10 +13,11 @@ export function CustomPicker({
   onIntervalChange,
   onAnchorChange,
 }: CustomPickerProps) {
+  const { t } = useTranslation()
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <span className="font-body text-body text-ink">Every</span>
+        <span className="font-body text-body text-ink">{t('everyLabel')}</span>
         <input
           type="number"
           min={2}
@@ -25,11 +28,11 @@ export function CustomPicker({
           }}
           className="w-[60px] rounded-md border border-muted-light bg-cream p-2 text-center font-mono text-ink focus:outline-none focus:ring-1 focus:ring-rust"
         />
-        <span className="font-body text-body text-ink">days</span>
+        <span className="font-body text-body text-ink">{t('daysLabel')}</span>
       </div>
 
       <div className="flex items-center gap-3">
-        <span className="font-body text-body text-ink">Starting from</span>
+        <span className="font-body text-body text-ink">{t('startingFrom')}</span>
         <input
           type="date"
           value={anchor ?? ''}

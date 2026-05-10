@@ -1,5 +1,6 @@
 import { getThemeTokens } from '../../utils/theme'
 import { SectionLabel } from '../SectionLabel'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface TotalCompletionsSectionProps {
   total: number
@@ -8,14 +9,15 @@ interface TotalCompletionsSectionProps {
 
 export function TotalCompletionsSection({ total, colorKey }: TotalCompletionsSectionProps) {
   const tokens = getThemeTokens(colorKey)
+  const { t } = useTranslation()
 
   return (
     <div className="flex flex-col items-center gap-2 border-y border-muted/10 py-12">
-      <SectionLabel>Total check-ins</SectionLabel>
+      <SectionLabel>{t('totalCheckIns')}</SectionLabel>
       <div className={`text-[56px] ${tokens.text} font-display leading-none`}>
         {isNaN(total) ? 0 : total}
       </div>
-      <div className="font-mono text-[11px] text-muted">times completed</div>
+      <div className="font-mono text-[11px] text-muted">{t('timesCompleted')}</div>
     </div>
   )
 }

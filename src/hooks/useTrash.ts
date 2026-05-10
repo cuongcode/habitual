@@ -1,5 +1,6 @@
 import { useHabitStore } from '@/store/habitStore'
 import { useUIStore } from '@/store/uiStore'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export function useTrash() {
   const trashedItems = useHabitStore((s) => s.trashedItems)
@@ -7,6 +8,7 @@ export function useTrash() {
   const permanentlyDeleteFromTrash = useHabitStore((s) => s.permanentlyDeleteFromTrash)
   const emptyTrash = useHabitStore((s) => s.emptyTrash)
   const showToast = useUIStore((s) => s.showToast)
+  const { t } = useTranslation()
 
   // Sort by most recently deleted first
   const sortedItems = [...trashedItems].sort(
@@ -15,17 +17,17 @@ export function useTrash() {
 
   const handleRestore = async (id: string, name: string) => {
     await restoreHabit(id)
-    showToast(`"${name}" restored`)
+    showToast(t('itemRestored', { name }))
   }
 
   const handleDelete = async (id: string) => {
     await permanentlyDeleteFromTrash(id)
-    showToast('Permanently deleted')
+    showToast(t('permanentlyDeleted'))
   }
 
   const handleEmptyTrash = async () => {
     await emptyTrash()
-    showToast('Trash emptied')
+    showToast(t('trashEmptied'))
   }
 
   return {

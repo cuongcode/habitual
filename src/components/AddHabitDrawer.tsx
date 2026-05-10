@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 
 import type { HabitFormValues } from '@/components'
 import { HabitForm } from '@/components'
+import { useTranslation } from '@/i18n/useTranslation'
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
 import { requestNotificationPermission, scheduleReminders } from '../services/notificationService'
 import { useHabitStore } from '../store/habitStore'
 import { useUIStore } from '../store/uiStore'
 
 export function AddHabitDrawer() {
+  const { t } = useTranslation()
   const [isVisible, setIsVisible] = useState(false)
   const closeDrawer = useUIStore((s) => s.closeAddHabitDrawer)
   const activeCategoryId = useHabitStore((s) => s.activeCategoryId)
@@ -74,12 +76,12 @@ export function AddHabitDrawer() {
         </div>
 
         {/* Title */}
-        <h2 className="px-4 pb-3 pt-2 font-display text-[18px] text-ink">New habit</h2>
+        <h2 className="px-4 pb-3 pt-2 font-display text-[18px] text-ink">{t('newHabit')}</h2>
 
         {/* Form */}
         <div className="pb-6">
           <HabitForm
-            submitLabel="Create"
+            submitLabel={t('create')}
             onSubmit={handleCreate}
             onCancel={handleClose}
             initialValues={{ categoryId: activeCategoryId || undefined }}

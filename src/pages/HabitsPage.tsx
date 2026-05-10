@@ -1,12 +1,25 @@
-import { format, startOfDay, subDays } from 'date-fns'
+import { startOfDay, subDays } from 'date-fns'
 import { Settings } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AddHabitDrawer, BottomNav, CategoryFilterBar, HabitList, PeriodNav } from '@/components'
+import type { TranslationKey } from '@/i18n/en'
+import { useTranslation } from '@/i18n/useTranslation'
 
 import { useUIStore } from '../store/uiStore'
 
+const WEEKDAYS_SHORT_MAP: Record<number, TranslationKey> = {
+  0: 'weekdaySunShort',
+  1: 'weekdayMonShort',
+  2: 'weekdayTueShort',
+  3: 'weekdayWedShort',
+  4: 'weekdayThuShort',
+  5: 'weekdayFriShort',
+  6: 'weekdaySatShort',
+}
+
 export default function HabitsPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const addHabitDrawerOpen = useUIStore((s) => s.addHabitDrawerOpen)
@@ -24,11 +37,11 @@ export default function HabitsPage() {
       <div className="sticky top-0 z-10 flex shrink-0 touch-none flex-col bg-cream">
         <div className="pt-safe flex shrink-0 flex-col border-b border-muted-light bg-cream">
           <div className="flex items-center justify-between px-4 pb-2 pt-3">
-            <h1 className="font-display text-xl font-bold text-ink">Habitual</h1>
+            <h1 className="font-display text-xl font-bold text-ink">{t('appName')}</h1>
             <button
               onClick={() => navigate('/settings')}
               className="text-ink transition-colors hover:text-rust"
-              aria-label="Settings"
+              aria-label={t('settings')}
             >
               <Settings size={20} />
             </button>
@@ -43,7 +56,7 @@ export default function HabitsPage() {
                     key={i}
                     className="w-7 text-center font-mono text-[10px] uppercase tracking-widest text-muted"
                   >
-                    {format(date, 'EEEEEE')}
+                    {t(WEEKDAYS_SHORT_MAP[date.getDay()])}
                   </div>
                 ))}
               </div>

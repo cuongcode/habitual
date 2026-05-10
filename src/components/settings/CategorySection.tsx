@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { CategoryModal, SectionLabel } from '@/components'
 import { useHabitStore } from '@/store/habitStore'
 import type { Category } from '@/types'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export function CategorySection() {
+  const { t } = useTranslation()
   const categories = useHabitStore((s) => s.categories)
   const habits = useHabitStore((s) => s.habits)
 
@@ -26,13 +28,13 @@ export function CategorySection() {
     <div className="flex flex-col">
       {/* Section header */}
       <div className="mb-3 flex items-center justify-between">
-        <SectionLabel>Categories</SectionLabel>
+        <SectionLabel>{t('categories')}</SectionLabel>
         <button
           onClick={handleAddClick}
           className="flex items-center gap-1 font-mono text-[11px] uppercase tracking-wide text-rust transition-opacity hover:opacity-70"
         >
           <Plus size={12} />
-          Add
+          {t('addCategory')}
         </button>
       </div>
 
@@ -42,9 +44,9 @@ export function CategorySection() {
           <div className="flex flex-col items-center gap-2 px-4 py-8">
             <Tag size={28} className="text-muted opacity-40" />
             <p className="m-0 text-center font-mono text-[12px] text-muted">
-              No categories yet.{' '}
+              {t('noCategoriesYet')}{' '}
               <button onClick={handleAddClick} className="text-rust underline">
-                Add one
+                {t('addOne')}
               </button>
             </p>
           </div>
@@ -66,7 +68,7 @@ export function CategorySection() {
                       {cat.label}
                     </span>
                     <span className="mt-0.5 shrink-0 font-mono text-[11px] text-muted">
-                      {habitCount} {habitCount === 1 ? 'habit' : 'habits'}
+                      {habitCount} {habitCount === 1 ? t('habitSingular') : t('habitsPlural')}
                     </span>
                   </button>
                 </div>

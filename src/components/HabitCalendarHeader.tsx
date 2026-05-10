@@ -1,8 +1,8 @@
-import { format, setDay } from 'date-fns'
 import { SlidersHorizontal } from 'lucide-react'
 
+import { useTranslation } from '@/i18n/useTranslation'
 import type { Category, Habit } from '../types/index'
-import { getOrdinalSuffix } from '../utils/format'
+import { formatSchedule } from '../utils/format'
 
 interface HabitCalendarHeaderProps {
   habit: Habit
@@ -12,45 +12,9 @@ interface HabitCalendarHeaderProps {
 
 
 
-const formatSchedule = (habit: Habit) => {
-  const { schedule } = habit
-  switch (schedule.frequency) {
-    case 'daily':
-      return 'Every day'
-    case 'weekly': {
-      const names = schedule.weekdays.map((wd) => format(setDay(new Date(), wd), 'EEEE'))
-      if (names.length === 1) return `Every ${names[0]}`
-      const last = names[names.length - 1]
-      const rest = names.slice(0, -1)
-      return `Every ${rest.join(', ')} & ${last}`
-    }
-    case 'monthly':
-      return `Every month on the ${schedule.dayOfMonth}${getOrdinalSuffix(schedule.dayOfMonth)}`
-    case 'yearly': {
-      const date = new Date(2000, schedule.month - 1, schedule.dayOfMonth)
-      return `Every ${format(date, 'MMMM do')}`
-    }
-    case 'custom':
-      return `Every ${schedule.intervalDays} days`
-    case 'every-x-weeks': {
-      const dayNames = schedule.weekdays
-        .slice()
-        .sort((a, b) => a - b)
-        .map((d) => format(setDay(new Date(), d), 'EEE'))
-        .join(', ')
-      return `Every ${schedule.intervalWeeks} weeks on ${dayNames}`
-    }
-    case 'every-x-months': {
-      const suffix = getOrdinalSuffix(schedule.dayOfMonth)
-      return `Every ${schedule.intervalMonths} months on the ${schedule.dayOfMonth}${suffix}`
-    }
-    default:
-      return ''
-  }
-}
-
 export function HabitCalendarHeader({ habit, category, onEditPress }: HabitCalendarHeaderProps) {
-  const scheduleText = formatSchedule(habit)
+  const { t } = useTranslation()
+  const scheduleText = formatSchedule(habit.schedule, t)
 
   return (
     <div className="bg-cream px-5 pb-4 pt-6">

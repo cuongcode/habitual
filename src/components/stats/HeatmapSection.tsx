@@ -4,6 +4,7 @@ import { getDayState } from '../../services/scheduleEngine'
 import type { Habit, HabitEntry } from '../../types/index'
 import { getThemeTokens } from '../../utils/theme'
 import { SectionLabel } from '../SectionLabel'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface HeatmapSectionProps {
   habit: Habit
@@ -13,6 +14,8 @@ interface HeatmapSectionProps {
 
 export function HeatmapSection({ habit, entries, colorKey }: HeatmapSectionProps) {
   const tokens = getThemeTokens(colorKey)
+  const { t, lang } = useTranslation()
+  const formatter = new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-US', { month: 'short' })
   // 52 weeks ago, starting from Monday
   const gridStart = startOfWeek(subWeeks(new Date(), 52), { weekStartsOn: 1 })
   const allDates = Array.from({ length: 364 }, (_, i) => addDays(gridStart, i))
@@ -31,7 +34,7 @@ export function HeatmapSection({ habit, entries, colorKey }: HeatmapSectionProps
     const currentMonth = firstDayOfWeek.getMonth()
     if (currentMonth !== lastMonth) {
       monthLabels.push({
-        label: format(firstDayOfWeek, 'MMM'),
+        label: formatter.format(firstDayOfWeek),
         index: i,
       })
       lastMonth = currentMonth
@@ -60,7 +63,7 @@ export function HeatmapSection({ habit, entries, colorKey }: HeatmapSectionProps
 
   return (
     <div className="space-y-3">
-      <SectionLabel>Last 52 weeks</SectionLabel>
+      <SectionLabel>{t('last52Weeks')}</SectionLabel>
 
       <div className="overflow-x-auto pb-2 scrollbar-hide">
         <div className="min-w-fit">

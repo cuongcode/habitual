@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+import { detectLanguage, type Language } from '../i18n'
+
 type HabitsDisplayMode = 'week' | 'year' | 'month'
 type Theme = 'light' | 'dark' | 'system'
 
@@ -26,6 +28,8 @@ interface UIStore {
   setTheme(theme: Theme): void
   openSwipeRowId: string | null
   setOpenSwipeRowId(id: string | null): void
+  language: Language
+  setLanguage(lang: Language): void
 }
 
 // ── Theme helpers ──────────────────────────────────────────────────
@@ -125,5 +129,10 @@ export const useUIStore = create<UIStore>((set, get) => {
     },
     openSwipeRowId: null,
     setOpenSwipeRowId: (id) => set({ openSwipeRowId: id }),
+    language: (localStorage.getItem('language') as Language) ?? detectLanguage(),
+    setLanguage: (lang) => {
+      localStorage.setItem('language', lang)
+      set({ language: lang })
+    },
   }
 })

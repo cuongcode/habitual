@@ -11,6 +11,7 @@ import {
   StreakSection,
   TotalCompletionsSection,
 } from '@/components'
+import { useTranslation } from '@/i18n/useTranslation'
 
 import {
   getBestPeriod,
@@ -26,6 +27,7 @@ import type { HabitEntry } from '../types/index'
 const EMPTY_ENTRIES: HabitEntry[] = []
 
 export default function HabitStatsPage() {
+  const { t } = useTranslation()
   const location = useLocation()
   const { habitId } = useParams<{ habitId: string }>()
   const habit = useHabitStore((state) => state.habits.find((h) => h.id === habitId))
@@ -60,10 +62,10 @@ export default function HabitStatsPage() {
   if (!habit) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-cream p-10">
-        <h1 className="font-display text-2xl text-ink">Habit not found</h1>
+        <h1 className="font-display text-2xl text-ink">{t('noHabitFound')}</h1>
         <Link to="/" className="mt-6 flex items-center gap-2 font-mono text-sm uppercase text-rust">
           <ArrowLeft size={16} />
-          Go Back
+          {t('back')}
         </Link>
       </div>
     )

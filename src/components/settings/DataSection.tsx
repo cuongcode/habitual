@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import { ImportModal, SectionLabel } from '@/components'
 import { useDataExport } from '@/hooks/useDataExport'
 import { useHabitStore } from '@/store/habitStore'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export function DataSection() {
+  const { t } = useTranslation()
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
   const { lastExport, exporting, showExported, handleExport } = useDataExport()
   const trashCount = useHabitStore((s) => s.trashedItems.length)
@@ -15,7 +17,7 @@ export function DataSection() {
   return (
     <div className="flex flex-col">
       <div className="mb-3">
-        <SectionLabel>Data</SectionLabel>
+        <SectionLabel>{t('data')}</SectionLabel>
       </div>
       <div className="overflow-hidden rounded-xl border border-muted-light bg-cream-dark">
         {/* Export row */}
@@ -24,9 +26,9 @@ export function DataSection() {
             <Download className="h-[18px] w-[18px] shrink-0 text-rust" />
             <div className="flex flex-col">
               <span className="mb-1 font-serif text-[15px] leading-tight text-ink">
-                Export backup
+                {t('exportBackup')}
               </span>
-              <span className="font-mono text-[11px] text-muted">Last export: {lastExport}</span>
+              <span className="font-mono text-[11px] text-muted">{t('lastExport')}: {lastExport === 'never' ? t('lastExportNever') : lastExport}</span>
             </div>
           </div>
           <button
@@ -38,7 +40,7 @@ export function DataSection() {
                 : 'border-rust border-opacity-40 text-rust hover:bg-rust hover:text-cream'
             } disabled:cursor-not-allowed`}
           >
-            {showExported ? 'Exported!' : 'Export'}
+            {showExported ? t('exported') : t('exportButton')}
           </button>
         </div>
 
@@ -50,16 +52,16 @@ export function DataSection() {
             <Upload className="h-[18px] w-[18px] shrink-0 text-brown" />
             <div className="flex flex-col">
               <span className="mb-1 font-serif text-[15px] leading-tight text-ink">
-                Restore backup
+                {t('restoreBackup')}
               </span>
-              <span className="font-mono text-[11px] text-muted">Merge or replace your data</span>
+              <span className="font-mono text-[11px] text-muted">{t('mergeOrReplace')}</span>
             </div>
           </div>
           <button
             onClick={() => setIsImportModalOpen(true)}
             className="min-w-[84px] rounded-full border border-brown border-opacity-40 px-3 py-1 font-mono text-[12px] text-brown transition-all hover:bg-brown hover:text-cream"
           >
-            Import
+            {t('importButton')}
           </button>
         </div>
 
@@ -71,12 +73,12 @@ export function DataSection() {
             <Trash2 className="h-[18px] w-[18px] shrink-0 text-muted" />
             <div className="flex flex-col">
               <span className="mb-1 font-serif text-[15px] leading-tight text-ink">
-                Trash
+                {t('trash')}
               </span>
               <span className="font-mono text-[11px] text-muted">
                 {trashCount === 0
-                  ? 'No deleted habits'
-                  : `${trashCount} ${trashCount === 1 ? 'item' : 'items'} · auto-deletes in 30 days`}
+                  ? t('noDeletedHabits')
+                  : `${trashCount} ${trashCount === 1 ? t('item') : t('items')} · ${t('autoDeletes')}`}
               </span>
             </div>
           </div>
@@ -84,7 +86,7 @@ export function DataSection() {
             onClick={() => navigate('/settings/trash')}
             className="min-w-[84px] rounded-full border border-muted border-opacity-40 px-3 py-1 font-mono text-[12px] text-muted transition-all hover:bg-muted hover:text-cream"
           >
-            View
+            {t('viewButton')}
           </button>
         </div>
       </div>

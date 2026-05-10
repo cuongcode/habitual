@@ -1,17 +1,4 @@
-const MONTH_LABELS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-]
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface YearlyPickerProps {
   month?: number
@@ -21,12 +8,15 @@ interface YearlyPickerProps {
 }
 
 export function YearlyPicker({ month, day, onMonthChange, onDayChange }: YearlyPickerProps) {
+  const { lang } = useTranslation()
+  const formatter = new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-US', { month: 'short' })
   return (
     <div className="flex gap-4">
       {/* Month grid */}
       <div className="grid flex-1 grid-cols-3 gap-1.5">
-        {MONTH_LABELS.map((label, i) => {
+        {Array.from({ length: 12 }, (_, i) => {
           const m = i + 1
+          const label = formatter.format(new Date(2024, i, 1))
           const isSelected = month === m
           return (
             <button

@@ -4,17 +4,20 @@ import { BasicsTab } from './BasicsTab'
 // import { ReminderTab } from './ReminderTab'
 import { ScheduleTab } from './ScheduleTab'
 import { useHabitForm, type HabitFormValues } from './useHabitForm'
+import { useTranslation } from '@/i18n/useTranslation'
+import type { TranslationKey } from '@/i18n/en'
 
 interface HabitFormProps {
   initialValues?: Partial<HabitFormValues>
   onSubmit: (values: HabitFormValues) => Promise<void>
   onCancel: () => void
-  submitLabel: 'Create' | 'Save'
+  submitLabel: string
 }
 
 const TABS = ['Basics', 'Schedule'] as const
 
 export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: HabitFormProps) {
+  const { t } = useTranslation()
   const { state, actions } = useHabitForm({ initialValues, onSubmit })
 
   return (
@@ -28,7 +31,7 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
             onClick={() => actions.setActiveTab(tab as any)}
             className={`flex-1 py-3 text-center font-mono text-xs uppercase tracking-wide transition-colors ${state.activeTab === tab ? 'border-b-2 border-rust text-ink' : 'border-b-2 border-transparent text-muted'}`}
           >
-            {tab}
+            {t(`tab${tab}` as TranslationKey)}
           </button>
         ))}
       </div>
@@ -75,7 +78,7 @@ export function HabitForm({ initialValues, onSubmit, onCancel, submitLabel }: Ha
           disabled={state.submitting}
           className="font-body text-sm text-muted transition-colors hover:text-ink disabled:opacity-50"
         >
-          Cancel
+          {t('cancel')}
         </button>
         <button
           type="button"

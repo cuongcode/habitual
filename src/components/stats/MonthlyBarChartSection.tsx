@@ -1,6 +1,7 @@
 import type { MonthlyRate } from '../../services/statsEngine'
 import { getThemeTokens } from '../../utils/theme'
 import { SectionLabel } from '../SectionLabel'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface MonthlyBarChartSectionProps {
   monthlyRates: MonthlyRate[]
@@ -15,6 +16,8 @@ function seededJitter(seed: number): number {
 
 export function MonthlyBarChartSection({ monthlyRates, colorKey }: MonthlyBarChartSectionProps) {
   const tokens = getThemeTokens(colorKey)
+  const { t, lang } = useTranslation()
+  const formatter = new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-US', { month: 'short' })
 
   // Show last 6 months, oldest left, newest right
   const data = [...monthlyRates].reverse()
@@ -31,7 +34,7 @@ export function MonthlyBarChartSection({ monthlyRates, colorKey }: MonthlyBarCha
 
   return (
     <div className="space-y-3">
-      <SectionLabel>Monthly consistency</SectionLabel>
+      <SectionLabel>{t('monthlyConsistency')}</SectionLabel>
 
       <div className="h-[110px] w-full">
         <svg viewBox="0 0 280 110" width="100%" className="overflow-visible">
@@ -72,7 +75,7 @@ export function MonthlyBarChartSection({ monthlyRates, colorKey }: MonthlyBarCha
                   textAnchor="middle"
                   className="fill-muted font-mono text-[10px]"
                 >
-                  {m.total > 0 ? m.label : '—'}
+                  {m.total > 0 ? formatter.format(new Date(2024, m.month - 1, 1)) : '—'}
                 </text>
               </g>
             )

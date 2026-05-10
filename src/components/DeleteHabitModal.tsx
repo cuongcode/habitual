@@ -2,6 +2,7 @@ import { Loader2, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 import { useHabitStore } from '@/store/habitStore'
+import { useTranslation } from '@/i18n/useTranslation'
 import type { Habit } from '@/types'
 
 interface DeleteHabitModalProps {
@@ -10,6 +11,7 @@ interface DeleteHabitModalProps {
 }
 
 export function DeleteHabitModal({ habit, onClose }: DeleteHabitModalProps) {
+  const { t } = useTranslation()
   const [deleting, setDeleting] = useState(false)
 
   async function handleConfirm() {
@@ -29,22 +31,22 @@ export function DeleteHabitModal({ habit, onClose }: DeleteHabitModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Title */}
-        <p className="mb-1 font-display text-lg text-ink">Delete habit?</p>
+        <p className="mb-1 font-display text-lg text-ink">{t('deleteHabit')}?</p>
 
         {/* Habit name */}
         <p className="mb-4 font-mono text-xs text-muted">
-          "{habit.name}" and all its history will be moved to Trash.
+          "{habit.name}" {t('deleteHabitWarning')}
         </p>
 
         {/* Warning detail */}
         <p className="mb-6 font-mono text-xs leading-relaxed text-muted">
-          You can restore it within 30 days.
+          {t('deleteHabitRestoreHint')}
         </p>
 
         {/* Action row */}
         <div className="flex items-center justify-between">
           <button onClick={onClose} className="px-4 py-2 font-mono text-sm text-muted">
-            Cancel
+            {t('cancel')}
           </button>
           <button
             onClick={handleConfirm}
@@ -52,7 +54,7 @@ export function DeleteHabitModal({ habit, onClose }: DeleteHabitModalProps) {
             className="flex items-center gap-2 rounded-full bg-rust px-5 py-2 font-mono text-sm text-cream disabled:opacity-60"
           >
             {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-            Delete
+            {t('delete')}
           </button>
         </div>
       </div>

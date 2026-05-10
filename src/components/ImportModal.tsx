@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { importData, type ImportMode } from '../services/exportService'
 import { useHabitStore } from '../store/habitStore'
 import { useUIStore } from '../store/uiStore'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface ImportModalProps {
   isOpen: boolean
@@ -12,6 +13,7 @@ interface ImportModalProps {
 }
 
 export function ImportModal({ isOpen, onClose }: ImportModalProps) {
+  const { t } = useTranslation()
   const [mode, setMode] = useState<ImportMode>('merge')
   const [file, setFile] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -42,7 +44,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
 
   const handleFileSelection = (selectedFile: File) => {
     if (!selectedFile.name.endsWith('.json')) {
-      setError('Please select a valid .json backup file.')
+      setError(t('invalidFormat'))
       setFile(null)
       return
     }
@@ -64,7 +66,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
     const result = await importData(file, mode)
     if (result.success) {
       await initStore()
-      showToast(`Restored ${result.imported.habits} habits, ${result.imported.entries} entries ✓`)
+      showToast(`${t('importSuccess', { habits: result.imported.habits, entries: result.imported.entries })} ✓`)
       onClose()
     } else {
       setError(result.error || 'Unknown error occurred.')
@@ -82,9 +84,9 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col gap-1">
-          <h2 className="m-0 font-serif text-[18px] text-ink">Restore backup</h2>
+          <h2 className="m-0 font-serif text-[18px] text-ink">{t('importTitle')}</h2>
           <p className="m-0 font-mono text-[11px] text-muted">
-            Import a .json file exported from Habitual.
+            {t('importSubtitle')}
           </p>
         </div>
 
@@ -104,8 +106,8 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
           {!file ? (
             <>
               <FileJson className="mb-2 h-8 w-8 text-muted" />
-              <p className="m-0 font-serif text-[14px] text-muted">Drop your backup file here</p>
-              <p className="m-0 font-mono text-[11px] text-muted-light">or tap to browse</p>
+              <p className="m-0 font-serif text-[14px] text-muted">{t('dropFileHere')}</p>
+              <p className="m-0 font-mono text-[11px] text-muted-light">{t('orTapToBrowse')}</p>
             </>
           ) : (
             <>
@@ -123,7 +125,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
                   if (fileInputRef.current) fileInputRef.current.value = ''
                 }}
               >
-                × Choose different file
+                {t('chooseDifferentFile')}
               </button>
             </>
           )}
@@ -139,7 +141,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
               }`}
               onClick={() => setMode('merge')}
             >
-              Merge
+              {t('merge')}
             </button>
             <button
               className={`flex-1 rounded-lg py-1.5 text-center font-mono text-[13px] transition-colors ${
@@ -147,7 +149,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
               }`}
               onClick={() => setMode('replace')}
             >
-              Replace
+              {t('replace')}
             </button>
           </div>
           <p
@@ -155,9 +157,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
               mode === 'replace' ? 'text-rust' : 'text-muted'
             }`}
           >
-            {mode === 'merge'
-              ? 'New data is added. Existing habits are kept.'
-              : 'All current data is deleted and replaced.'}
+            {mode === 'merge' ? t('mergeDesc') : t('replaceDesc')}
           </p>
         </div>
 
@@ -167,7 +167,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
             onClick={onClose}
             disabled={isLoading}
           >
-            Cancel
+            {t('cancel')}
           </button>
           <button
             className={`flex min-w-[100px] items-center justify-center rounded-full px-6 py-2 font-serif text-[14px] transition-colors ${
@@ -178,7 +178,7 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
             onClick={handleRestore}
             disabled={!file || isLoading}
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin text-cream" /> : 'Restore'}
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin text-cream" /> : t('restore')}
           </button>
         </div>
       </div>

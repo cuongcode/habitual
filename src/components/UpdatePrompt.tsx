@@ -1,6 +1,8 @@
 import { useRegisterSW } from 'virtual:pwa-register/react'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export function UpdatePrompt() {
+  const { t } = useTranslation()
   const {
     offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
@@ -28,17 +30,17 @@ export function UpdatePrompt() {
     >
       <div className="flex-1">
         <p className="m-0 font-display text-sm text-ink">
-          {offlineReady ? 'App ready for offline' : 'Update available'}
+          {offlineReady ? t('appReadyOffline') : t('updateAvailable')}
         </p>
         <p className="m-0 mt-0.5 font-mono text-xs text-muted">
           {offlineReady
-            ? 'Access your habits even without internet'
-            : 'A new version with improvements is ready'}
+            ? t('appReadyOfflineDesc')
+            : t('updateAvailableDesc')}
         </p>
       </div>
 
       <button onClick={close} className="px-2 py-1 font-mono text-xs text-muted">
-        Later
+        {t('installLater')}
       </button>
 
       {needRefresh && (
@@ -46,7 +48,7 @@ export function UpdatePrompt() {
           onClick={() => updateServiceWorker(true)}
           className="rounded-full bg-rust px-3 py-1.5 font-mono text-xs text-cream transition-colors hover:bg-rust-light active:scale-95"
         >
-          Update
+          {t('updateAction')}
         </button>
       )}
 
@@ -55,7 +57,7 @@ export function UpdatePrompt() {
           onClick={close}
           className="rounded-full bg-sage/20 px-3 py-1.5 font-mono text-xs text-sage transition-colors hover:bg-sage/30 active:scale-95"
         >
-          Got it
+          {t('gotIt')}
         </button>
       )}
     </div>

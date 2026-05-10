@@ -10,8 +10,10 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 import { isIOS, isStandalone } from '@/utils/pwa'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export function InstallPrompt() {
+  const { t } = useTranslation()
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [showIOSPrompt, setShowIOSPrompt] = useState(false)
   const [dismissed, setDismissed] = useState(
@@ -56,11 +58,11 @@ export function InstallPrompt() {
       <div className="page-enter-fade fixed bottom-[84px] left-4 right-4 z-40 flex flex-col gap-3 rounded-2xl border border-muted-light bg-cream p-4 shadow-sm">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <p className="m-0 font-display text-sm text-ink font-medium">Add to home screen</p>
-            <p className="m-0 mt-0.5 font-mono text-[10px] text-muted uppercase tracking-wider">Use Habitual like a native app</p>
+            <p className="m-0 font-display text-sm text-ink font-medium">{t('addToHomeScreen')}</p>
+            <p className="m-0 mt-0.5 font-mono text-[10px] text-muted uppercase tracking-wider">{t('installDesc')}</p>
           </div>
           <button onClick={handleDismiss} className="px-2 py-1 font-mono text-[10px] text-muted hover:text-ink transition-colors uppercase">
-            Later
+            {t('installLater')}
           </button>
         </div>
         
@@ -73,7 +75,7 @@ export function InstallPrompt() {
             </svg>
           </div>
           <p className="flex-1 leading-relaxed">
-            Tap the <span className="font-semibold text-rust">Share</span> icon below and select <span className="font-semibold text-rust">"Add to Home Screen"</span> from the menu.
+            {t('tapThe')} <span className="font-semibold text-rust">{t('share')}</span> {t('iconBelowAndSelect')} <span className="font-semibold text-rust">{t('addToHomeScreenQuote')}</span> {t('fromTheMenu')}
           </p>
         </div>
       </div>
@@ -84,17 +86,17 @@ export function InstallPrompt() {
   return (
     <div className="page-enter-fade fixed bottom-[84px] left-4 right-4 z-40 flex items-center gap-3 rounded-2xl border border-muted-light bg-cream p-4 shadow-sm">
       <div className="flex-1">
-        <p className="m-0 font-display text-sm text-ink font-medium">Add to home screen</p>
-        <p className="m-0 mt-0.5 font-mono text-[10px] text-muted uppercase tracking-wider">Use Habitual like a native app</p>
+        <p className="m-0 font-display text-sm text-ink font-medium">{t('addToHomeScreen')}</p>
+        <p className="m-0 mt-0.5 font-mono text-[10px] text-muted uppercase tracking-wider">{t('installDesc')}</p>
       </div>
       <button onClick={handleDismiss} className="px-2 py-1 font-mono text-[10px] text-muted hover:text-ink transition-colors uppercase">
-        Later
+        {t('installLater')}
       </button>
       <button
         onClick={handleInstall}
         className="rounded-full bg-rust px-4 py-2 font-mono text-[10px] text-cream shadow-sm hover:bg-rust-dark transition-colors uppercase tracking-widest font-bold"
       >
-        Install
+        {t('installButton')}
       </button>
     </div>
   )

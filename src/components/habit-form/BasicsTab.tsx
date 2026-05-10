@@ -1,4 +1,5 @@
 import type { Category } from '@/types'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface BasicsTabProps {
   name: string
@@ -19,13 +20,14 @@ export function BasicsTab({
   categories,
   errors,
 }: BasicsTabProps) {
+  const { t } = useTranslation()
   return (
     <div className="space-y-6">
       {/* Habit Name */}
       <div>
         <div className="mb-2 flex items-end justify-between">
           <label className="block font-mono text-label uppercase tracking-wider text-muted">
-            Habit Name
+            {t('habitName')}
           </label>
           <span className="font-mono text-[10px] tabular-nums tracking-wider text-muted-light">
             {name.length}/25
@@ -37,7 +39,7 @@ export function BasicsTab({
           value={name}
           maxLength={25}
           onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. Morning walk"
+          placeholder={t('habitNamePlaceholder')}
           className="w-full rounded-md border border-muted-light bg-cream px-3 py-2.5 font-body text-ink placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-rust"
         />
         {errors.name && <p className="mt-1 font-mono text-label text-rust">{errors.name}</p>}
@@ -46,11 +48,11 @@ export function BasicsTab({
       {/* Category */}
       <div>
         <label className="mb-2 block font-mono text-label uppercase tracking-wider text-muted">
-          Category
+          {t('category')}
         </label>
 
         {categories.length === 0 ? (
-          <p className="font-mono text-xs text-muted">No categories yet — add one in Settings.</p>
+          <p className="font-mono text-xs text-muted">{t('noCategoriesHint')}</p>
         ) : (
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {categories.map((cat) => (

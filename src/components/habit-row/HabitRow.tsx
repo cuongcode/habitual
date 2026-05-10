@@ -10,12 +10,14 @@ import { useRef, useState } from 'react'
 import { ActionDrawer } from './ActionDrawer'
 import { HabitRowHeader } from './HabitRowHeader'
 import { WeekCells } from './WeekCells'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface HabitRowProps {
   habit: Habit
 }
 
 export function HabitRow({ habit }: HabitRowProps) {
+  const { t } = useTranslation()
   const entries = useHabitStore((state) => state.entries[habit.id]) ?? []
   const notes = useHabitStore((state) => state.notes)
   const categories = useHabitStore((state) => state.categories)
@@ -131,7 +133,7 @@ export function HabitRow({ habit }: HabitRowProps) {
                     />
 
                     <span className="shrink-0 font-mono text-[10px] uppercase text-muted">
-                      COMPLETED: {completedCount}
+                      {t('completed').toUpperCase()}: {completedCount}
                     </span>
                   </div>
                 </div>

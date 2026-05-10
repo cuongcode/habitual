@@ -2,6 +2,8 @@ import { Check, ChevronDown } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 import type { Schedule } from '@/types'
+import { useTranslation } from '@/i18n/useTranslation'
+import type { TranslationKey } from '@/i18n/en'
 import { CustomPicker } from './CustomPicker'
 import { EveryXMonthsPicker } from './EveryXMonthsPicker'
 import { EveryXWeeksPicker } from './EveryXWeeksPicker'
@@ -16,14 +18,14 @@ interface ScheduleTabProps {
   errors: Record<string, string>
 }
 
-const FREQUENCY_OPTIONS: { value: Schedule['frequency']; label: string; description: string }[] = [
-  { value: 'daily', label: 'Daily', description: 'Every day' },
-  { value: 'weekly', label: 'Weekly', description: 'Pick 1–6 weekdays' },
-  { value: 'every-x-weeks', label: 'Every X weeks', description: 'Every few weeks' },
-  { value: 'monthly', label: 'Monthly', description: 'Pick a day of the month' },
-  { value: 'every-x-months', label: 'Every X months', description: 'Every few months' },
-  { value: 'yearly', label: 'Yearly', description: 'Pick a date each year' },
-  { value: 'custom', label: 'Custom', description: 'Every X days' },
+const FREQUENCY_OPTIONS: { value: Schedule['frequency']; labelKey: TranslationKey; descriptionKey: TranslationKey }[] = [
+  { value: 'daily', labelKey: 'freqDaily', descriptionKey: 'freqDailyDesc' },
+  { value: 'weekly', labelKey: 'freqWeekly', descriptionKey: 'freqWeeklyDesc' },
+  { value: 'every-x-weeks', labelKey: 'freqEveryXWeeks', descriptionKey: 'freqEveryXWeeksDesc' },
+  { value: 'monthly', labelKey: 'freqMonthly', descriptionKey: 'freqMonthlyDesc' },
+  { value: 'every-x-months', labelKey: 'freqEveryXMonths', descriptionKey: 'freqEveryXMonthsDesc' },
+  { value: 'yearly', labelKey: 'freqYearly', descriptionKey: 'freqYearlyDesc' },
+  { value: 'custom', labelKey: 'freqCustom', descriptionKey: 'freqCustomDesc' },
 ]
 
 export function ScheduleTab({
@@ -32,6 +34,7 @@ export function ScheduleTab({
   onFrequencyChange,
   errors,
 }: ScheduleTabProps) {
+  const { t } = useTranslation()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -58,8 +61,8 @@ export function ScheduleTab({
           className="flex w-full items-center justify-between rounded-xl border border-muted-light bg-cream p-4 text-left shadow-sm transition-colors hover:bg-cream-dark dark:bg-surface dark:hover:bg-muted/20"
         >
           <div>
-            <div className="font-body text-body text-ink">{selectedOption.label}</div>
-            <div className="font-mono text-label text-muted">{selectedOption.description}</div>
+            <div className="font-body text-body text-ink">{t(selectedOption.labelKey)}</div>
+            <div className="font-mono text-label text-muted">{t(selectedOption.descriptionKey)}</div>
           </div>
           <ChevronDown
             className={`h-5 w-5 text-muted transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}
@@ -85,8 +88,8 @@ export function ScheduleTab({
                   className="flex w-full items-center justify-between px-4 py-2 text-left transition-colors hover:bg-cream-dark dark:hover:bg-muted/20"
                 >
                   <div>
-                    <div className="font-body text-body text-ink">{opt.label}</div>
-                    <div className="font-mono text-label text-muted">{opt.description}</div>
+                    <div className="font-body text-body text-ink">{t(opt.labelKey)}</div>
+                    <div className="font-mono text-label text-muted">{t(opt.descriptionKey)}</div>
                   </div>
                   {schedule.frequency === opt.value && <Check className="h-5 w-5 text-rust" />}
                 </button>

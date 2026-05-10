@@ -6,6 +6,7 @@ import { useHabitStore } from '../store/habitStore'
 import { useUIStore } from '../store/uiStore'
 import type { Category } from '../types/index'
 import { COLOR_OPTIONS, type ColorKey } from '../utils/colors'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface CategoryModalProps {
   isOpen: boolean
@@ -14,6 +15,7 @@ interface CategoryModalProps {
 }
 
 export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModalProps) {
+  const { t } = useTranslation()
   const [label, setLabel] = useState(() => categoryToEdit?.label ?? '')
   const [colorKey, setColorKey] = useState<ColorKey>(
     () => (categoryToEdit?.colorKey as ColorKey) || 'rust',
@@ -79,7 +81,7 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
             <X size={20} />
           </button>
           <h2 className="m-0 pr-8 font-serif text-[18px] text-ink">
-            {categoryToEdit ? 'Edit Category' : 'New Category'}
+            {categoryToEdit ? t('editCategory') : t('addCategory')}
           </h2>
         </div>
 
@@ -98,12 +100,12 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSave()
             }}
-            placeholder="Category name"
+            placeholder={t('categoryNamePlaceholder')}
             className="w-full rounded-xl border border-muted-light bg-cream-dark px-4 py-3 font-body text-body text-ink placeholder:text-muted focus:border-rust focus:outline-none"
           />
 
           <div className="flex items-center justify-between px-1">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-muted">Color</span>
+            <span className="font-mono text-[11px] uppercase tracking-wider text-muted">{t('categoryColor')}</span>
             <div className="flex items-center gap-3">
               {COLOR_OPTIONS.map((c) => (
                 <button
@@ -124,7 +126,7 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
               className="px-4 py-2 font-serif text-[14px] text-muted transition-colors hover:text-rust"
               onClick={() => setIsConfirmingDelete(!isConfirmingDelete)}
             >
-              {isConfirmingDelete ? 'Keep' : 'Delete'}
+              {isConfirmingDelete ? t('keep') : t('delete')}
             </button>
           ) : (
             <div />
@@ -138,7 +140,7 @@ export function CategoryModal({ isOpen, onClose, categoryToEdit }: CategoryModal
             onClick={handleSave}
             disabled={!isConfirmingDelete && !label.trim()}
           >
-            {isConfirmingDelete ? 'Confirm' : 'Save'}
+            {isConfirmingDelete ? t('confirm') : t('save')}
           </button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { MonthDayPicker } from './MonthDayPicker'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface EveryXMonthsPickerProps {
   interval: number
@@ -17,12 +18,13 @@ export function EveryXMonthsPicker({
   onDayChange,
   onAnchorChange,
 }: EveryXMonthsPickerProps) {
+  const { t } = useTranslation()
   const monthValue = anchor ? anchor.substring(0, 7) : ''
 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <span className="font-body text-body text-ink">Every</span>
+        <span className="font-body text-body text-ink">{t('everyLabel')}</span>
         <input
           type="number"
           min="2"
@@ -31,11 +33,11 @@ export function EveryXMonthsPicker({
           onChange={(e) => onIntervalChange(Math.floor(Number(e.target.value)))}
           className="w-[60px] rounded-lg border border-muted-light bg-cream px-3 py-2 font-mono text-[15px] text-ink outline-none transition-colors focus:border-rust"
         />
-        <span className="font-body text-body text-ink">months</span>
+        <span className="font-body text-body text-ink">{t('monthsLabel')}</span>
       </div>
 
       <div className="flex items-center gap-3">
-        <span className="font-body text-body text-ink">Starting in</span>
+        <span className="font-body text-body text-ink">{t('startingFrom')}</span>
         <input
           type="month"
           value={monthValue}
@@ -49,11 +51,11 @@ export function EveryXMonthsPicker({
       </div>
 
       <div className="space-y-2">
-        <span className="font-body text-body text-ink">On the</span>
+        <span className="font-body text-body text-ink">{t('startingOnThe')}</span>
         <MonthDayPicker selected={day} onChange={onDayChange} />
         {day >= 29 && (
           <p className="mt-1 font-mono text-[10px] text-muted">
-            Months without this day will be skipped.
+            {t('skipMonthHint')}
           </p>
         )}
       </div>

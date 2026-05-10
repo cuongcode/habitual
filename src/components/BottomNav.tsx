@@ -1,18 +1,21 @@
 import { CalendarDays, LayoutGrid, LayoutList, type LucideIcon } from 'lucide-react'
 
+import { useTranslation } from '@/i18n/useTranslation'
+import type { TranslationKey } from '@/i18n/en'
 import { useUIStore } from '../store/uiStore'
 
 type HabitsDisplayMode = 'week' | 'year' | 'month'
 
-const modeConfig: Record<HabitsDisplayMode, { icon: LucideIcon; label: string }> = {
-  week: { icon: LayoutList, label: 'week' },
-  month: { icon: CalendarDays, label: 'month' },
-  year: { icon: LayoutGrid, label: 'year' },
+const modeConfig: Record<HabitsDisplayMode, { icon: LucideIcon; labelKey: TranslationKey }> = {
+  week: { icon: LayoutList, labelKey: 'modeWeek' },
+  month: { icon: CalendarDays, labelKey: 'modeMonth' },
+  year: { icon: LayoutGrid, labelKey: 'modeYear' },
 }
 
 const modes: HabitsDisplayMode[] = ['week', 'month', 'year']
 
 export function BottomNav() {
+  const { t } = useTranslation()
   const openAddHabitDrawer = useUIStore((s) => s.openAddHabitDrawer)
   const habitsDisplayMode = useUIStore((s) => s.habitsDisplayMode)
   const setHabitsDisplayMode = useUIStore((s) => s.setHabitsDisplayMode)
@@ -23,7 +26,7 @@ export function BottomNav() {
     setHabitsDisplayMode(next)
   }
 
-  const { icon: Icon, label } = modeConfig[habitsDisplayMode]
+  const { icon: Icon, labelKey } = modeConfig[habitsDisplayMode]
 
   return (
     <nav className="pb-safe flex w-full items-center justify-between border-t border-muted-light bg-cream px-6 py-3">
@@ -53,7 +56,7 @@ export function BottomNav() {
           aria-label="Toggle display mode"
         >
           <Icon size={20} className={habitsDisplayMode === 'week' ? 'text-muted' : 'text-rust'} />
-          <span className="font-mono text-[9px] leading-none text-muted">{label}</span>
+          <span className="font-mono text-[9px] leading-none text-muted">{t(labelKey)}</span>
         </button>
       </div>
     </nav>

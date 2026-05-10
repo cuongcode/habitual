@@ -1,6 +1,6 @@
-import { format } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
+import { useTranslation } from '@/i18n/useTranslation'
 import { useUIStore } from '../store/uiStore'
 
 const currentYear = new Date().getFullYear()
@@ -52,6 +52,7 @@ function YearPeriodNav() {
 }
 
 function MonthPeriodNav() {
+  const { lang } = useTranslation()
   const year = useUIStore((state) => state.heatmapYear)
   const month = useUIStore((state) => state.heatmapMonth)
   const setHeatmapMonth = useUIStore((state) => state.setHeatmapMonth)
@@ -70,7 +71,11 @@ function MonthPeriodNav() {
     else setHeatmapMonth(year, month + 1)
   }
 
-  const label = format(new Date(year, month - 1, 1), 'MMMM yyyy')
+  const date = new Date(year, month - 1, 1)
+  const label = new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-US', {
+    month: 'long',
+    year: 'numeric'
+  }).format(date)
 
   return (
     <div className="flex items-center justify-between border-b border-muted-light bg-cream px-6 py-2">

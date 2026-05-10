@@ -1,4 +1,5 @@
-import { format, parseISO } from 'date-fns'
+import { useTranslation } from '@/i18n/useTranslation'
+import { parseISO } from 'date-fns'
 import { Trash2, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -12,6 +13,7 @@ interface NoteModalProps {
 }
 
 export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
+  const { t, lang } = useTranslation()
   const store = useHabitStore()
   const existingNote = store.getNoteForHabitDate(habitId, date)
   const [text, setText] = useState(() => existingNote?.text ?? '')
@@ -46,7 +48,11 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
     handleClose()
   }
 
-  const formattedDate = format(parseISO(date), 'EEEE, MMMM d')
+  const formattedDate = new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-US', { 
+    weekday: 'long', 
+    month: 'long', 
+    day: 'numeric' 
+  }).format(parseISO(date))
 
   const { dragY, handlers } = useSwipeToDismiss(handleClose)
 
@@ -86,7 +92,7 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
           onTouchMove={(e) => e.stopPropagation()}
           onPointerDown={(e) => e.stopPropagation()}
           onPointerMove={(e) => e.stopPropagation()}
-          placeholder="Add a note..."
+          placeholder={t('notePlaceholder')}
           className="mb-6 h-52 w-full resize-none rounded-md border border-muted-light bg-cream p-3 font-body text-ink focus:outline-none focus:ring-1 focus:ring-rust"
         />
 
@@ -97,7 +103,7 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
               className="flex items-center gap-1.5 text-muted transition-colors hover:text-rust"
             >
               <Trash2 size={18} />
-              <span className="text-sm">Delete note</span>
+              <span className="text-sm">{t('deleteNote')}</span>
             </button>
           ) : (
             <div />
@@ -107,7 +113,7 @@ export function NoteModal({ habitId, date, onClose }: NoteModalProps) {
             onClick={handleSave}
             className="rounded-full bg-rust px-6 py-2 font-medium text-white transition-transform active:scale-95"
           >
-            Save Note
+            {t('saveNote')}
           </button>
         </div>
       </div>

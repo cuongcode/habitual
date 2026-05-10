@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import type { HabitFormValues } from '@/components'
 import { HabitForm } from '@/components'
+import { useTranslation } from '@/i18n/useTranslation'
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss'
 import { requestNotificationPermission, scheduleReminders } from '../services/notificationService'
 import { useHabitStore } from '../store/habitStore'
@@ -13,6 +14,7 @@ interface EditHabitModalProps {
 }
 
 export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
+  const { t } = useTranslation()
   const [isVisible, setIsVisible] = useState(false)
   // const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   // const navigate = useNavigate()
@@ -87,13 +89,13 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
         </div>
 
         {/* Title */}
-        <h2 className="px-4 pb-3 pt-2 font-display text-lg text-ink">Edit habit</h2>
+        <h2 className="px-4 pb-3 pt-2 font-display text-lg text-ink">{t('editHabit')}</h2>
 
         {/* Form */}
         <div className="pb-4">
           <HabitForm
             initialValues={initialValues}
-            submitLabel="Save"
+            submitLabel={t('save')}
             onSubmit={handleSave}
             onCancel={handleClose}
           />

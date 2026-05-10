@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { getThemeTokens } from '../../utils/theme'
 import { SectionLabel } from '../SectionLabel'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface CompletionRateSectionProps {
   rate: number
@@ -11,6 +12,7 @@ interface CompletionRateSectionProps {
 export function CompletionRateSection({ rate, colorKey }: CompletionRateSectionProps) {
   const [animatedRate, setAnimatedRate] = useState(0)
   const tokens = getThemeTokens(colorKey)
+  const { t } = useTranslation()
 
   const safeRate = isNaN(rate) ? 0 : rate
   const radius = 52
@@ -28,7 +30,7 @@ export function CompletionRateSection({ rate, colorKey }: CompletionRateSectionP
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="self-start">
-        <SectionLabel>Consistency</SectionLabel>
+        <SectionLabel>{t('consistency')}</SectionLabel>
       </div>
 
       <div className="relative flex items-center justify-center">
@@ -60,14 +62,14 @@ export function CompletionRateSection({ rate, colorKey }: CompletionRateSectionP
 
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {safeRate === 0 ? (
-            <span className="px-4 text-center font-mono text-[16px] text-muted">No data yet</span>
+            <span className="px-4 text-center font-mono text-[16px] text-muted">{t('noDataYet')}</span>
           ) : (
             <>
               <span className="font-display text-[28px] text-ink">
                 {Math.round(safeRate * 100)}%
               </span>
               <span className="font-mono text-[10px] uppercase tracking-tight text-muted">
-                completion rate
+                {t('completionRate')}
               </span>
             </>
           )}

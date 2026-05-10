@@ -8,8 +8,10 @@ import {
   TrashNav,
 } from '@/components'
 import { useTrash } from '@/hooks/useTrash'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export default function TrashPage() {
+  const { t } = useTranslation()
   const location = useLocation()
   const { sortedItems, handleRestore, handleDelete, handleEmptyTrash, itemCount } =
     useTrash()
@@ -56,25 +58,25 @@ export default function TrashPage() {
                   onClick={() => setShowEmptyConfirm(true)}
                   className="w-full rounded-full border border-rust/20 py-3 text-center font-mono text-[12px] text-rust transition-all hover:bg-rust hover:text-cream active:scale-[0.98]"
                 >
-                  Empty Trash ({itemCount} {itemCount === 1 ? 'item' : 'items'})
+                  {t('emptyTrash')} ({itemCount} {itemCount === 1 ? t('item') : t('items')})
                 </button>
               ) : (
                 <div className="flex flex-col gap-4 rounded-2xl bg-rust/5 p-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <span className="text-center font-serif text-[15px] text-ink">
-                    Permanently delete all items?
+                    {t('emptyTrashConfirm')}
                   </span>
                   <div className="flex items-center justify-center gap-3">
                     <button
                       onClick={() => setShowEmptyConfirm(false)}
                       className="px-6 py-2 font-mono text-[12px] text-muted transition-colors hover:text-ink"
                     >
-                      Cancel
+                      {t('cancel')}
                     </button>
                     <button
                       onClick={onEmptyTrash}
                       className="rounded-full bg-rust px-6 py-2 font-mono text-[12px] text-cream shadow-sm transition-all hover:bg-rust-dark active:scale-95"
                     >
-                      Empty
+                      {t('emptyTrash')}
                     </button>
                   </div>
                 </div>

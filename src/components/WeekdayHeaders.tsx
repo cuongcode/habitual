@@ -1,5 +1,17 @@
+import { useTranslation } from '@/i18n/useTranslation'
+import type { TranslationKey } from '@/i18n/en'
+
 export function WeekdayHeaders() {
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  const { t } = useTranslation()
+  const days: TranslationKey[] = [
+    'weekdayMon',
+    'weekdayTue',
+    'weekdayWed',
+    'weekdayThu',
+    'weekdayFri',
+    'weekdaySat',
+    'weekdaySun',
+  ]
 
   return (
     <div className="grid grid-cols-7 bg-cream px-4 pb-2 pt-1">
@@ -8,7 +20,7 @@ export function WeekdayHeaders() {
           key={day}
           className="text-center font-mono text-[10px] uppercase tracking-widest text-muted"
         >
-          {day}
+          {t(day)}
         </div>
       ))}
     </div>

@@ -1,10 +1,12 @@
 import { useHabitStore } from '../store/habitStore'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export function CategoryFilterBar() {
   const habits = useHabitStore((s) => s.habits)
   const categories = useHabitStore((s) => s.categories)
   const activeCategoryId = useHabitStore((s) => s.activeCategoryId)
   const setActiveCategoryId = useHabitStore((s) => s.setActiveCategoryId)
+  const { t } = useTranslation()
 
   const hasNoneCategoryHabits = habits.some((h) => !h.categoryId || h.categoryId === 'none')
   const allHabitsAreNoneCategory = habits.length > 0 && habits.every((h) => !h.categoryId || h.categoryId === 'none')
@@ -22,7 +24,7 @@ export function CategoryFilterBar() {
               : 'border-muted bg-cream text-muted'
           }`}
         >
-          All
+          {t('allCategories')}
         </button>
 
         {categories.map((cat) => (
@@ -49,7 +51,7 @@ export function CategoryFilterBar() {
                 : 'border-muted bg-cream text-muted'
             }`}
           >
-            None
+            {t('uncategorized')}
           </button>
         )}
       </div>

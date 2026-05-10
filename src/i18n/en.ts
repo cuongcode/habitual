@@ -26,6 +26,7 @@ export const en = {
   confirm: 'Confirm',
   keep: 'Keep',
   delete: 'Delete',
+  edit: 'Edit',
   deleteHabit: 'Delete habit',
   deleteHabitConfirm: 'Are you sure?',
   deleteHabitWarning: 'and all its history will be moved to trash.',
@@ -243,13 +244,13 @@ export const en = {
   weekdaySun: 'Sun',
 
   // Weekday single letter headers (for heatmap grids)
-  weekdayMonShort: 'M',
-  weekdayTueShort: 'T',
-  weekdayWedShort: 'W',
-  weekdayThuShort: 'T',
-  weekdayFriShort: 'F',
-  weekdaySatShort: 'S',
-  weekdaySunShort: 'S',
+  weekdayMonShort: 'MO',
+  weekdayTueShort: 'TU',
+  weekdayWedShort: 'WE',
+  weekdayThuShort: 'TH',
+  weekdayFriShort: 'FR',
+  weekdaySatShort: 'SA',
+  weekdaySunShort: 'SU',
 } as const
 
 export type TranslationKey = keyof typeof en

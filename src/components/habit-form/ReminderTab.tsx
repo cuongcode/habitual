@@ -1,3 +1,5 @@
+import { useTranslation } from '@/i18n/useTranslation'
+
 interface ReminderTabProps {
   reminderEnabled: boolean
   setReminderEnabled: (v: boolean) => void
@@ -11,11 +13,12 @@ export function ReminderTab({
   reminderTime,
   setReminderTime,
 }: ReminderTabProps) {
+  const { t } = useTranslation()
   return (
     <div className="space-y-5">
       {/* Toggle Row */}
       <div className="flex items-center justify-between">
-        <span className="font-body text-body text-ink">Daily reminder</span>
+        <span className="font-body text-body text-ink">{t('dailyReminder')}</span>
         <button
           type="button"
           onClick={() => setReminderEnabled(!reminderEnabled)}
@@ -30,7 +33,7 @@ export function ReminderTab({
       {/* Time Picker */}
       {reminderEnabled && (
         <div className="flex items-center gap-3">
-          <span className="font-body text-body text-ink">Remind me at</span>
+          <span className="font-body text-body text-ink">{t('remindMeAt')}</span>
           <input
             type="time"
             value={reminderTime}
@@ -42,7 +45,7 @@ export function ReminderTab({
 
       {/* Note */}
       <p className="font-mono text-label text-muted">
-        Notifications require permission. You'll be prompted on first use.
+        {t('notificationNote')}
       </p>
     </div>
   )

@@ -10,20 +10,22 @@ import type { Schedule } from '../types'
 
 export function formatSchedule(
   schedule: Schedule,
-  t: (key: TranslationKey, vars?: Record<string, string | number>) => string
+  t: (key: TranslationKey, vars?: Record<string, string | number>) => string,
+  lang?: string
 ): string {
+  const useShort = lang === 'vi'
   switch (schedule.frequency) {
     case 'daily':
       return t('scheduleEveryDay')
     case 'weekly': {
       const weekdaysMap: Record<number, TranslationKey> = {
-        0: 'weekdaySun',
-        1: 'weekdayMon',
-        2: 'weekdayTue',
-        3: 'weekdayWed',
-        4: 'weekdayThu',
-        5: 'weekdayFri',
-        6: 'weekdaySat',
+        0: useShort ? 'weekdaySunShort' : 'weekdaySun',
+        1: useShort ? 'weekdayMonShort' : 'weekdayMon',
+        2: useShort ? 'weekdayTueShort' : 'weekdayTue',
+        3: useShort ? 'weekdayWedShort' : 'weekdayWed',
+        4: useShort ? 'weekdayThuShort' : 'weekdayThu',
+        5: useShort ? 'weekdayFriShort' : 'weekdayFri',
+        6: useShort ? 'weekdaySatShort' : 'weekdaySat',
       }
       const names = schedule.weekdays.map((wd) => t(weekdaysMap[wd]))
       if (names.length === 1) return t('scheduleEveryWeekOn', { day: names[0] })
@@ -42,13 +44,13 @@ export function formatSchedule(
       return t('scheduleEveryXDays', { n: schedule.intervalDays })
     case 'every-x-weeks': {
       const weekdaysMap: Record<number, TranslationKey> = {
-        0: 'weekdaySun',
-        1: 'weekdayMon',
-        2: 'weekdayTue',
-        3: 'weekdayWed',
-        4: 'weekdayThu',
-        5: 'weekdayFri',
-        6: 'weekdaySat',
+        0: useShort ? 'weekdaySunShort' : 'weekdaySun',
+        1: useShort ? 'weekdayMonShort' : 'weekdayMon',
+        2: useShort ? 'weekdayTueShort' : 'weekdayTue',
+        3: useShort ? 'weekdayWedShort' : 'weekdayWed',
+        4: useShort ? 'weekdayThuShort' : 'weekdayThu',
+        5: useShort ? 'weekdayFriShort' : 'weekdayFri',
+        6: useShort ? 'weekdaySatShort' : 'weekdaySat',
       }
       const dayNames = schedule.weekdays
         .slice()

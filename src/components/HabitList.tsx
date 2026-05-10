@@ -1,4 +1,5 @@
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
+import { useTranslation } from '@/i18n/useTranslation'
 import {
   closestCenter,
   DndContext,
@@ -24,6 +25,7 @@ export function HabitList() {
   const reorderHabits = useHabitStore((s) => s.reorderHabits)
   const openSwipeRowId = useUIStore((state) => state.openSwipeRowId)
   const setOpenSwipeRowId = useUIStore((state) => state.setOpenSwipeRowId)
+  const { t } = useTranslation()
 
   // Close any open swipe row when tapping outside of action buttons
   useEffect(() => {
@@ -59,7 +61,7 @@ export function HabitList() {
           .filter((h) => !h.categoryId || h.categoryId === 'none')
           .sort((a, b) => a.order - b.order)
         return noneHabits.length > 0
-          ? [{ category: { id: 'none', label: 'None', colorKey: 'muted' as any }, habits: noneHabits }]
+          ? [{ category: { id: 'none', label: t('uncategorized'), colorKey: 'muted' as any }, habits: noneHabits }]
           : []
       }
 
@@ -129,16 +131,16 @@ export function HabitList() {
       return (
         <EmptyState
           compact
-          title="No habits in this category"
-          description="Add one with the + button"
+          title={t('noHabitsInCategory')}
+          description={t('noHabitsInCategoryHint')}
         />
       )
     }
 
     return (
       <EmptyState
-        title="Your Habitual is empty"
-        description="Tap the + button below to add your first habit"
+        title={t('noHabitsYet')}
+        description={t('noHabitsHint')}
         icon={<Notebook size={64} strokeWidth={1} />}
       />
     )

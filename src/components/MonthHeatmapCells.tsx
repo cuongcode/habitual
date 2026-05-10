@@ -12,10 +12,11 @@ import { getDayState } from '@/services/scheduleEngine'
 import { useUIStore } from '@/store/uiStore'
 import type { Habit, HabitEntry } from '@/types'
 import { MonthCell } from './MonthCell'
+import { useTranslation } from '@/i18n/useTranslation'
+import type { TranslationKey } from '@/i18n/en'
 
 const CELL_SIZE = 28
 const GAP = 2
-const DAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
 
 interface MonthHeatmapCellsProps {
   habit: Habit
@@ -34,6 +35,17 @@ export const MonthHeatmapCells = React.memo(function MonthHeatmapCells({
 }: MonthHeatmapCellsProps) {
   const year = useUIStore((state) => state.heatmapYear)
   const month = useUIStore((state) => state.heatmapMonth)
+  const { t } = useTranslation()
+
+  const DAY_KEYS: TranslationKey[] = [
+    'weekdayMonShort',
+    'weekdayTueShort',
+    'weekdayWedShort',
+    'weekdayThuShort',
+    'weekdayFriShort',
+    'weekdaySatShort',
+    'weekdaySunShort',
+  ]
 
   const { days, offset } = useMemo(() => {
     const start = startOfMonth(new Date(year, month - 1, 1))
@@ -60,13 +72,13 @@ export const MonthHeatmapCells = React.memo(function MonthHeatmapCells({
           marginBottom: GAP,
         }}
       >
-        {DAYS.map((d, i) => (
+        {DAY_KEYS.map((key, i) => (
           <div
             key={i}
             className="text-center font-mono text-muted-light"
             style={{ fontSize: 9, height: 12, lineHeight: '12px' }}
           >
-            {d}
+            {t(key)}
           </div>
         ))}
       </div>

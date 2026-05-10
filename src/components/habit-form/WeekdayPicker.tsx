@@ -13,13 +13,13 @@ export function WeekdayPicker({ selected, onChange }: WeekdayPickerProps) {
   // Display Mon–Sun; map display index → JS weekday (0=Sun)
   const displayToJS: Weekday[] = [1, 2, 3, 4, 5, 6, 0]
   const WEEKDAY_LABELS_KEYS: TranslationKey[] = [
-    'weekdayMon',
-    'weekdayTue',
-    'weekdayWed',
-    'weekdayThu',
-    'weekdayFri',
-    'weekdaySat',
-    'weekdaySun',
+    'weekdayMonShort',
+    'weekdayTueShort',
+    'weekdayWedShort',
+    'weekdayThuShort',
+    'weekdayFriShort',
+    'weekdaySatShort',
+    'weekdaySunShort',
   ]
   const atMax = selected.length >= 6
 
@@ -49,7 +49,7 @@ export function WeekdayPicker({ selected, onChange }: WeekdayPickerProps) {
               onClick={() => toggle(jsDay)}
               className={`flex h-9 w-9 items-center justify-center rounded-full font-mono text-xs transition-all active:scale-90 ${isSelected ? 'bg-rust text-cream' : 'bg-cream-dark text-ink'} ${isDisabled ? 'cursor-not-allowed opacity-35' : 'cursor-pointer'}`}
             >
-              {t(labelKey).slice(0, 2)}
+              {t(labelKey)}
             </button>
           )
         })}

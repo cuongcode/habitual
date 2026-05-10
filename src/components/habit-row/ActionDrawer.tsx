@@ -1,4 +1,5 @@
 import { Pencil, Trash2 } from 'lucide-react'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface ActionDrawerProps {
   width: number
@@ -7,6 +8,7 @@ interface ActionDrawerProps {
 }
 
 export function ActionDrawer({ width, onDelete, onEdit }: ActionDrawerProps) {
+  const { t } = useTranslation()
   return (
     <div
       data-swipe-action
@@ -21,7 +23,7 @@ export function ActionDrawer({ width, onDelete, onEdit }: ActionDrawerProps) {
       >
         <Trash2 size={18} className="text-cream" />
         <span className="font-mono text-cream" style={{ fontSize: 10 }}>
-          Delete
+          {t('delete')}
         </span>
       </button>
 
@@ -32,7 +34,7 @@ export function ActionDrawer({ width, onDelete, onEdit }: ActionDrawerProps) {
       >
         <Pencil size={18} className="" />
         <span className="font-mono" style={{ fontSize: 10 }}>
-          Edit
+          {t('edit')}
         </span>
       </button>
     </div>

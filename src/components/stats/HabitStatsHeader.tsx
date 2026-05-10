@@ -10,8 +10,8 @@ interface HabitStatsHeaderProps {
 
 
 export function HabitStatsHeader({ habit, category }: HabitStatsHeaderProps) {
-  const { t } = useTranslation()
-  const scheduleText = formatSchedule(habit.schedule, t)
+  const { t, lang } = useTranslation()
+  const scheduleText = formatSchedule(habit.schedule, t, lang)
 
   return (
     <div className="bg-cream px-5 pb-4 pt-6">

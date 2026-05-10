@@ -5,6 +5,7 @@ import { buildCompletedSet, getDayStateFast } from '../services/scheduleEngine'
 import type { Habit, HabitDayNote, HabitEntry } from '../types/index'
 import { getThemeTokens } from '../utils/theme'
 import { CalendarDayCell } from './CalendarDayCell'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface MonthBlockProps {
   year: number
@@ -19,6 +20,7 @@ interface MonthBlockProps {
 
 export const MonthBlock = memo(
   ({ year, month, habit, entries, notes, isFirst, onLongPress, colorKey }: MonthBlockProps) => {
+    const { lang } = useTranslation()
     const completedSet = useMemo(() => buildCompletedSet(entries), [entries])
     const firstDay = startOfMonth(new Date(year, month - 1))
     const totalDays = getDaysInMonth(firstDay)
@@ -28,7 +30,10 @@ export const MonthBlock = memo(
     const offset = (getDay(firstDay) + 6) % 7
 
     const days = Array.from({ length: totalDays }, (_, i) => addDays(firstDay, i))
-    const monthLabel = format(firstDay, 'MMMM yyyy')
+    const monthLabel = new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-US', {
+      month: 'long',
+      year: 'numeric',
+    }).format(firstDay)
 
     // To display the start of the month at the top and the end of the month at the bottom,
     // we just use the cells chronologically.

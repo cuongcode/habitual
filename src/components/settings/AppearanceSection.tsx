@@ -24,7 +24,7 @@ export function AppearanceSection() {
       <div className="flex flex-col gap-4 overflow-hidden rounded-xl border border-muted-light bg-cream-dark p-4">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <Palette size={18} className="text-rust" />
+            <Palette size={18} className="text-muted" />
             <span className="font-serif text-[15px] text-ink">{t('theme')}</span>
           </div>
           <div className="flex gap-1 rounded-xl border border-muted-light bg-cream p-1">
@@ -47,7 +47,7 @@ export function AppearanceSection() {
 
         <div className="flex flex-col gap-2 border-t border-muted-light/50 pt-4">
           <div className="flex items-center gap-3">
-            <Languages size={18} className="text-rust" />
+            <Languages size={18} className="text-muted" />
             <span className="font-serif text-[15px] text-ink">{t('language')}</span>
           </div>
           <div className="flex gap-1 rounded-xl border border-muted-light bg-cream p-1">
